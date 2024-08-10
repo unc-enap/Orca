@@ -3,25 +3,20 @@
 #include <fcio.h>
 #include <string.h>
 
-typedef enum FSPChannelFormat {
+typedef enum FSPTraceFormat {
   FCIO_TRACE_INDEX_FORMAT = 0,
   FCIO_TRACE_MAP_FORMAT = 1,
   L200_RAWID_FORMAT = 2,
-  FSPChannelFormatUnkown = 3
+  FSPTraceFormatUnkown = 3
 
-} FSPChannelFormat;
+} FSPTraceFormat;
 
-static inline int is_known_channelmap_format(FSPChannelFormat format)
+static inline int is_known_channelmap_format(FSPTraceFormat format)
 {
-  unsigned int form = format;
-  if (form < FSPChannelFormatUnkown) {
-    return 1;
-  } else {
-    return 0;
-  }
+  return (format < FSPTraceFormatUnkown) ? 1 : 0;
 }
 
-static inline const char* channelmap_fmt2str(FSPChannelFormat format)
+static inline const char* channelmap_fmt2str(FSPTraceFormat format)
 {
   switch (format) {
     case FCIO_TRACE_INDEX_FORMAT:
@@ -35,9 +30,9 @@ static inline const char* channelmap_fmt2str(FSPChannelFormat format)
   }
 }
 
-static inline FSPChannelFormat channelmap_str2fmt(const char* str)
+static inline FSPTraceFormat channelmap_str2fmt(const char* str)
 {
-  FSPChannelFormat ret = FSPChannelFormatUnkown;
+  FSPTraceFormat ret = FSPTraceFormatUnkown;
   if (strncmp(str, "fcio-trace-idx", 14) == 0)
     ret = FCIO_TRACE_INDEX_FORMAT;
   else if (strncmp(str, "fcio-trace-map", 14) == 0)
@@ -45,7 +40,7 @@ static inline FSPChannelFormat channelmap_str2fmt(const char* str)
   else if (strncmp(str, "l200-rawid", 10) == 0)
     ret = L200_RAWID_FORMAT;
   else
-    ret = FSPChannelFormatUnkown;
+    ret = FSPTraceFormatUnkown;
   return ret;
 }
 
@@ -60,7 +55,7 @@ static inline int tracemap2rawid(unsigned int input, int listener) {
   return listener * 1000000 + (input >> 16) * 100 + (input & 0xffff);
 }
 
-static inline int convert2rawid(int ninput, int *input, FSPChannelFormat format, unsigned int *tracemap, int listener) {
+static inline int convert2rawid(int ninput, int *input, FSPTraceFormat format, unsigned int *tracemap, int listener) {
   switch (format) {
     case FCIO_TRACE_MAP_FORMAT: {
       for (int i = 0; i < ninput; i++) {
@@ -84,7 +79,7 @@ static inline int convert2rawid(int ninput, int *input, FSPChannelFormat format,
   return 1;
 }
 
-static inline int convert2traceidx(int ninput, int *input, FSPChannelFormat format, unsigned int *tracemap) {
+static inline int convert2traceidx(int ninput, int *input, FSPTraceFormat format, unsigned int *tracemap) {
   /*  quote from fcio.c to guide the reader:
       > unsigned int tracemap[FCIOMaxChannels]; // trace map identifiers - fadc/triggercard addresses and channels
       >                                         // stores the FADC and Trigger card addresses as follows: (address <<

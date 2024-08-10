@@ -146,6 +146,9 @@ typedef struct {
   int datamissing;
   int dataskipped;
   int tagsskipped;
+  unsigned long byteswritten;
+  unsigned long bytesread;
+  unsigned long bytesskipped;
 } tmio_stream;
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -304,6 +307,9 @@ Returns 0.
   stream->datamissing = 0;
   stream->dataskipped = 0;
   stream->tagsskipped = 0;
+  stream->byteswritten = 0;
+  stream->bytesread = 0;
+  stream->bytesskipped = 0;
 
   return 0;
 }
@@ -396,6 +402,7 @@ TMIO_EHANDSHAKE Error while writing protocol
     tmio_close(stream);
     return -1;
   }
+  stream->byteswritten += sizeof(protocol_tag) + TMIO_PROTOCOL_SIZE;
 
   if (stream->debug > 1)
     fprintf(stderr, "tmio_create: connected file/peer %s\n", name);
@@ -468,6 +475,7 @@ TMIO_EPROTO     Protocols do not match
     tmio_close(stream);
     return -1;
   }
+  stream->bytesread += sizeof(protocol_tag) + TMIO_PROTOCOL_SIZE;
 
   // Sanitise input
   protocol[TMIO_PROTOCOL_SIZE - 1] = 0;
@@ -546,6 +554,7 @@ TMIO_ETIMEDOUT Write operation timed out
 
   stream->state |= TMIO_WRITING;
   stream->tagwrites++;
+  stream->byteswritten += sizeof(write_tag);
   return 0;
 }
 
@@ -592,6 +601,7 @@ reads (tmio_read_data returns 0) on the other end.
   }
 
   stream->datawrites++;
+  stream->byteswritten += sizeof(size) + size;
   return size;
 }
 
@@ -693,6 +703,7 @@ static int tmio_skip_frame(tmio_stream *stream)
   if (frame_header < 0) {
     // Skip tag
     stream->tagsskipped++;
+    stream->bytesskipped += sizeof(frame_header);
   } else {
     // Skip data frame
     int remaining_bytes = frame_header;
@@ -709,8 +720,8 @@ static int tmio_skip_frame(tmio_stream *stream)
       assert(nbytes <= remaining_bytes);
       remaining_bytes -= nbytes;
     }
-
     stream->dataskipped++;
+    stream->bytesskipped += sizeof(frame_header) + frame_header;
   }
 
   return 0;
@@ -821,6 +832,7 @@ TMIO_ETIMEDOUT A timeout occured while skipping a data frame
       stream->hasbufferedheader = 0;
       stream->bufferedheader = 0;
       stream->tagreads++;
+      stream->bytesread += sizeof(tag);
       return tag;
     }
 
@@ -851,6 +863,7 @@ TMIO_ETIMEDOUT A timeout occured while skipping a data frame
       return -1;
   }
 
+  stream->bytesread += sizeof(frame_header);
   stream->tagreads++;
   return -frame_header;
 }
@@ -915,6 +928,7 @@ TMIO_ETIMEDOUT The timeout was hit before a complete data frame could be read
   }
 
   // Update statistics
+  stream->bytesread += sizeof(*frame_header) + to_read;
   stream->datareads++;
   if (frame_size > size)
     stream->datatruncs++;
@@ -932,6 +946,7 @@ TMIO_ETIMEDOUT The timeout was hit before a complete data frame could be read
       tmio_set_status(stream, TMIO_EREAD);
       return -1;
     }
+    stream->bytesskipped += nbytes;
 
     assert(nbytes <= remaining_bytes);
     remaining_bytes -= nbytes;
@@ -1045,6 +1060,18 @@ Returns the stream type (TMIO_FILE, TMIO_SOCKET, TMIO_PIPE).
   return stream->type;
 }
 
+/*=== Function ===============================================================*/
+
+void* tmio_stream_handle(tmio_stream *stream)
+
+/*--- Description ------------------------------------------------------------//
+
+Returns the pointer to the internal io library.
+
+//----------------------------------------------------------------------------*/
+{
+  return stream->f;
+}
 
 /*=== Function ===============================================================*/
 
@@ -1068,6 +1095,9 @@ Prints statistics.
   fprintf(stderr, "... read truncated   %d\n", stream->datatruncs);
   fprintf(stderr, "... data skipped     %d\n", stream->dataskipped);
   fprintf(stderr, "... tags skipped     %d\n", stream->tagsskipped);
+  fprintf(stderr, "... bytes written    %zu\n", stream->byteswritten);
+  fprintf(stderr, "... bytes read       %zu\n", stream->bytesread);
+  fprintf(stderr, "... bytes skipped    %zu\n", stream->bytesskipped);
 
   return 0;
 }

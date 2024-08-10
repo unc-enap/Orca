@@ -26,6 +26,7 @@
 #import "fcio.h"
 #import "ANSIEscapeHelper.h"
 #import "fsp.h"
+#import "fsp_l200.h"
 
 #define kFlashCamConfigBufferLength 64
 #define kFlashCamStatusBufferLength 256

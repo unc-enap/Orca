@@ -1,7 +1,7 @@
 #pragma once
 
-#include <fsp_state.h>
-#include <fsp_timestamps.h>
+#include "state.h"
+#include "timestamps.h"
 
 typedef struct FSPBuffer {
   int insert_state;
@@ -17,6 +17,9 @@ typedef struct FSPBuffer {
 
   Timestamp buffer_timestamp;
   Timestamp buffer_window;
+
+  // contains the last state returned via FSPBufferFetchState
+  FSPState *last_fsp_state;
 
 } FSPBuffer;
 

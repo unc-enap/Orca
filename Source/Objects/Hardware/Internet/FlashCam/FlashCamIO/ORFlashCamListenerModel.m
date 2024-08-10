@@ -1328,7 +1328,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         FSPDestroy(processor);
     }
 
-    if (!(processor = FSPCreate())) {
+    if (!(processor = FSPCreate(0))) {
         NSLog(@"%@: Couldn't allocate software trigger.\n", [self identifier]);
         return NO;
     }
@@ -1336,7 +1336,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     FSPSetLogLevel(processor, [[self configParam:@"fspLogLevel"] intValue]);
     
     /* always set the Aux Parameters to get sane defaults, we picked some at the beginning of this function.*/
-    if (!FSPSetAuxParameters(processor, FCIO_TRACE_MAP_FORMAT,
+    if (!FSP_L200_SetAuxParameters(processor, FCIO_TRACE_MAP_FORMAT,
                              fspPulserChannel, fspPulserChannelThreshold,
                              fspBaselineChannel, fspBaselineChannelThreshold,
                              fspMuonChannel, fspMuonChannelThreshold
@@ -1346,7 +1346,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
 
     if ([self configParam:@"fspHWEnabled"] && nfspHWChannels) {
-        if (!FSPSetGeParameters(processor, nfspHWChannels, fspHWChannelMap, FCIO_TRACE_MAP_FORMAT,
+        if (!FSP_L200_SetGeParameters(processor, nfspHWChannels, fspHWChannelMap, FCIO_TRACE_MAP_FORMAT,
                                 [[self configParam:@"fspHWMajThreshold"] intValue],
                                 0, // do not skip any channels to check
                                 fspHWPrescaleThresholds,
@@ -1357,7 +1357,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
 
     if ([self configParam:@"fspPSEnabled"] && nfspPSChannels) {
-        if (!FSPSetSiPMParameters(processor, nfspPSChannels, fspPSChannelMap, FCIO_TRACE_MAP_FORMAT,
+        if (!FSP_L200_SetSiPMParameters(processor, nfspPSChannels, fspPSChannelMap, FCIO_TRACE_MAP_FORMAT,
                                   fspPSChannelGains, fspPSChannelThresholds,
                                   fspPSChannelShapings, fspPSChannelLowPass,
                                   [[self configParam:@"fspPSPreWindow"] intValue],
@@ -1548,7 +1548,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             return NO; // stream has ended - similar to FCIOGetNextState
         state = fspstate->state; // set current read record
 
-        if (!fspstate->write && !writeNonTriggered) // write to output even if software trigger did not trigger
+        if (!fspstate->write_flags.write && !writeNonTriggered) // write to output even if software trigger did not trigger
             return YES;
     }
     fcio_last_tag = state->last_tag;

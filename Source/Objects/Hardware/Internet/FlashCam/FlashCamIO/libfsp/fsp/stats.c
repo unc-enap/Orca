@@ -1,9 +1,10 @@
-#include "fsp_stats.h"
+#include "stats.h"
 
 #include <stdio.h>
 
-#include <fsp_processor.h>
 #include <time_utils.h>
+
+#include "processor.h"
 
 int FSPStatsUpdate(StreamProcessor* processor, int force) {
   FSPStats* stats = processor->stats;

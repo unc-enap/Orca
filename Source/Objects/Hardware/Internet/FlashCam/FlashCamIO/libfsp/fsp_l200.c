@@ -4,22 +4,20 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <fsp_state.h>
-
-int FSPSetAuxParameters(StreamProcessor* processor, FSPChannelFormat format, int pulser_channel,
+int FSP_L200_SetAuxParameters(StreamProcessor* processor, FSPTraceFormat format, int pulser_channel,
                         int pulser_level_adc, int baseline_channel, int baseline_level_adc,
                         int muon_channel, int muon_level_adc) {
   if (!is_known_channelmap_format(format)) {
     if (processor->loglevel)
       fprintf(stderr,
-              "ERROR LPPSetAuxParameters: channel map type %s is not supported. Valid inputs are \"fcio-trace-index\", "
+              "ERROR FSP_L200_SetAuxParameters: channel map type %s is not supported. Valid inputs are \"fcio-trace-index\", "
               "\"fcio-tracemap\" or \"rawid\".\n",
               channelmap_fmt2str(format));
     return 0;
   }
-  processor->ct_cfg = calloc(1, sizeof(ChannelThresholdConfig));
+  // processor->dsp_ct = calloc(1, sizeof(DSPChannelThreshold));
 
-  ChannelThresholdConfig* ct_cfg = processor->ct_cfg;
+  DSPChannelThreshold* ct_cfg = processor->dsp_ct;
 
   ct_cfg->tracemap_format = format;
   ct_cfg->tracemap[0] = pulser_channel;
@@ -28,36 +26,33 @@ int FSPSetAuxParameters(StreamProcessor* processor, FSPChannelFormat format, int
   ct_cfg->thresholds[0] = pulser_level_adc;
   ct_cfg->thresholds[1] = baseline_level_adc;
   ct_cfg->thresholds[2] = muon_level_adc;
-  ct_cfg->labels[0] = "Pulser";
-  ct_cfg->labels[1] = "Baseline";
-  ct_cfg->labels[2] = "Muon";
   ct_cfg->ntraces = 3;
 
+  ct_cfg->enabled = 1;
+
   if (processor->loglevel >= 4) {
-    fprintf(stderr, "DEBUG LPPSetAuxParameters\n");
+    fprintf(stderr, "DEBUG FSP_L200_SetAuxParameters\n");
     for (int i = 0; i < ct_cfg->ntraces; i++) {
       if (ct_cfg->tracemap_format == FCIO_TRACE_MAP_FORMAT) {
-        fprintf(stderr, "DEBUG %s channel   0x%x level_adc %d\n", ct_cfg->labels[i], ct_cfg->tracemap[i],
-                ct_cfg->thresholds[i]);
+        fprintf(stderr, "DEBUG channel   0x%x level_adc %d\n", ct_cfg->tracemap[i], ct_cfg->thresholds[i]);
       } else {
-        fprintf(stderr, "DEBUG %s channel   %d level_adc %d\n", ct_cfg->labels[i], ct_cfg->tracemap[i],
-                ct_cfg->thresholds[i]);
+        fprintf(stderr, "DEBUG channel   %d level_adc %d\n", ct_cfg->tracemap[i], ct_cfg->thresholds[i]);
       }
     }
   }
   return 1;
 }
 
-int FSPSetGeParameters(StreamProcessor* processor, int nchannels, int* channelmap, FSPChannelFormat format,
+int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* channelmap, FSPTraceFormat format,
                        int majority_threshold, int skip_full_counting, unsigned short* ge_prescale_threshold_adc,
                        int prescale_ratio) {
-  processor->hwm_cfg = calloc(1, sizeof(HardwareMajorityConfig));
-  HardwareMajorityConfig* fmc = processor->hwm_cfg;
+  // processor->dsp_hwm = calloc(1, sizeof(DSPHardwareMajority));
+  DSPHardwareMajority* fmc = processor->dsp_hwm;
 
   if (!is_known_channelmap_format(format)) {
     if (processor->loglevel)
       fprintf(stderr,
-              "ERROR LPPSetGeParameters: channel map type %s is not supported. Valid inputs are \"fcio-trace-index\", "
+              "ERROR FSP_L200_SetGeParameters: channel map type %s is not supported. Valid inputs are \"fcio-trace-index\", "
               "\"fcio-tracemap\" or \"rawid\".\n",
               channelmap_fmt2str(format));
     free(fmc);
@@ -72,20 +67,22 @@ int FSPSetGeParameters(StreamProcessor* processor, int nchannels, int* channelma
   }
   fmc->fast = skip_full_counting;
   if (majority_threshold >= 0)
-    processor->hwm_threshold = majority_threshold;
+    processor->config.hwm_threshold = majority_threshold;
   else {
     fprintf(stderr, "CRITICAL majority_threshold needs to be >= 0 is %d\n", majority_threshold);
     return 0;
   }
   if (prescale_ratio >= 0)
-    processor->hwm_prescale_ratio = prescale_ratio;
+    processor->config.hwm_prescale_ratio = prescale_ratio;
   else {
     fprintf(stderr, "CRITICAL Ge prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
   }
 
+  fmc->enabled = 1;
+
   if (processor->loglevel >= 4) {
-    fprintf(stderr, "DEBUG LPPSetGeParameters\n");
+    fprintf(stderr, "DEBUG FSP_L200_SetGeParameters\n");
     fprintf(stderr, "DEBUG majority_threshold %d\n", majority_threshold);
     fprintf(stderr, "DEBUG prescale_ratio     %d\n", prescale_ratio);
     fprintf(stderr, "DEBUG skip_full_counting %d\n", fmc->fast);
@@ -101,19 +98,19 @@ int FSPSetGeParameters(StreamProcessor* processor, int nchannels, int* channelma
   return 1;
 }
 
-int FSPSetSiPMParameters(StreamProcessor* processor, int nchannels, int* channelmap, FSPChannelFormat format,
+int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* channelmap, FSPTraceFormat format,
                          float* calibration_pe_adc, float* channel_thresholds_pe, int* shaping_width_samples,
                          float* lowpass_factors, int coincidence_pre_window_ns, int coincidence_post_window_ns,
                          int coincidence_window_samples, int sum_window_start_sample, int sum_window_stop_sample,
                          float sum_threshold_pe, float coincidence_wps_threshold, int prescale_ratio,
                          int enable_muon_coincidence) {
-  processor->wps_cfg = calloc(1, sizeof(WindowedPeakSumConfig));
-  WindowedPeakSumConfig* wps_cfg = processor->wps_cfg;
+  // processor->dsp_wps = calloc(1, sizeof(DSPWindowedPeakSum));
+  DSPWindowedPeakSum* wps_cfg = processor->dsp_wps;
 
   if (!is_known_channelmap_format(format)) {
     if (processor->loglevel)
       fprintf(stderr,
-              "CRITICAL LPPSetSiPMParameters: channel map type %s is not supported. Valid inputs are "
+              "CRITICAL FSP_L200_SetSiPMParameters: channel map type %s is not supported. Valid inputs are "
               "\"fcio-trace-index\", \"fcio-tracemap\" or \"rawid\".\n",
               channelmap_fmt2str(format));
     free(wps_cfg);
@@ -122,26 +119,26 @@ int FSPSetSiPMParameters(StreamProcessor* processor, int nchannels, int* channel
   wps_cfg->tracemap_format = format;
 
   if (coincidence_wps_threshold >= 0)
-    processor->relative_wps_threshold = coincidence_wps_threshold;
+    processor->config.relative_wps_threshold = coincidence_wps_threshold;
   else {
     fprintf(stderr, "CRICITAL coincidence_wps_threshold needs to be >= 0 is %f\n", coincidence_wps_threshold);
     return 0;
   }
 
   if (sum_threshold_pe >= 0)
-    processor->absolute_wps_threshold = sum_threshold_pe;
+    processor->config.absolute_wps_threshold = sum_threshold_pe;
   else {
     fprintf(stderr, "CRICITAL sum_threshold_pe needs to be >= 0 is %f\n", sum_threshold_pe);
     return 0;
   }
 
-  processor->pre_trigger_window.seconds = coincidence_pre_window_ns / 1000000000L;
-  processor->pre_trigger_window.nanoseconds = coincidence_pre_window_ns % 1000000000L;
-  processor->post_trigger_window.seconds = coincidence_post_window_ns / 1000000000L;
-  processor->post_trigger_window.nanoseconds = coincidence_post_window_ns % 1000000000L;
-  processor->muon_coincidence = enable_muon_coincidence;
+  processor->config.pre_trigger_window.seconds = coincidence_pre_window_ns / 1000000000L;
+  processor->config.pre_trigger_window.nanoseconds = coincidence_pre_window_ns % 1000000000L;
+  processor->config.post_trigger_window.seconds = coincidence_post_window_ns / 1000000000L;
+  processor->config.post_trigger_window.nanoseconds = coincidence_post_window_ns % 1000000000L;
+  processor->config.muon_coincidence = enable_muon_coincidence;
   if (prescale_ratio >= 0)
-    processor->wps_prescale_ratio = prescale_ratio;
+    processor->config.wps_prescale_ratio = prescale_ratio;
   else {
     fprintf(stderr, "CRITICAL SiPM prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
@@ -152,7 +149,6 @@ int FSPSetSiPMParameters(StreamProcessor* processor, int nchannels, int* channel
   wps_cfg->sum_window_stop_sample = sum_window_stop_sample;
   wps_cfg->coincidence_threshold = coincidence_wps_threshold;
 
-  /* TODO CHECK THIS*/
   wps_cfg->apply_gain_scaling = 1;
 
   wps_cfg->ntraces = nchannels;
@@ -196,21 +192,23 @@ int FSPSetSiPMParameters(StreamProcessor* processor, int nchannels, int* channel
     if (wps_cfg->dsp_post_samples[i] > wps_cfg->dsp_post_max_samples) wps_cfg->dsp_post_max_samples = wps_cfg->dsp_post_samples[i];
   }
 
+  wps_cfg->enabled = 1;
+
   if (processor->loglevel >= 4) {
     /* DEBUGGING enabled, print all inputs */
-    fprintf(stderr, "DEBUG LPPSetSiPMParameters:\n");
+    fprintf(stderr, "DEBUG FSP_L200_SetSiPMParameters:\n");
     fprintf(stderr, "DEBUG channelmap_format %d : %s\n", wps_cfg->tracemap_format, channelmap_fmt2str(format));
-    fprintf(stderr, "DEBUG prescale_ratio               %d\n", processor->wps_prescale_ratio);
+    fprintf(stderr, "DEBUG prescale_ratio               %d\n", processor->config.wps_prescale_ratio);
     fprintf(stderr, "DEBUG sum_window_start_sample      %d\n", wps_cfg->sum_window_start_sample);
     fprintf(stderr, "DEBUG sum_window_stop_sample       %d\n", wps_cfg->sum_window_stop_sample);
     fprintf(stderr, "DEBUG dsp_pre_max_samples          %d\n", wps_cfg->dsp_pre_max_samples);
     fprintf(stderr, "DEBUG dsp_post_max_samples         %d\n", wps_cfg->dsp_post_max_samples);
-    fprintf(stderr, "DEBUG coincidence_pre_window_ns    %ld\n", processor->pre_trigger_window.nanoseconds);
-    fprintf(stderr, "DEBUG coincidence_post_window_ns   %ld\n", processor->post_trigger_window.nanoseconds);
+    fprintf(stderr, "DEBUG coincidence_pre_window_ns    %ld\n", processor->config.pre_trigger_window.nanoseconds);
+    fprintf(stderr, "DEBUG coincidence_post_window_ns   %ld\n", processor->config.post_trigger_window.nanoseconds);
     fprintf(stderr, "DEBUG coincidence_window_samples   %d\n", wps_cfg->coincidence_window);
-    fprintf(stderr, "DEBUG relative_wps_threshold       %f\n", processor->relative_wps_threshold);
-    fprintf(stderr, "DEBUG absolute_sum_threshold       %f\n", processor->absolute_wps_threshold);
-    fprintf(stderr, "DEBUG enable_muon_coincidence      %d\n", processor->muon_coincidence);
+    fprintf(stderr, "DEBUG relative_wps_threshold       %f\n", processor->config.relative_wps_threshold);
+    fprintf(stderr, "DEBUG absolute_sum_threshold       %f\n", processor->config.absolute_wps_threshold);
+    fprintf(stderr, "DEBUG enable_muon_coincidence      %d\n", processor->config.muon_coincidence);
 
     for (int i = 0; i < wps_cfg->ntraces; i++) {
       if (wps_cfg->tracemap_format == 1) {
