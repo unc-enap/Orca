@@ -20,7 +20,6 @@
 #import "ORFlashCamReadoutModel.h"
 #import "ORFlashCamADCModel.h"
 #import "ORFlashCamTriggerModel.h"
-#import "bufio.h"
 
 NSString* ORFlashCamReadoutModelIPAddressChanged    = @"ORFlashCamReadoutModelIPAddressChanged";
 NSString* ORFlashCamReadoutModelUsernameChanged     = @"ORFlashCamReadoutModelUsernameChanged";

@@ -47,15 +47,15 @@
     int bufferedRecords;
     StreamProcessor* processor;
     uint32_t  configId;
-    uint32_t* configBuffer;
-    uint32_t  configBufferIndex;
-    uint32_t  takeDataConfigIndex;
-    uint32_t  bufferedConfigCount;
+//    uint32_t* configBuffer;
+//    uint32_t  configBufferIndex;
+//    uint32_t  takeDataConfigIndex;
+//    uint32_t  bufferedConfigCount;
     uint32_t  statusId;
-    uint32_t* statusBuffer;
-    uint32_t  statusBufferIndex;
-    uint32_t  takeDataStatusIndex;
-    uint32_t  bufferedStatusCount;
+//    uint32_t* statusBuffer;
+//    uint32_t  statusBufferIndex;
+//    uint32_t  takeDataStatusIndex;
+//    uint32_t  bufferedStatusCount;
     uint32_t  eventId;
     NSString* status;
     ORAlarm* runFailedAlarm;
@@ -83,6 +83,7 @@
     NSMutableArray* readOutArgs;
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
+
     bool listenerRemoteIsFile;
     int fcio_last_tag;
     bool enableStreamProcessor;
@@ -128,7 +129,12 @@
     int fspBaselineChannelThreshold;
     int fspMuonChannel;
     int fspMuonChannelThreshold;
+    bool writeNonTriggered;
     bool debug;
+
+    // FCIOWriter internals
+    FCIOStream fcio_mem_writer;
+    FCIORecordSizes fcioSizes;
 }
 
 #pragma mark •••Initialization
@@ -205,6 +211,7 @@
 - (void) setStateBuffer:(int)sb;
 - (void) setConfigId:(uint32_t)cId;
 - (void) setStatusId:(uint32_t)sId;
+- (void) setEventId:(uint32_t)eId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherListener;
 - (void) setReadOutList:(ORReadOutList*)newList;
@@ -228,6 +235,7 @@
 - (bool) fcioOpen;
 - (bool) fcioClose;
 - (bool) fcioRead:(ORDataPacket*)aDataPacket;
+- (bool) shipFCIO:(ORDataPacket*)aDataPacket state:(FCIOState*)state fspState: (FSPState*)fspstate;
 - (void) runFailed;
 
 #pragma mark •••Task methods
