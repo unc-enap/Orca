@@ -4,7 +4,7 @@
 
 #include "observables.h"
 
-typedef struct WindowedPeakSumConfig {
+typedef struct DSPWindowedPeakSum {
   int tracemap_format;
   int tracemap[FCIOMaxChannels];
   float gains[FCIOMaxChannels];
@@ -58,7 +58,7 @@ typedef struct WindowedPeakSumConfig {
 
 } DSPWindowedPeakSum;
 
-typedef struct HardwareMajorityConfig {
+typedef struct DSPHardwareMajority {
   int tracemap_format;
   int ntraces;
   int tracemap[FCIOMaxChannels];
@@ -75,7 +75,7 @@ typedef struct HardwareMajorityConfig {
 
 } DSPHardwareMajority;
 
-typedef struct ChannelThresholdConfig {
+typedef struct DSPChannelThreshold {
   int tracemap_format;
   int ntraces;
   int tracemap[FCIOMaxChannels];
