@@ -28,9 +28,6 @@
 #import "fsp.h"
 #import "fsp_l200.h"
 
-#define kFlashCamConfigBufferLength 64
-#define kFlashCamStatusBufferLength 256
-
 @interface ORFlashCamListenerModel : ORAuxHw <ORDataTaker>
 {
     @private
@@ -47,15 +44,7 @@
     int bufferedRecords;
     StreamProcessor* processor;
     uint32_t  configId;
-//    uint32_t* configBuffer;
-//    uint32_t  configBufferIndex;
-//    uint32_t  takeDataConfigIndex;
-//    uint32_t  bufferedConfigCount;
     uint32_t  statusId;
-//    uint32_t* statusBuffer;
-//    uint32_t  statusBufferIndex;
-//    uint32_t  takeDataStatusIndex;
-//    uint32_t  bufferedStatusCount;
     uint32_t  eventId;
     NSString* status;
     ORAlarm* runFailedAlarm;
@@ -245,8 +234,6 @@
 - (void) setupReadoutTask;
 - (void) startReadoutTask;
 - (void) stopReadoutTask;
-- (void) readConfig:(fcio_config*)config;
-- (void) readStatus:(fcio_status*)fcstatus;
 
 #pragma mark •••Data taker methods
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

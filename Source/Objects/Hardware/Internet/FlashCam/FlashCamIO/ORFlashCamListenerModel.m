@@ -204,11 +204,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
     if(reader) FCIODestroyStateReader(reader);
     if(processor) FSPDestroy(processor);
-//    free(configBuffer);
-//    configBuffer = NULL;
-//
-//    free(statusBuffer);
-//    statusBuffer = NULL;
 
     [runFailedAlarm      clearAlarm];
     [runFailedAlarm      release];
@@ -1550,73 +1545,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
     // fspstate is allowed to be NULL - it steers the output depending on SoftwareTrigger activation.
     return [self shipFCIO:aDataPacket state:state fspState:fspstate];
-
-//    switch(state->last_tag){
-//        case FCIOConfig: {
-//            DEBUG_PRINT( "%s %s: fcioRead: config\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
-//            for(id obj in dataTakers) [obj setWFsamples:state->config->eventsamples];
-//            [self readConfig:state->config];
-//            [self sendConfigPacket:aDataPacket]; // send outside of the locked function
-//            break;
-//        }
-//        case FCIOEvent:
-//        case FCIOSparseEvent: {
-//
-//#ifdef DEBUG_FSP
-//            if (!fspstate->write) {
-//                writeWaveforms = false; // might not properly work with data parsing downstream
-//            }
-//            // this implementation reused the unused timestamp fields. This produces conflicts with fc250b version 2.
-//            // should better use a separate new record.
-//            state->event->type = 10; // FSP Event, use new EventType
-//            state->event->timestamp[4] = (unsigned int)(fspstate->flags.trigger); // unsigned int
-//            state->event->timestamp[5] = (unsigned int)(fspstate->flags.event); // unsigned int
-//            state->event->timestamp[6] = (unsigned int)(fspstate->largest_sum_pe * 100);  // increase precision up to 2 decimals, won't ever need more than that
-//            state->event->timestamp[7] = fspstate->largest_sum_offset; // the sample within the event
-//            state->event->timestamp[8] = fspstate->channel_multiplicity; // the number of channels participating
-//            state->event->timestamp[9] = *(int*)(&fspstate->largest_pe);  // float
-//            state->event->timestamp_size = 10;
-//#endif
-//            // for(int itr=0; itr<state->event->num_traces; itr++){
-//            //     NSDictionary* dict = [chanMap objectAtIndex:state->event->trace_list[itr]];
-//            //     ORFlashCamADCModel* card = [dict objectForKey:@"adc"];
-//            //     unsigned int chan = [[dict objectForKey:@"channel"] unsignedIntValue];
-//            //     [card shipEvent:state->event withIndex:state->event->trace_list[itr]
-//            //          andChannel:chan use:aDataPacket includeWF:writeWaveforms];
-//            // }
-//
-//            break;
-//        }
-//        case FCIORecEvent: {
-//            if(!unrecognizedPacket){
-//                NSLogColor([NSColor redColor], @"%@: skipping received FCIORecEvent packet on %@ - packet type not supported!\n", [self identifier], [self streamDescription]);
-//                NSLogColor([NSColor redColor], @"%@: WARNING - suppressing further instances of this message for this object in this run\n", [self identifier]);
-//            }
-//            unrecognizedPacket = true;
-//            break;
-//        }
-//        case FCIOStatus: {
-//            DEBUG_PRINT( "%s %s: fcioRead: status\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
-//            [self readStatus:state->status];
-//            [self sendStatusPacket:aDataPacket];
-//            break;
-//        }
-//        default: {
-//            bool found = false;
-//            // we don't pass unrecognized states, actually might be best to
-//            // deselect them in the statereader.. multiple ways to handle this
-//            for(id n in unrecognizedStates)
-//                if((int) state->last_tag == [n intValue]) found = true;
-//            if(!found){
-//                [unrecognizedStates addObject:[NSNumber numberWithInt:(int)state->last_tag]];
-//                NSLogColor([NSColor redColor], @"%@: unrecognized fcio record tag %d on %@\n", [self identifier], state->last_tag, [self streamDescription]);
-//                NSLogColor([NSColor redColor], @"%@: WARNING - suppressing further instances of this message for this object in this run\n", [self identifier]);
-//            }
-//            break;
-//        }
-//    }
-
-//    return YES;
 }
 
 - (size_t) dataRecordSize:(int) write_tag fcioState:(FCIOState*) state fspState:(FSPState*) fspstate
@@ -2329,187 +2257,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 }
 
 #pragma mark •••Data taker methods
-
-/*
-
-- (void) readConfig:(fcio_config*)config
-{
-    // validate the number of waveform samples
-    if(config->eventsamples != [[self configParam:@"eventSamples"] intValue]){
-        NSLogColor([NSColor redColor], @"%@: user defined waveform length %d "
-                   " != waveform length from configuration packet %d\n", [self identifier],
-                   [[self configParam:@"eventSamples"] intValue], config->eventsamples);
-        [self runFailed];
-    }
-    // read the configuration packet
-    uint32_t index = configBufferIndex;
-    configBufferIndex = (configBufferIndex + 1) % kFlashCamConfigBufferLength;
-    bufferedConfigCount++;
-    uint32_t offset = 2 + (2 + sizeof(fcio_config)/sizeof(uint32_t)) * index;
-    configBuffer[offset++] = (uint32_t) config->telid;
-    configBuffer[offset++] = (uint32_t) config->adcs;
-    configBuffer[offset++] = (uint32_t) config->triggers;
-    configBuffer[offset++] = (uint32_t) config->eventsamples;
-    configBuffer[offset++] = (uint32_t) config->adcbits;
-    configBuffer[offset++] = (uint32_t) config->sumlength;
-    configBuffer[offset++] = (uint32_t) config->blprecision;
-    configBuffer[offset++] = (uint32_t) config->mastercards;
-    configBuffer[offset++] = (uint32_t) config->triggercards;
-    configBuffer[offset++] = (uint32_t) config->adccards;
-    configBuffer[offset++] = (uint32_t) config->gps;
-    memcpy(configBuffer + offset, config->tracemap, config->adcs*sizeof(uint32_t));
-    offset += FCIOMaxChannels;
-    // append the board revision and main board ids to the configuration packet
-    NSMutableArray* addresses = [NSMutableArray array];
-    uint32 broffset = offset + (uint32_t) ceil([self maxADCCards]/4.0);
-    for(int i=0; i<config->adcs; i++){
-        uint16_t addr = (config->tracemap[i] & 0xFFFF0000) >> 16;
-        NSUInteger index = [addresses indexOfObjectIdenticalTo:[NSNumber numberWithUnsignedShort:addr]];
-        if(index == NSNotFound){
-            [addresses addObject:[NSNumber numberWithUnsignedShort:addr]];
-            index = [addresses count] - 1;
-        }
-        else continue;
-        bool found = false;
-        for(id obj in [readOutList children]){
-            if([[obj object] cardAddress] != (uint32_t) addr) continue;
-            configBuffer[offset+index/4] |= (((uint32_t) [[obj object] boardRevision]) << (8*(index%4)));
-            configBuffer[broffset]   = (uint32_t) (([[obj object] hardwareID] & 0xFFFFFFFF00000000) >> 32);
-            configBuffer[broffset+1] = (uint32_t) (([[obj object] hardwareID] & 0x00000000FFFFFFFF));
-            broffset += 2;
-            found = true;
-            break;
-        }
-        if(!found){
-            NSLogColor([NSColor redColor], @"%@: adc mapping error for address 0x%hhx\n",
-                       [self identifier], addr);
-            [self runFailed];
-        }
-    }
-    if(bufferedConfigCount == kFlashCamConfigBufferLength){
-        NSLogColor([NSColor redColor], @"%@: error config buffer full\n",
-                   [self identifier]);
-        [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelConfigBufferFull
-                                                            object:self];
-    }
-    // validate the channel map
-    bool fail = false;
-    for(unsigned int i=0; i<config->adcs; i++){
-        uint32_t addr  = (config->tracemap[i] & 0xffff0000) >> 16;
-        uint32_t input =  config->tracemap[i] & 0x0000ffff;
-        if(i >= (unsigned int) [chanMap count]){
-            if(config->tracemap[i] == 0) continue;
-            else{
-                NSLogColor([NSColor redColor], @"%@: failed to start run due to "
-                           "FCIO channel map entry (index %u card 0x%x input %u) not found in Orca channel map\n",
-                          [self identifier], i, addr, input);
-                fail = true;
-                continue;
-            }
-        }
-        NSDictionary* dict = [chanMap objectAtIndex:i];
-        if([[dict objectForKey:@"adc"]          cardAddress] != addr ||
-           [[dict objectForKey:@"channel"] unsignedIntValue] != input){
-            NSLogColor([NSColor redColor], @"%@: failed to start run due to "
-                       "inconsistent channel map entry at index %u: FCIO - card 0x%x input %u, ORCA - card 0x%x input %u\n",
-                       [self identifier], i, addr, input,
-                       [[dict objectForKey:@"adc"] cardAddress], [[dict objectForKey:@"channel"] unsignedIntValue]);
-            fail = true;
-        }
-    }
-    if(fail) {
-        NSLogColor([NSColor redColor], @"%@: failed to validated channel map\n", [self identifier]);
-        [self runFailed];
-    }
-}
-
-- (void) sendConfigPacket:(ORDataPacket*)aDataPacket
-{
-    uint32_t blength = 2 + sizeof(fcio_config) / sizeof(uint32_t);
-    uint32_t dlength = blength;
-    blength += (uint32_t) ceil([self maxADCCards]/4.0) + 2*[self maxADCCards];
-    uint32_t index = blength * takeDataConfigIndex;
-    dlength -= FCIOMaxChannels - configBuffer[index+3];
-    uint32_t nadc = configBuffer[index+11];
-    dlength += (uint32_t) ceil(nadc/4.0) + 2*nadc;
-    takeDataConfigIndex = (takeDataConfigIndex + 1) % kFlashCamConfigBufferLength;
-    bufferedConfigCount --;
-    configBuffer[index]    = configId | (dlength & 0x3ffff);
-    DEBUG_PRINT( "sendConfig: dataid %u record %u -> %u\n", configId, dlength, configBuffer[index]);
-    configBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
-    configBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
-    [aDataPacket addLongsToFrameBuffer:configBuffer+index
-                                length:dlength-(uint32_t)ceil(nadc/4.0)-2*nadc];
-    index += 2 + sizeof(fcio_config)/sizeof(uint32_t);
-    [aDataPacket addLongsToFrameBuffer:configBuffer+index length:(uint32_t)ceil(nadc/4.0)];
-    index += (uint32_t) ceil([self maxADCCards]/4.0);
-    [aDataPacket addLongsToFrameBuffer:configBuffer+index length:nadc*2];
-}
-
-- (void) readStatus:(fcio_status*)fcstatus
-{
-    uint32_t index = statusBufferIndex;
-    statusBufferIndex = (statusBufferIndex + 1) % kFlashCamStatusBufferLength;
-    bufferedStatusCount++;
-    uint32_t offset = 2 + (2 + sizeof(fcio_status)/sizeof(uint32_t)) * index;
-    statusBuffer[offset++] = (uint32_t) fcstatus->status;
-    memcpy(statusBuffer+offset, fcstatus->statustime, 10*sizeof(uint32_t));
-    offset += 10;
-    statusBuffer[offset++] = fcstatus->cards;
-    statusBuffer[offset++] = fcstatus->size;
-    for(int i=0; i<fcstatus->cards; i++){
-        statusBuffer[offset++] = (fcstatus->data+i)->reqid;
-        statusBuffer[offset++] = (fcstatus->data+i)->status;
-        statusBuffer[offset++] = (fcstatus->data+i)->eventno;
-        statusBuffer[offset++] = (fcstatus->data+i)->pps;
-        statusBuffer[offset++] = (fcstatus->data+i)->ticks;
-        statusBuffer[offset++] = (fcstatus->data+i)->maxticks;
-        statusBuffer[offset++] = (fcstatus->data+i)->numenv;
-        statusBuffer[offset++] = (fcstatus->data+i)->numctilinks;
-        statusBuffer[offset++] = (fcstatus->data+i)->numlinks;
-        statusBuffer[offset++] = (fcstatus->data+i)->dummy;
-        statusBuffer[offset++] = (fcstatus->data+i)->totalerrors;
-        statusBuffer[offset++] = (fcstatus->data+i)->enverrors;
-        statusBuffer[offset++] = (fcstatus->data+i)->ctierrors;
-        statusBuffer[offset++] = (fcstatus->data+i)->linkerrors;
-        memcpy(statusBuffer+offset, (fcstatus->data+i)->othererrors, 5*sizeof(uint32_t));
-        offset += 5;
-        memcpy(statusBuffer+offset, (fcstatus->data+i)->environment, 16*sizeof(uint32_t));
-        offset += 16;
-        memcpy(statusBuffer+offset, (fcstatus->data+i)->ctilinks, 4*sizeof(uint32_t));
-        offset += 4;
-        memcpy(statusBuffer+offset, (fcstatus->data+i)->linkstates, fcstatus->cards*sizeof(uint32_t));
-        unsigned int ID = (fcstatus->data+i)->reqid;
-        for(id dict in cardMap){
-            if([[dict objectForKey:@"fcioID"] unsignedIntValue] == ID){
-                [[dict objectForKey:@"card"] readStatus:fcstatus atIndex:i];
-                break;
-            }
-        }
-    }
-    if(bufferedStatusCount == kFlashCamStatusBufferLength){
-        NSLogColor([NSColor redColor], @"%@: error status buffer full\n",
-                   [self identifier]);
-    }
-}
-
-- (void) sendStatusPacket:(ORDataPacket*)aDataPacket
-{
-    uint32_t index = (2 + sizeof(fcio_status) / sizeof(uint32_t)) * takeDataStatusIndex;
-    takeDataStatusIndex = (takeDataStatusIndex + 1) % kFlashCamStatusBufferLength;
-    bufferedStatusCount --;
-    int cards = (int) statusBuffer[index+13];
-    int dsize = (int) statusBuffer[index+14];
-    uint32_t length = 2 + (sizeof(fcio_status) -
-                           (256-cards)*(dsize+cards*sizeof(uint32_t))) / sizeof(uint32_t);
-    statusBuffer[index]    = statusId | (length & 0x3ffff);
-    statusBuffer[index+1]  = ((unsigned short) [guardian uniqueIdNumber]) << 16;
-    statusBuffer[index+1] |=  (unsigned short) [self uniqueIdNumber];
-    DEBUG_PRINT( "sendStatus: dataid %u record %u -> %u\n", statusId, length, statusBuffer[index]);
-    [aDataPacket addLongsToFrameBuffer:statusBuffer+index length:length];
-}
- */
-
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
     // check the listenerThreadMain method
@@ -2524,17 +2271,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     if(!unrecognizedStates) unrecognizedStates = [[NSMutableArray array] retain];
     [unrecognizedStates removeAllObjects];
     [readOutArgs removeAllObjects];
-
-//    memset(configBuffer, 0, kFlashCamConfigBufferLength * (2 + sizeof(fcio_config)/sizeof(uint32_t) + (uint32_t)
-//                                                           ceil([self maxADCCards]/4.0) + 2*[self maxADCCards]));
-//    configBufferIndex   = 0;
-//    takeDataConfigIndex = 0;
-//    bufferedConfigCount = 0;
-//
-//    memset(statusBuffer, 0, kFlashCamStatusBufferLength * (2 + sizeof(fcio_status)/sizeof(uint32_t)));
-//    statusBufferIndex   = 0;
-//    takeDataStatusIndex = 0;
-//    bufferedStatusCount = 0;
 
     [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamListenerModel"];
 
@@ -2587,16 +2323,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     currentStartupTime = 0;
 
     [readOutArgs removeAllObjects];
-
-//    memset(configBuffer, 0, kFlashCamConfigBufferLength * (2 + sizeof(fcio_config)/sizeof(uint32_t) + (uint32_t)
-//                                                           ceil([self maxADCCards]/4.0) + 2*[self maxADCCards]));
-//    configBufferIndex   = 0;
-//    takeDataConfigIndex = 0;
-//    bufferedConfigCount = 0;
-//    memset(statusBuffer, 0, kFlashCamStatusBufferLength * (2 + sizeof(fcio_status)/sizeof(uint32_t)));
-//    statusBufferIndex   = 0;
-//    takeDataStatusIndex = 0;
-//    bufferedStatusCount = 0;
 
     [self setChanMap:nil];
     [self setCardMap:nil];
