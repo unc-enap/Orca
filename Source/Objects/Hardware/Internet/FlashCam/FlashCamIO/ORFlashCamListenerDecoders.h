@@ -20,6 +20,14 @@
 #import "ORBaseDecoder.h"
 #import "ORDataSet.h"
 
+#import "fcio.h"
+#import "fsp.h"
+
+#define kMaxFCIOStreams 16
+// streams are identifier by the uniqueID of the sending object (FlashCamListenerModel)
+// which are counted sequentially starting from 1. If there is ever a use case to have more than
+// 15 simulatenous listeners, this needs to be increased accordingly.
+
 @interface ORFlashCamListenerConfigDecoder : ORBaseDecoder {
     @private
 }
@@ -30,6 +38,21 @@
 @interface ORFlashCamListenerStatusDecoder : ORBaseDecoder {
     @private
 }
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
+@end
+
+@interface ORFCIODecoder : ORBaseDecoder {
+    @private
+    // lookups per uniqueID of the sending Listener
+    FCIOData* fcioStreams[kMaxFCIOStreams];
+    FSPState* fspStates[kMaxFCIOStreams];
+    StreamProcessor* processors[kMaxFCIOStreams];
+    NSMutableDictionary* fcCards;
+}
+- (void) addToObjectList:(NSMutableDictionary*)dict;
+- (bool) allocOrUpdate:(void*)someData withSize:(size_t)size andListener: (uint32_t)listener_id;
+- (void) dealloc;
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
