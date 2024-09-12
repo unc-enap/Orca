@@ -607,6 +607,11 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     return eventId;
 }
 
+- (uint32_t) listenerDataId
+{
+    return listenerDataId;
+}
+
 - (NSString*) status
 {
     if(!status) return @"";
@@ -1045,18 +1050,25 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     eventId = eId;
 }
 
+- (void) setListenerDataId:(uint32_t)lId
+{
+    listenerDataId = lId;
+}
+
 - (void) setDataIds:(id)assigner
 {
-    configId = [assigner assignDataIds:kLongForm];
-    eventId = [assigner assignDataIds:kLongForm];
-    statusId = [assigner assignDataIds:kLongForm];
+    listenerDataId = [assigner assignDataIds:kLongForm];
+//    configId = [assigner assignDataIds:kLongForm];
+//    eventId = [assigner assignDataIds:kLongForm];
+//    statusId = [assigner assignDataIds:kLongForm];
 }
 
 - (void) syncDataIdsWith:(id)anotherListener
 {
-    [self setConfigId:[anotherListener configId]];
-    [self setEventId:[anotherListener eventId]];
-    [self setStatusId:[anotherListener statusId]];
+    [self setListenerDataId:[anotherListener listenerDataId]];
+//    [self setConfigId:[anotherListener configId]];
+//    [self setEventId:[anotherListener eventId]];
+//    [self setStatusId:[anotherListener statusId]];
 }
 
 - (void) setReadOutList:(ORReadOutList*)newList
@@ -1555,7 +1567,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         case FCIOConfig:
             requiredSize += fcioSizes.protocol + fcioSizes.config;
             // Orca extends the config record by shipping board revisions and hardware ids
-            requiredSize += state->config->adcs * (sizeof(uint8_t) + sizeof(uint64_t)) + 2 * sizeof(int);
+            requiredSize += state->config->adcs * (3 * sizeof(uint8_t) + sizeof(uint64_t)) + 4 * sizeof(int);
             break;
         case FCIOEvent:
             requiredSize += fcioSizes.event;
@@ -1620,9 +1632,15 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 {
     size_t br_data_size = config->adcs * sizeof(uint8_t) ;
     size_t hwid_data_size = config->adcs * sizeof(uint64_t);
+    size_t crate_number_size = config->adcs * sizeof(uint8_t);
+    size_t crate_slot_size = config->adcs * sizeof(uint8_t);
 
     uint8_t br_buffer[FCIOMaxChannels];
     uint64_t hwid_buffer[FCIOMaxChannels];
+
+    uint8_t crate_number[FCIOMaxChannels];
+    uint8_t crate_slot[FCIOMaxChannels];
+    
 
     for (int i = 0; i < config->adcs; i++) {
         uint16_t addr = (config->tracemap[i] & 0xFFFF0000) >> 16;
@@ -1633,12 +1651,16 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
             br_buffer[i] = [[obj object] boardRevision];
             hwid_buffer[i] = [[obj object] hardwareID];
+            crate_number[i] = [[obj object] crateNumber];
+            crate_slot[i] = [[obj object] slot];
             break;
         }
     }
     int written_size = 0;
     written_size += FCIOWrite(stream, (int)br_data_size, br_buffer);
     written_size += FCIOWrite(stream, (int)hwid_data_size, hwid_buffer);
+    written_size += FCIOWrite(stream, (int)crate_number_size, crate_number);
+    written_size += FCIOWrite(stream, (int)crate_slot_size, crate_slot);
 
     if (FCIOFlush(stream))
         return 0;
@@ -1656,19 +1678,20 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
 - (bool) shipFCIO:(ORDataPacket*)aDataPacket state:(FCIOState*)state fspState: (FSPState*)fspstate
 {
-    if (!state)
+    if (!state) {
+        DEBUG_PRINT( "%s %s: shipFCIO no FCIOState\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
         return NO;
+    }
 
     [self updateRecordSizes:state and: fspstate];
 
-    uint32_t header_length = 3;
+    uint32_t header_length = 3; // dataId + recordLength + readout/listenerId
     size_t header_size = header_length * sizeof(int32_t);
-    size_t stop_tag_size = sizeof(int);
 
     // determines the output depending on write_flags if fspstate is present
     int writeTag = [self getWriteTag:state and: fspstate];
 
-    size_t recordSize = header_size + stop_tag_size + [self dataRecordSize:writeTag fcioState:state fspState:fspstate];
+    size_t recordSize = header_size + [self dataRecordSize:writeTag fcioState:state fspState:fspstate];
 
     // calculate the required size in units of int32_t
     uint32_t recordLength = (uint32_t)recordSize / sizeof(int32_t) + (recordSize % sizeof(int32_t) != 0);
@@ -1676,20 +1699,24 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     // get a slot to write the data to, using getBlockForAddingLongs to prevent memcpy
     uint32_t* dataRecord = [aDataPacket getBlockForAddingLongs: recordLength];
 
-    // get dataId from
-    uint32_t dataId = [self getWriteDataId:writeTag];
-    if ( !dataId )
+    // get dataId corresponding to the FCIOTag which was read from stream
+//    uint32_t dataId = [self getWriteDataId:writeTag];
+    uint32_t dataId = listenerDataId;
+    if ( !dataId ) {
+        DEBUG_PRINT( "%s %s: shipFCIO no valid dataId\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
         return NO;
+    }
 
-    dataRecord[0] = dataId;
+
+    dataRecord[0] = dataId; // use extended format, write recordLength to the second entry
     dataRecord[1] = recordLength;
 
     /* FlashCamIO Header */
     dataRecord[2]  = ((unsigned short) [guardian uniqueIdNumber]) << 16; // ReadoutID
     dataRecord[2] |=  (unsigned short) [self uniqueIdNumber];            // ListenerID
 
-    char* start_ptr = (char*)&dataRecord[header_length];
-    char* end_ptr = (char*)&dataRecord[recordLength];
+    char* start_ptr = (char*)&dataRecord[header_length]; // from here FCIO is allowed to write
+    char* end_ptr = (char*)&dataRecord[recordLength]; // up to here FCIO is allowed to write
     char* data_ptr = start_ptr;
 
     size_t stream_size_offset = FCIOStreamBytes(fcio_mem_writer, 'w', 0);
@@ -1700,31 +1727,31 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
         NSString* peer = [NSString stringWithFormat:@"mem://%p/%zu", data_ptr, end_ptr - data_ptr];
 
-        fcio_mem_writer = FCIOConnect([peer UTF8String] , 'w', 0, 0);
+        fcio_mem_writer = FCIOConnect([peer UTF8String] , 'w', 0, 0); // writes the PROTOCOL TAG (4 bytes) and PROTOCOL string (64 bytes)
         data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
         if (data_ptr > end_ptr)
             return NO;
-        fprintf(stderr, "DEBUG Connect total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
+        DEBUG_PRINT("Connect total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
     }
 
     FCIOSetMemField(fcio_mem_writer, data_ptr, end_ptr - data_ptr);
     FCIOPutState(fcio_mem_writer, state, writeTag);
     data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
-    fprintf(stderr, "DEBUG State total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
+    DEBUG_PRINT("State total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
     if (data_ptr > end_ptr)
         return NO;
 
     FCIOSetMemField(fcio_mem_writer, data_ptr, end_ptr - data_ptr);
-    [ self ORExtendFCIOState:fcio_mem_writer from:state as:writeTag]; // we append additional fields to the fcio record
+    [ self ORExtendFCIOState:fcio_mem_writer from:state as:writeTag]; // we append additional fields to the fcio record, might be 0 bytes if there are none
     data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
-    fprintf(stderr, "DEBUG ORCA total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
+    DEBUG_PRINT("ORCA total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
     if (data_ptr > end_ptr)
         return NO;
 
     FCIOSetMemField(fcio_mem_writer, data_ptr, end_ptr - data_ptr);
-    FCIOPutFSP(fcio_mem_writer, processor, writeTag);
+    FCIOPutFSP(fcio_mem_writer, processor, writeTag); // append the software trigger output, only if processor exists
     data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
-    fprintf(stderr, "DEBUG FSP total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
+    DEBUG_PRINT("FSP total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
     if (data_ptr > end_ptr)
         return NO;
 
@@ -1735,7 +1762,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     // zero-pad the remaining buffer, allows the reading side to continue reading until recordLength is reached.
     while( data_ptr < end_ptr)
         *data_ptr++ = 0;
-    fprintf(stderr, "DEBUG ZERO total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
+    DEBUG_PRINT("ZERO total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
 
     return YES;
 }
@@ -1748,7 +1775,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
 - (void) runFailedMainThread
 {
-    DEBUG_PRINT( "%s %s: runFailedMainThreaed\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
+    DEBUG_PRINT( "%s %s: runFailedMainThread\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
     [[NSNotificationCenter defaultCenter] postNotificationName:ORRequestRunHalt object:self];
     if(!runFailedAlarm){
         runFailedAlarm = [[ORAlarm alloc] initWithName:@"FlashCamListener run failed"
@@ -2357,24 +2384,33 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 - (NSDictionary*) dataRecordDescription
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    NSDictionary* dc = [NSDictionary dictionaryWithObjectsAndKeys:
-                        @"ORFCIOConfigDecoder",                          @"decoder",
-                        [NSNumber numberWithLong:configId],              @"dataId",
-                        [NSNumber numberWithBool:YES],                   @"variable",
-                        [NSNumber numberWithLong:-1],                    @"length", nil];
-    NSDictionary* ds = [NSDictionary dictionaryWithObjectsAndKeys:
-                        @"ORFCIOStatusDecoder",                          @"decoder",
-                        [NSNumber numberWithLong:statusId],              @"dataId",
-                        [NSNumber numberWithBool:YES],                   @"variable",
-                        [NSNumber numberWithLong:-1],                    @"length", nil];
-    NSDictionary* de = [NSDictionary dictionaryWithObjectsAndKeys:
-                        @"ORFCIOEventDecoder",                           @"decoder",
-                        [NSNumber numberWithLong:eventId],               @"dataId",
-                        [NSNumber numberWithBool:YES],                   @"variable",
-                        [NSNumber numberWithLong:-1],                    @"length", nil];
-    [dict setObject:dc forKey:@"FlashCamConfig"];
-    [dict setObject:ds forKey:@"FlashCamStatus"];
-    [dict setObject:de forKey:@"FlashCamEvent"];
+    NSDictionary* dl =  [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFCIODecoder",                                    @"decoder",
+                        [NSNumber numberWithLong:listenerDataId],            @"dataId",
+                        [NSNumber numberWithBool:YES],                       @"variable",
+                        [NSNumber numberWithLong:-1],                        @"length",
+                        [NSNumber numberWithLong:[self uniqueIdNumber]],     @"listenerId",
+                        [NSNumber numberWithLong:[guardian uniqueIdNumber]], @"readoutId",
+                        nil];
+    [dict setObject:dl forKey:@"FlashCamDataStream"];
+//    NSDictionary* dc = [NSDictionary dictionaryWithObjectsAndKeys:
+//                        @"ORFCIODecoder",                                @"decoder",
+//                        [NSNumber numberWithLong:configId],              @"dataId",
+//                        [NSNumber numberWithBool:YES],                   @"variable",
+//                        [NSNumber numberWithLong:-1],                    @"length", nil];
+//    NSDictionary* ds = [NSDictionary dictionaryWithObjectsAndKeys:
+//                        @"ORFCIODecoder",                                @"decoder",
+//                        [NSNumber numberWithLong:statusId],              @"dataId",
+//                        [NSNumber numberWithBool:YES],                   @"variable",
+//                        [NSNumber numberWithLong:-1],                    @"length", nil];
+//    NSDictionary* de = [NSDictionary dictionaryWithObjectsAndKeys:
+//                        @"ORFCIODecoder",                                @"decoder",
+//                        [NSNumber numberWithLong:eventId],               @"dataId",
+//                        [NSNumber numberWithBool:YES],                   @"variable",
+//                        [NSNumber numberWithLong:-1],                    @"length", nil];
+//    [dict setObject:dc forKey:@"FlashCamConfig"];
+//    [dict setObject:ds forKey:@"FlashCamStatus"];
+//    [dict setObject:de forKey:@"FlashCamEvent"];
     return dict;
 }
 
@@ -2408,14 +2444,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     fspFlagChannelMap = (int*)calloc(FCIOMaxChannels, sizeof(int));
     fspFlagChannelThresholds = (int*)calloc(FCIOMaxChannels, sizeof(int));
 
-//    if(!configBuffer) configBuffer = (uint32_t*) malloc((2*sizeof(uint32_t) + sizeof(fcio_config)) * kFlashCamConfigBufferLength);
-//    configBufferIndex = 0;
-//    takeDataConfigIndex = 0;
-//    bufferedConfigCount = 0;
-//    if(!statusBuffer) statusBuffer = (uint32_t*) malloc((2*sizeof(uint32_t) + sizeof(fcio_status)) * kFlashCamStatusBufferLength);
-//    statusBufferIndex = 0;
-//    takeDataStatusIndex = 0;
-//    bufferedStatusCount = 0;
     eventCount        = 0;
     runTime           = 0.0;
     readMB            = 0.0;
