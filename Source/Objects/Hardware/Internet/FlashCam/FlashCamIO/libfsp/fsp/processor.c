@@ -89,11 +89,13 @@ StreamProcessor* FSPCreate(unsigned int buffer_depth)
 
 void FSPDestroy(StreamProcessor* processor)
 {
-  FSPBufferDestroy(processor->buffer);
-  free(processor->stats);
-  free(processor->dsp_hwm);
-  free(processor->dsp_wps);
-  free(processor->dsp_ct);
+  if (processor) {
+    FSPBufferDestroy(processor->buffer);
+    free(processor->stats);
+    free(processor->dsp_hwm);
+    free(processor->dsp_wps);
+    free(processor->dsp_ct);
+  }
   free(processor);
 }
 
