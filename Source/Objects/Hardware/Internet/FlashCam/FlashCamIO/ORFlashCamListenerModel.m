@@ -1555,6 +1555,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     // keep this for consistency check after the stream ended
     fcio_last_tag = state->last_tag;
 
+
+    // the following switch could/should be refactored and could as well live
+    // in ORFlashCamADCModel. The event parsing used to live in it's shipEvent
+    // method, while readStatus was called in previous versions of the listener.
     switch(fcio_last_tag) {
         case FCIOEvent:
         case FCIOSparseEvent:
@@ -1564,9 +1568,19 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                 uint16_t addr = (state->config->tracemap[trace_idx] & 0xFFFF0000) >> 16;
                 uint16_t channel = (state->config->tracemap[i] & 0xffff);
                 for(id obj in [readOutList children]){
-                    if([[obj object] cardAddress] != (uint32_t) addr)
+                    ORFlashCamADCModel* card = [obj object];
+                    if([card cardAddress] != (uint32_t) addr)
                         continue;
-                    [[[obj object] baselineHistory:channel] addDataToTimeAverage:(float)state->event->theader[trace_idx][0]];
+                    unsigned short fpga_baseline = state->event->theader[trace_idx][0];
+                    unsigned short fpga_energy = state->event->theader[trace_idx][1];
+
+                    [[card baselineHistory:channel] addDataToTimeAverage:(float)fpga_baseline];
+                    [card increaseWfCountForChannel:channel];
+                    if (fpga_energy > 0) {
+                        [card increaseTrigCountForChannel:channel];
+                        [card shipToInflux:channel energy:fpga_energy baseline:fpga_baseline];
+                    }
+
                     break;
                 }
             }
@@ -1580,6 +1594,9 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                 // if bit 0x4000 is set: submaster card
                 // if bit 0x2000 is set: trigger card (not used in Legend)
                 // if bit 0x1000 is set: adc card
+                // INFO: this features maxes use of internal workings of FC250bStatus
+                //       in fc250b.c and is not intended as a stable API, although
+                //       very unlikely to change
                 unsigned int ID = state->status->data[i].reqid;
                 for(id dict in cardMap){
                     if([[dict objectForKey:@"fcioID"] unsignedIntValue] == ID){
@@ -1604,8 +1621,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     switch (write_tag) {
         case FCIOConfig:
             requiredSize += fcioSizes.protocol + fcioSizes.config;
-            // Orca extends the config record by shipping board revisions and hardware ids
-            requiredSize += state->config->adcs * (3 * sizeof(uint8_t) + sizeof(uint64_t)) + 4 * sizeof(int);
+            // Orca extends the config record by shipping:
+            // board revisions and hardware ids and crate and cardslot numbers
+            size_t orca_extension_size = state->config->adcs * (3 * sizeof(uint8_t) + sizeof(uint64_t)) + 4 * sizeof(int);
+            requiredSize += orca_extension_size;
             break;
         case FCIOEvent:
             requiredSize += fcioSizes.event;
