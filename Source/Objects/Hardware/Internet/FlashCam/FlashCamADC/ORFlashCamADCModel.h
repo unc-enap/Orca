@@ -117,10 +117,12 @@
 - (ORRateGroup*) wfRates;
 - (id) wfRateObject:(short)channel;
 - (uint32_t) wfCount:(int)channel;
+- (void) increaseWfCountForChannel:(int)channel;
 - (float) getWFrate:(short)channel;
 - (ORRateGroup*) trigRates;
 - (id) rateObject:(short)channel;
 - (uint32_t) trigCount:(int)channel;
+- (void) increaseTrigCountForChannel:(int)channel;
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag;
 - (float) getRate:(short)channel forGroup:(int)groupTag;
 - (uint32_t) dataId;

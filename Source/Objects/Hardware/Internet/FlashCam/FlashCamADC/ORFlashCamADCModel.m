@@ -401,6 +401,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     return wfCount[channel];
 }
 
+- (void) increaseWfCountForChannel:(int)channel
+{
+    wfCount[channel]++;
+}
+
 - (float) getWFrate:(short)channel
 {
     if(channel>=0 && channel<[self numberOfChannels]){
@@ -422,6 +427,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 - (uint32_t) trigCount:(int)channel
 {
     return trigCount[channel];
+}
+
+- (void) increaseTrigCountForChannel:(int)channel
+{
+    trigCount[channel]++;
 }
 
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
