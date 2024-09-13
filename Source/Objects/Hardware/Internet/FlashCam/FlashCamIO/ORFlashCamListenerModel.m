@@ -1556,16 +1556,40 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     fcio_last_tag = state->last_tag;
 
     switch(fcio_last_tag) {
+        case FCIOEvent:
+        case FCIOSparseEvent:
+        case FCIOEventHeader: {
+            for (int i = 0; i < state->event->num_traces; i++) {
+                int trace_idx = state->event->trace_list[i];
+                uint16_t addr = (state->config->tracemap[trace_idx] & 0xFFFF0000) >> 16;
+                uint16_t channel = (state->config->tracemap[i] & 0xffff);
+                for(id obj in [readOutList children]){
+                    if([[obj object] cardAddress] != (uint32_t) addr)
+                        continue;
+                    [[[obj object] baselineHistory:channel] addDataToTimeAverage:(float)state->event->theader[trace_idx][0]];
+                    break;
+                }
+            }
+            break;
+        }
         case FCIOStatus: {
+            // update all cards with their status
             for (int i = 0; i < state->status->cards; i++) {
+                // reqid contains index of cards in 0xff by type:
+                // 0 is top master
+                // if bit 0x4000 is set: submaster card
+                // if bit 0x2000 is set: trigger card (not used in Legend)
+                // if bit 0x1000 is set: adc card
                 unsigned int ID = state->status->data[i].reqid;
                 for(id dict in cardMap){
                     if([[dict objectForKey:@"fcioID"] unsignedIntValue] == ID){
+                        fprintf(stderr, "TODO: orca stored id %u - reqid %u\n", [[dict objectForKey:@"fcioID"] unsignedIntValue], ID);
                         [[dict objectForKey:@"card"] readStatus:state->status atIndex:i];
                         break;
                     }
                 }
             }
+            break;
         }
     }
 
