@@ -1555,6 +1555,20 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     // keep this for consistency check after the stream ended
     fcio_last_tag = state->last_tag;
 
+    switch(fcio_last_tag) {
+        case FCIOStatus: {
+            for (int i = 0; i < state->status->cards; i++) {
+                unsigned int ID = state->status->data[i].reqid;
+                for(id dict in cardMap){
+                    if([[dict objectForKey:@"fcioID"] unsignedIntValue] == ID){
+                        [[dict objectForKey:@"card"] readStatus:state->status atIndex:i];
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     // fspstate is allowed to be NULL - it steers the output depending on SoftwareTrigger activation.
     return [self shipFCIO:aDataPacket state:state fspState:fspstate];
 }
