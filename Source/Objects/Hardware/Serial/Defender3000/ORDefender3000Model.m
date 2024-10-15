@@ -584,11 +584,14 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
         components = [theResponse componentsSeparatedByString:@" "];
         if([components count]>=3){
             //format is wt unit mode
-            [self setWeight:[[components objectAtIndex:0]floatValue]];
-            [self setUnitData: [components objectAtIndex:1]];
+            //[self setWeight:[[components objectAtIndex:0]floatValue]];
+            //[self setUnitData: [components objectAtIndex:1]];
             [self setModeData:[components objectAtIndex:2]];
         }
         else if([components count]==2){
+            [self setWeight:[[components objectAtIndex:0]floatValue]];
+            [self setUnitData: [components objectAtIndex:1]];
+            
             if([[components objectAtIndex:0] isEqualToString:@"UNIT"]){
                 [self setUnitData: [components objectAtIndex:1]];
             }
