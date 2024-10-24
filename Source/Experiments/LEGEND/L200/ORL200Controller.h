@@ -89,6 +89,8 @@
 - (void) updateWindow;
 - (void) groupChanged:(NSNotification*)note;
 - (void) viewTypeChanged:(NSNotification*)note;
+- (void) disableRunAndPeriod;
+- (void) enableRunAndPeriod;
 
 - (void) colorScaleTypeChanged:(NSNotification*)note;
 - (void) customColor1Changed:(NSNotification*)note;

@@ -130,6 +130,8 @@
     [[auxChanColorScale colorAxis] setNeedsDisplay:YES];
     [[auxChanColorScale colorAxis] setRngLimitsLow:0 withHigh:128000 withMinRng:0.01];
     [[auxChanColorScale colorAxis] setRngDefaultsLow:0 withHigh:128000];
+    
+    [self enableRunAndPeriod];
 }
 
 #pragma mark •••Notifications
@@ -273,7 +275,16 @@
                      selector : @selector(metaErrorChanged:)
                          name : ORL200ModelMetaErrorChanged
                        object : nil];
+
+    [notifyCenter addObserver : self
+                     selector : @selector(disableRunAndPeriod)
+                         name : ORRunStartedNotification
+                       object : nil];
     
+    [notifyCenter addObserver : self
+                     selector : @selector(enableRunAndPeriod)
+                         name : ORRunStoppedNotification
+                       object : nil];
 }
 
 - (void) updateWindow
@@ -300,6 +311,22 @@
     [self l200FileNameChanged:nil];
     [self metaInfoChanged:nil];
     [self metaErrorChanged:nil];
+}
+
+- (void) disableRunAndPeriod
+{
+    [dataCycleField setEnabled:NO];
+    [dataPeriodField setEnabled:NO];
+    [cycleStepper setEnabled:NO];
+    [periodStepper setEnabled:NO];
+}
+
+- (void) enableRunAndPeriod
+{
+    [dataCycleField setEnabled:YES];
+    [dataPeriodField setEnabled:YES];
+    [cycleStepper setEnabled:YES];
+    [periodStepper setEnabled:YES];
 }
 
 - (void) populateDataTypePopup
