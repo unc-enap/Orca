@@ -17,8 +17,11 @@
 //express or implied, or assume any liability or responsibility 
 //for the use of this software.
 //-------------------------------------------------------------
-
-@interface NSDictionary (OrcaExtensions)
+@protocol MutableDeepCopying <NSObject>
+-(id) mutableDeepCopy;
+@end
+@interface NSDictionary (OrcaExtensions) <MutableDeepCopying>
+- (NSMutableDictionary*) mutableDeepCopy;
 - (NSArray*) allKeysStartingWith:(NSString*)aString;
 - (id) objectForNestedKey:(NSString*)aStringList;
 - (id) nestedObjectForKeyList:(id) firstKey withvaList:(va_list)keyList;

@@ -46,49 +46,6 @@ NSString* ORL200ModelL200FileNameChanged = @"ORL200ModelL200FileNameChanged";
 NSString* ORL200ModelMetaInfoChanged     = @"ORL200ModelMetaInfoChanged";
 NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 
-// Header
-@protocol MutableDeepCopying <NSObject>
--(id) mutableDeepCopy;
-@end
-@interface NSDictionary (MutableDeepCopy) <MutableDeepCopying>
-@end
-@interface NSArray (MutableDeepCopy) <MutableDeepCopying>
-@end
-
-// Implementation
-@implementation NSDictionary (MutableDeepCopy)
-- (NSMutableDictionary*) mutableDeepCopy
-{
-    NSMutableDictionary * returnDict = [[NSMutableDictionary alloc] initWithCapacity:self.count];
-    NSArray* keys = [self allKeys];
-    for(id key in keys) {
-        id aValue  = [self objectForKey:key];
-        if([aValue conformsToProtocol:@protocol(MutableDeepCopying)])    [returnDict setValue:[aValue mutableDeepCopy] forKey:key]; //autoreleased in the recursive call
-        else if([aValue conformsToProtocol:@protocol(NSMutableCopying)]) [returnDict setValue:[[aValue mutableCopy]autorelease] forKey:key];
-        else if([aValue conformsToProtocol:@protocol(NSCopying)])        [returnDict setValue:[[aValue copy]autorelease] forKey:key];
-        else                                                             [returnDict setValue:[[aValue retain]autorelease] forKey:key];
-    }
-    return [returnDict autorelease];
-}
-@end
-
-@implementation NSArray (MutableDeepCopy)
--(NSMutableArray*) mutableDeepCopy
-{
-  NSMutableArray *returnArray = [[NSMutableArray alloc] initWithCapacity:self.count];
-    for(int i=0;i<self.count;i++) {
-        id aValue = [self objectAtIndex:i];
-        if([aValue conformsToProtocol:@protocol(MutableDeepCopying)])    [returnArray addObject:[aValue mutableDeepCopy]]; //autoreleased in the recursive call
-        else if([aValue conformsToProtocol:@protocol(NSMutableCopying)]) [returnArray addObject:[[aValue mutableCopy] autorelease]];
-        else if([aValue conformsToProtocol:@protocol(NSCopying)])        [returnArray addObject:[[aValue copy] autorelease]];
-        else                                                             [returnArray addObject:[[aValue retain]autorelease]];
-    }
-  
-    return [returnArray autorelease];
-}
-@end
-
-
 @implementation ORL200Model
 
 #pragma mark •••Initialization
@@ -1431,8 +1388,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     }
 
     [self storeMetaDict];   //in case Orca is stopped
-    NSLog(@"%@\n",metaDataDict); //temp for debugging
-
+    //NSLog(@"%@\n",metaDataDict); //temp for debugging
 }
 
 - (void) readMetaDict
