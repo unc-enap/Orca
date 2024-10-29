@@ -17,7 +17,9 @@
 //-------------------------------------------------------------
 
 
-@interface NSArray (OrcaExtensions)
+
+@interface NSArray (OrcaExtensions) <MutableDeepCopying>
+-(NSMutableArray*) mutableDeepCopy;
 - (BOOL)containsObjectIdenticalTo: (id)object;
 - (NSArray *)tabJoinedComponents;
 - (NSString *)joinAsLinesOfEndingType:(LineEndingType)type;
