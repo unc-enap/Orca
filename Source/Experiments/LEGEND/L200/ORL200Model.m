@@ -1395,16 +1395,15 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 {
     //read in the meta dictionary and make it mutable so we can add to it
     if(metaDataDict)[metaDataDict release];
-    NSDictionary* oldMetaDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroupV2"];
-    
-    metaDataDict = [[oldMetaDict mutableDeepCopy] retain];
+    NSDictionary* oldMetaDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroupV3"];
+    if(oldMetaDict) metaDataDict = [[oldMetaDict mutableDeepCopy] retain];
 
     [self checkMetaDataDict];
 }
 
 - (void) storeMetaDict
 {
-    if(metaDataDict) [[NSUserDefaults standardUserDefaults] setObject:metaDataDict forKey:@"L200RunGroupV2"];
+    if(metaDataDict) [[NSUserDefaults standardUserDefaults] setObject:metaDataDict forKey:@"L200RunGroupV3"];
 }
 
 @end
