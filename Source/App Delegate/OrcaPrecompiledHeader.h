@@ -16,6 +16,7 @@
 
 #import <Cocoa/Cocoa.h>
 #include <IOKit/IOMessage.h>
+#import "ORDefaults.h"
 #import "ORGroupView.h"
 #import "NSDate+Extensions.h"
 #import "NSData+Extensions.h"
@@ -43,7 +44,6 @@
 #import "ORDocument.h"
 #import "ORAppDelegate.h"
 #import "ORAlarm.h"
-#import "ORDefaults.h"
 #import "ORTimer.h"
 #import "ORConnector.h"
 #import "ORAutoTester.h"
