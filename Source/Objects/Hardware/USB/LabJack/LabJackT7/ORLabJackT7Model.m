@@ -90,6 +90,10 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
 }
 - (void) dealloc
 {
+    //release InfluxDB
+    // Manually release InFluxDB if using manual memory management (MRC)
+    [InFluxDB release];
+    //previous dealloc
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     int i;
     for(i=0;i<kNumT7AdcChannels;i++)  [channelName[i] release];
@@ -1278,44 +1282,38 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
 - (void)sendLabjackT7ToInflux:(NSArray *)arrayCh
 {
     @autoreleasepool {
-        // Retrieve the InFluxDB model instance
-        InFluxDB = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"] retain];
+        // Check if InFluxDB instance is already assigned
+        if (!InFluxDB) {
+            // Retrieve the InFluxDB model instance
+            InFluxDB = [[[(ORAppDelegate *)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"] retain];
+        }
         
         if (InFluxDB == nil) {
             NSLog(@"Error: Unable to find the InfluxDB model.");
             return;
         }
-
-        // Ensure arrayCh contains at least 3 elements
-        if ([arrayCh count] < 3) {
-            NSLog(@"Error: Insufficient number of channels in arrayCh.");
-            return;
-        }
-
+        
         // Current timestamp
         double currentTimeStamp = [[NSDate date] timeIntervalSince1970];
-
+        
         // Create a new measurement object for the InfluxDB bucket
         ORInFluxDBMeasurement *measurement = [ORInFluxDBMeasurement measurementForBucket:@"SlowControl_Labjack" org:[InFluxDB org]];
-
+        
         [measurement start:@"LabjackT7"];
         [measurement addTag:@"Device" withString:@"Channels"];
-
+        
         // Add fields for each channel
         for (NSInteger i = 0; i < [arrayCh count]; i++) {
             NSString *fieldName = [NSString stringWithFormat:@"Channel%ld", (long)i];
             double fieldValue = [[arrayCh objectAtIndex:i] doubleValue];
             [measurement addField:fieldName withDouble:fieldValue];
         }
-    
+        
         // Set the timestamp
         [measurement setTimeStamp:currentTimeStamp];
-
+        
         // Execute the database command
         [InFluxDB executeDBCmd:measurement];
-        
-        // Manually release InFluxDB if using manual memory management (MRC)
-        [InFluxDB release];
     }
 }
 
