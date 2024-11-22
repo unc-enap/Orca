@@ -46,7 +46,9 @@
     uint32_t  configId;
     uint32_t  statusId;
     uint32_t  eventId;
+    uint32_t  eventHeaderId;
     uint32_t  listenerDataId;
+    uint32_t  readout_listener_uniqueID;
     NSString* status;
     ORAlarm* runFailedAlarm;
     bool unrecognizedPacket;
@@ -155,6 +157,7 @@
 - (uint32_t) configId;
 - (uint32_t) statusId;
 - (uint32_t) eventId;
+- (uint32_t) eventHeaderId;
 - (uint32_t) listenerDataId;
 - (NSString*) status;
 - (NSUInteger) eventCount;

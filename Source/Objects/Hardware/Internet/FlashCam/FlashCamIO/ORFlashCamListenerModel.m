@@ -607,6 +607,11 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     return eventId;
 }
 
+- (uint32_t) eventHeaderId
+{
+    return eventHeaderId;
+}
+
 - (uint32_t) listenerDataId
 {
     return listenerDataId;
@@ -1050,6 +1055,11 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     eventId = eId;
 }
 
+- (void) setEventHeaderId:(uint32_t)hId
+{
+    eventHeaderId = hId;
+}
+
 - (void) setListenerDataId:(uint32_t)lId
 {
     listenerDataId = lId;
@@ -1058,17 +1068,19 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 - (void) setDataIds:(id)assigner
 {
     listenerDataId = [assigner assignDataIds:kLongForm];
-//    configId = [assigner assignDataIds:kLongForm];
-//    eventId = [assigner assignDataIds:kLongForm];
-//    statusId = [assigner assignDataIds:kLongForm];
+    configId = [assigner assignDataIds:kLongForm];
+    eventId = [assigner assignDataIds:kLongForm];
+    eventHeaderId = [assigner assignDataIds:kLongForm];
+    statusId = [assigner assignDataIds:kLongForm];
 }
 
 - (void) syncDataIdsWith:(id)anotherListener
 {
     [self setListenerDataId:[anotherListener listenerDataId]];
-//    [self setConfigId:[anotherListener configId]];
-//    [self setEventId:[anotherListener eventId]];
-//    [self setStatusId:[anotherListener statusId]];
+    [self setConfigId:[anotherListener configId]];
+    [self setEventId:[anotherListener eventId]];
+    [self setEventHeaderId:[anotherListener eventHeaderId]];
+    [self setStatusId:[anotherListener statusId]];
 }
 
 - (void) setReadOutList:(ORReadOutList*)newList
@@ -1479,8 +1491,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                              // manually for separate internal code sections.
     }
 
-
-
     FCIOState* state = NULL;
     FSPState* fspstate = NULL;
 
@@ -1495,7 +1505,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                 NSLog(@"%@: FCIO stream closed due to timeout, however deselected records arrived.\n", [self identifier]);
             return NO;
         }
-    // additionally process all records, reading of FlashCam data is handled internally
+    // additionally process all records, reading of FlashCam data is handled within FSP
     } else {
         if (!(fspstate = FSPGetNextState(processor, reader, &timedout))) {
             DEBUG_PRINT( "%s %s: fcioRead: end-of-stream: timedout %d\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String], timedout);
@@ -1508,8 +1518,8 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         }
 
         if (FSPStatsUpdate(processor, !fspstate)) {
-            // returns one if stats have been updated, or if the stream ends.
-            // only updates states for every fsp log time period
+            // returns 1 if stats have been updated, or if the stream ends.
+            // only updates stats every fsp log time period
             [swtBufferFillLevelHistory  addDataToTimeAverage:(float)FSPFreeStates(processor)];
             [swtDiscardRateHistory addDataToTimeAverage:(float)processor->stats->dt_rate_discard_events];
             [swtOutputRateHistory  addDataToTimeAverage:(float)processor->stats->dt_rate_write_events];
@@ -1520,7 +1530,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 #ifdef DEBUG_FSP
         int fspLogLevel = [[self configParam:@"fspLogLevel"] intValue];
         if (FSPStatsUpdate(processor, !fspstate)) {
-            // returns one if stats have been updated, or if the stream ends.
+            // returns 1 if stats have been updated, or if the stream ends.
             if (fspLogLevel > 0) {
                 char logstring[255];
                 if (FSPStatsInfluxString(postprocessor, logstring, 255))
@@ -1549,16 +1559,15 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             return NO; // stream has ended - similar to FCIOGetNextState
         state = fspstate->state; // set current read record
 
-//        if (!fspstate->write_flags.write && !writeNonTriggered) // write to output even if software trigger did not trigger
-//            return YES;
     }
     // keep this for consistency check after the stream ended
     fcio_last_tag = state->last_tag;
 
 
-    // the following switch could/should be refactored and could as well live
-    // in ORFlashCamADCModel. The event parsing used to live in it's shipEvent
-    // method, while readStatus was called in previous versions of the listener.
+    // the following switch updates the monitoring data of the attached ADC Cards and
+    // could/should  could as well be implemented in ORFlashCamADCModel.
+    // The event parsing was previously using the -shipEvent method,
+    // while readStatus was called in previous versions of the listener.
     switch(fcio_last_tag) {
         case FCIOEvent:
         case FCIOSparseEvent:
@@ -1587,20 +1596,17 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             break;
         }
         case FCIOStatus: {
-            // update all cards with their status
+            // update all cards with their status data (voltages, temps, etc..)
             for (int i = 0; i < state->status->cards; i++) {
                 // reqid contains index of cards in 0xff by type:
                 // 0 is top master
                 // if bit 0x4000 is set: submaster card
-                // if bit 0x2000 is set: trigger card (not used in Legend)
+                // if bit 0x2000 is set: trigger card (not used in LEGEND)
                 // if bit 0x1000 is set: adc card
-                // INFO: this features maxes use of internal workings of FC250bStatus
-                //       in fc250b.c and is not intended as a stable API, although
-                //       very unlikely to change
+                // INFO: this features makes use of internal workings of FC250bStatus in fc250b.c
                 unsigned int ID = state->status->data[i].reqid;
                 for(id dict in cardMap){
                     if([[dict objectForKey:@"fcioID"] unsignedIntValue] == ID){
-                        fprintf(stderr, "TODO: orca stored id %u - reqid %u\n", [[dict objectForKey:@"fcioID"] unsignedIntValue], ID);
                         [[dict objectForKey:@"card"] readStatus:state->status atIndex:i];
                         break;
                     }
@@ -1610,12 +1616,16 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         }
     }
 
-    // fspstate is allowed to be NULL - it steers the output depending on SoftwareTrigger activation.
+    // fspstate is allowed to be NULL - it steers the data packet output depending on StreamProcessor activation.
     return [self shipFCIO:aDataPacket state:state fspState:fspstate];
 }
 
 - (size_t) dataRecordSize:(int) write_tag fcioState:(FCIOState*) state fspState:(FSPState*) fspstate
 {
+    /* this information should be buffered and only called once
+     */
+    [self updateRecordSizes:state and: fspstate];
+
     size_t requiredSize = 0;
 
     switch (write_tag) {
@@ -1658,6 +1668,9 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
 - (int) getWriteTag:(FCIOState*) state and:(FSPState*) fspstate
 {
+    /* This function decides if the waveforms are removed,
+       depending on the software trigger decision
+     */
     if (fspstate && (fspstate->write_flags.write))
         return state->last_tag;
 
@@ -1676,8 +1689,9 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             return configId;
         case FCIOSparseEvent:
         case FCIOEvent:
-        case FCIOEventHeader:
             return eventId;
+        case FCIOEventHeader:
+            return eventHeaderId;
         case FCIOStatus:
             return statusId;
         default:
@@ -1740,7 +1754,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         return NO;
     }
 
-    [self updateRecordSizes:state and: fspstate];
+
 
     uint32_t header_length = 3; // dataId + recordLength + readout/listenerId
     size_t header_size = header_length * sizeof(int32_t);
@@ -1756,9 +1770,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     // get a slot to write the data to, using getBlockForAddingLongs to prevent memcpy
     uint32_t* dataRecord = [aDataPacket getBlockForAddingLongs: recordLength];
 
+    // TODO: remove if not implemented, currently one dataId is used per listener, not per tag
     // get dataId corresponding to the FCIOTag which was read from stream
-//    uint32_t dataId = [self getWriteDataId:writeTag];
-    uint32_t dataId = listenerDataId;
+    uint32_t dataId = [self getWriteDataId:writeTag];
+//    uint32_t dataId = listenerDataId;
     if ( !dataId ) {
         DEBUG_PRINT( "%s %s: shipFCIO no valid dataId\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
         return NO;
@@ -1767,10 +1782,8 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
     dataRecord[0] = dataId; // use extended format, write recordLength to the second entry
     dataRecord[1] = recordLength;
-
     /* FlashCamIO Header */
-    dataRecord[2]  = ((unsigned short) [guardian uniqueIdNumber]) << 16; // ReadoutID
-    dataRecord[2] |=  (unsigned short) [self uniqueIdNumber];            // ListenerID
+    dataRecord[2] = readout_listener_uniqueID; // this is constructed in setupReadoutTask
 
     char* start_ptr = (char*)&dataRecord[header_length]; // from here FCIO is allowed to write
     char* end_ptr = (char*)&dataRecord[recordLength]; // up to here FCIO is allowed to write
@@ -1792,29 +1805,28 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
 
     FCIOSetMemField(fcio_mem_writer, data_ptr, end_ptr - data_ptr);
+    FCIOPutFSP(fcio_mem_writer, processor, writeTag); // prepend the software trigger information (if it exists)
+    data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
+    DEBUG_PRINT("FSP total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
+    if (data_ptr > end_ptr)
+        return NO;
+
+    FCIOSetMemField(fcio_mem_writer, data_ptr, end_ptr - data_ptr);
     FCIOPutState(fcio_mem_writer, state, writeTag);
     data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
     DEBUG_PRINT("State total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
     if (data_ptr > end_ptr)
         return NO;
 
+    /* removed:
+        This information is already also stored in the run header, or should be added there (like hardware_revision etc..)
     FCIOSetMemField(fcio_mem_writer, data_ptr, end_ptr - data_ptr);
     [ self ORExtendFCIOState:fcio_mem_writer from:state as:writeTag]; // we append additional fields to the fcio record, might be 0 bytes if there are none
     data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
     DEBUG_PRINT("ORCA total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
     if (data_ptr > end_ptr)
         return NO;
-
-    FCIOSetMemField(fcio_mem_writer, data_ptr, end_ptr - data_ptr);
-    FCIOPutFSP(fcio_mem_writer, processor, writeTag); // append the software trigger output, only if processor exists
-    data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
-    DEBUG_PRINT("FSP total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
-    if (data_ptr > end_ptr)
-        return NO;
-
-//    FCIOWriteMessage(fcio_mem_writer, 0); // EOF tag, allows the reading side to continue until this is found and skip the rest
-//    data_ptr = start_ptr + FCIOStreamBytes(fcio_mem_writer, 'w', stream_size_offset);
-//    fprintf(stderr, "DEBUG END total %zu remaining %zu\n", data_ptr - start_ptr, end_ptr - data_ptr );
+    */
 
     // zero-pad the remaining buffer, allows the reading side to continue reading until recordLength is reached.
     while( data_ptr < end_ptr)
@@ -2044,6 +2056,9 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     [readoutArgs addObjectsFromArray:@[@"-ei", [[self remoteInterfaces] componentsJoinedByString:@","]]];
     [readoutArgs addObjectsFromArray:@[@"-et", [self ethType]]];
     [readoutArgs addObjectsFromArray:@[@"-tmio", [@(timeout) stringValue]]]; // reuse the same timeout as the reading side.
+    readout_listener_uniqueID  = ((unsigned short) [guardian uniqueIdNumber]) << 16; // ReadoutID
+    readout_listener_uniqueID |=  (unsigned short) [self uniqueIdNumber];            // ListenerID
+    [readoutArgs addObjectsFromArray:@[@"-id", [@(readout_listener_uniqueID) stringValue]]];
     [readoutArgs addObjectsFromArray:[self runFlags:NO]];
     [readoutArgs addObjectsFromArray:argCard];
 
@@ -2441,33 +2456,39 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 - (NSDictionary*) dataRecordDescription
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    NSDictionary* dl =  [NSDictionary dictionaryWithObjectsAndKeys:
-                        @"ORFCIODecoder",                                    @"decoder",
-                        [NSNumber numberWithLong:listenerDataId],            @"dataId",
-                        [NSNumber numberWithBool:YES],                       @"variable",
-                        [NSNumber numberWithLong:-1],                        @"length",
-                        [NSNumber numberWithLong:[self uniqueIdNumber]],     @"listenerId",
-                        [NSNumber numberWithLong:[guardian uniqueIdNumber]], @"readoutId",
-                        nil];
-    [dict setObject:dl forKey:@"FlashCamDataStream"];
-//    NSDictionary* dc = [NSDictionary dictionaryWithObjectsAndKeys:
-//                        @"ORFCIODecoder",                                @"decoder",
-//                        [NSNumber numberWithLong:configId],              @"dataId",
-//                        [NSNumber numberWithBool:YES],                   @"variable",
-//                        [NSNumber numberWithLong:-1],                    @"length", nil];
-//    NSDictionary* ds = [NSDictionary dictionaryWithObjectsAndKeys:
-//                        @"ORFCIODecoder",                                @"decoder",
-//                        [NSNumber numberWithLong:statusId],              @"dataId",
-//                        [NSNumber numberWithBool:YES],                   @"variable",
-//                        [NSNumber numberWithLong:-1],                    @"length", nil];
-//    NSDictionary* de = [NSDictionary dictionaryWithObjectsAndKeys:
-//                        @"ORFCIODecoder",                                @"decoder",
-//                        [NSNumber numberWithLong:eventId],               @"dataId",
-//                        [NSNumber numberWithBool:YES],                   @"variable",
-//                        [NSNumber numberWithLong:-1],                    @"length", nil];
-//    [dict setObject:dc forKey:@"FlashCamConfig"];
-//    [dict setObject:ds forKey:@"FlashCamStatus"];
-//    [dict setObject:de forKey:@"FlashCamEvent"];
+//    NSDictionary* dl =  [NSDictionary dictionaryWithObjectsAndKeys:
+//                        @"ORFCIODecoder",                                    @"decoder",
+//                        [NSNumber numberWithLong:listenerDataId],            @"dataId",
+//                        [NSNumber numberWithBool:YES],                       @"variable",
+//                        [NSNumber numberWithLong:-1],                        @"length",
+//                        [NSNumber numberWithLong:[self uniqueIdNumber]],     @"listenerId",
+//                        [NSNumber numberWithLong:[guardian uniqueIdNumber]], @"readoutId",
+//                        nil];
+//    [dict setObject:dl forKey:@"FlashCamDataStream"];
+    NSDictionary* dc = [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFCIOConfigDecoder",                          @"decoder",
+                        [NSNumber numberWithLong:configId],              @"dataId",
+                        [NSNumber numberWithBool:YES],                   @"variable",
+                        [NSNumber numberWithLong:-1],                    @"length", nil];
+    NSDictionary* de = [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFCIOEventDecoder",                           @"decoder",
+                        [NSNumber numberWithLong:eventId],               @"dataId",
+                        [NSNumber numberWithBool:YES],                   @"variable",
+                        [NSNumber numberWithLong:-1],                    @"length", nil];
+    NSDictionary* dh = [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFCIOEventHeaderDecoder",                     @"decoder",
+                        [NSNumber numberWithLong:eventHeaderId],         @"dataId",
+                        [NSNumber numberWithBool:YES],                   @"variable",
+                        [NSNumber numberWithLong:-1],                    @"length", nil];
+    NSDictionary* ds = [NSDictionary dictionaryWithObjectsAndKeys:
+                        @"ORFCIOStatusDecoder",                          @"decoder",
+                        [NSNumber numberWithLong:statusId],              @"dataId",
+                        [NSNumber numberWithBool:YES],                   @"variable",
+                        [NSNumber numberWithLong:-1],                    @"length", nil];
+    [dict setObject:dc forKey:@"FlashCamConfig"];
+    [dict setObject:ds forKey:@"FlashCamStatus"];
+    [dict setObject:de forKey:@"FlashCamEvent"];
+    [dict setObject:dh forKey:@"FlashCamEventHeader"];
     return dict;
 }
 
