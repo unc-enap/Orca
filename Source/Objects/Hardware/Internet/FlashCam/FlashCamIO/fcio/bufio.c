@@ -676,7 +676,7 @@ application code does not crash during writes to a broken pipe.
   }
 
   if (stream->type == BUFIO_MEM) {
-    stream->mem_addr = mem_addr;
+    stream->mem_addr = (char*)mem_addr;
     stream->mem_size = mem_size;
     stream->mem_offset = 0;
 

@@ -5,9 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * Contact:
- * - mailing list: fcio-maintainers@mpi-hd.mpg.de
- * - upstream URL: https://www.mpi-hd.mpg.de/hinton/software
  */
 
 
@@ -48,7 +45,7 @@ int FCIODebug(int level)
 
 typedef struct {                 // Readout configuration (typically once at start of run)
 
-  int telid;                     // trace event list id ;-)
+  int streamid;                  // Identifier for this data stream
   int adcs;                      // Number of FADC channels
   int triggers;                  // Number of trigger channels
   int eventsamples;              // Number of FADC samples per trace

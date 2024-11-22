@@ -5,9 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * Contact:
- * - mailing list: fcio-maintainers@mpi-hd.mpg.de
- * - upstream URL: https://www.mpi-hd.mpg.de/hinton/software
  */
 
 
@@ -157,7 +154,7 @@ readers of the FCIO files/streams
 
 typedef struct {                 // Readout configuration (typically once at start of run)
 
-  int telid;                     // trace event list id ;-)
+  int streamid;                  // Identifier for this data stream
   int adcs;                      // Number of FADC channels
   int triggers;                  // Number of trigger channels
   int eventsamples;              // Number of FADC samples per trace
@@ -482,6 +479,7 @@ static inline int fcio_put_config(FCIOStream output, fcio_config* config)
   FCIOWriteInt(output,config->adccards);
   FCIOWriteInt(output,config->gps);
   FCIOWriteInts(output,(config->adcs+config->triggers),config->tracemap);
+  FCIOWriteInt(output,config->streamid);
 
   return FCIOFlush(output);
 }
@@ -849,6 +847,7 @@ static inline int fcio_get_config(FCIOStream stream, fcio_config *config)
   FCIOReadInt(stream,config->adccards);
   FCIOReadInt(stream,config->gps);
   int tracemap_size = FCIOReadInts(stream, FCIOMaxChannels, config->tracemap)/sizeof(int);
+  FCIOReadInt(stream,config->streamid);
 
   if (debug > 3)
     fprintf(stderr,"FCIO/fcio_get_config/DEBUG: %d/%d/%d adcs %d triggers %d samples %d adcbits %d blprec %d sumlength %d gps %d\n",
@@ -858,6 +857,7 @@ static inline int fcio_get_config(FCIOStream stream, fcio_config *config)
     for (int i = 0; i < tracemap_size; i++)
        fprintf(stderr,"FCIO/fcio_get_config/DEBUG: trace %d mapped to 0x%x\n",i,config->tracemap[i]);
   }
+
 
   // tracemap must not be present, but should match number of traces.
   if (tracemap_size && tracemap_size != n_configured_traces) {
@@ -973,7 +973,7 @@ static inline int fcio_get_sparseevent(FCIOStream stream, fcio_event *event, int
     fprintf(stderr,"FCIO/fcio_get_sparseevent/DEBUG: type %d pulser %g, offset %d %d %d ",event->type,event->pulser,event->timeoffset[0],event->timeoffset[1],event->timeoffset[2]);
     fprintf(stderr,"timestamp[%d]", event->timestamp_size); for (int i = 0; i < event->timestamp_size; i++) fprintf(stderr," %d",event->timestamp[i]);
     fprintf(stderr,"deadregion[%d]", event->deadregion_size); for (int i = 0; i < event->deadregion_size; i++) fprintf(stderr," %d",event->deadregion[i]);
-    if (debug > 4) {
+    if (debug > 5) {
       fprintf(stderr," traces[%d]", event->num_traces);
       for (int i = 0; i < event->num_traces; i++) fprintf(stderr," %d",event->trace_list[i]);
     }
@@ -1018,9 +1018,10 @@ static inline int fcio_get_eventheader(FCIOStream stream, fcio_config* config, f
     fprintf(stderr,"deadregion[%d]", event->deadregion_size); for (int i = 0; i < event->deadregion_size; i++) fprintf(stderr," %d",event->deadregion[i]);
     if (debug > 5) {
       fprintf(stderr," traces[%d]", event->num_traces);
-      for (int i = 0; i < event->num_traces; i++) fprintf(stderr," %d %u",event->trace_list[i], event->theader[event->trace_list[i]][1]);
-      fprintf(stderr,"\n");
+      for (int i = 0; i < event->num_traces; i++)
+        fprintf(stderr," %d %u",event->trace_list[i], event->theader[event->trace_list[i]][1]);
     }
+    fprintf(stderr,"\n");
   }
   return 0;
 }

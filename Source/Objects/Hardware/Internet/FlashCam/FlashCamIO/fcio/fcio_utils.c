@@ -9,20 +9,20 @@ int FCIOSetMemField(FCIOStream stream, void *mem_addr, size_t mem_size) {
     return -1;
   // bufio_set_mem_field check if the stream was opened using mem://
   // returns 0 on success, 1 on error.
-  return bufio_set_mem_field(tmio_stream_handle(stream), mem_addr, mem_size);
+  return bufio_set_mem_field((bufio_stream*)tmio_stream_handle((tmio_stream*)stream), (char*)mem_addr, mem_size);
 }
 
 size_t FCIOStreamBytes(FCIOStream stream, int direction, size_t offset)
 {
-    if (!stream)
-        return 0;
-    tmio_stream* tmio = (tmio_stream*)stream;
-    switch(direction) {
-        case 'w': return tmio->byteswritten - offset;
-        case 'r': return tmio->bytesread - offset;
-        case 's': return tmio->bytesskipped - offset;
-        default: return 0;
-    }
+  if (!stream)
+      return 0;
+  tmio_stream* tmio = (tmio_stream*)stream;
+  switch(direction) {
+      case 'w': return tmio->byteswritten - offset;
+      case 'r': return tmio->bytesread - offset;
+      case 's': return tmio->bytesskipped - offset;
+      default: return 0;
+  }
 }
 
 size_t FCIOWrittenBytes(FCIOStream stream)
@@ -32,9 +32,9 @@ size_t FCIOWrittenBytes(FCIOStream stream)
     return written = 0;
   tmio_stream* tmio = (tmio_stream*)stream;
 
-  size_t new = tmio->byteswritten - written;
+  size_t new_bytes = tmio->byteswritten - written;
   written = tmio->byteswritten;
-  return new;
+  return new_bytes;
 }
 
 void FCIOMeasureRecordSizes(FCIOData* data, FCIORecordSizes* sizes)
@@ -121,6 +121,7 @@ static inline size_t config_size(const fcio_config* config)
   total_size += frame_header + sizeof(((fcio_config){0}).adccards);
   total_size += frame_header + sizeof(((fcio_config){0}).gps);
   total_size += frame_header + sizeof(*((fcio_config){0}).tracemap) * (config->adcs+config->triggers);
+  total_size += frame_header + sizeof(((fcio_config){0}).streamid);
   return total_size;
 }
 
