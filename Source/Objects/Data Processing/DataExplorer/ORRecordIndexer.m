@@ -115,10 +115,9 @@
 			
 			id anObj = nil;
 			//get length from the first word.
-			uint32_t val = *dPtr;
-			if(needToSwap)val = (uint32_t)CFSwapInt32((uint32_t)val); //if data is from old PPC file, must swap.
-			aKey		  = [NSNumber  numberWithLong:ExtractDataId(val)];
-			decodedLength = ExtractLength(val);
+			if(needToSwap) *dPtr = (uint32_t)CFSwapInt32((uint32_t)(*dPtr)); //if data is from old PPC file, must swap.
+			aKey		  = [NSNumber  numberWithLong:ExtractDataId(*dPtr)];
+			decodedLength = ExtractLength(*dPtr);
 			anObj		  = [[currentDecoder objectLookup] objectForKey:aKey];
 			
 				NSString* shortName = [nameCatalog objectForKey:aKey];

@@ -42,17 +42,61 @@
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
 @end
 
-@interface ORFCIODecoder : ORBaseDecoder {
+@interface ORFCIOConfigDecoder : ORBaseDecoder {
     @private
-    // lookups per uniqueID of the sending Listener
     FCIOData* fcioStreams[kMaxFCIOStreams];
     FSPState* fspStates[kMaxFCIOStreams];
     StreamProcessor* processors[kMaxFCIOStreams];
-    NSMutableDictionary* fcCards;
+    bool initialized[kMaxFCIOStreams];
+    uint32_t currentListenerId;
+    uint32_t currentRecordLength;
 }
-- (void) addToObjectList:(NSMutableDictionary*)dict;
-- (bool) allocOrUpdate:(void*)someData withSize:(size_t)size andListener: (uint32_t)listener_id;
+- (FCIOData*) fcioStream;
+- (FSPState*) fspState;
+- (StreamProcessor*) processor;
+- (bool) decodersInitialized;
+- (uint32_t) recordLength;
+
+- (void) broadcastToOthers:(ORDecoder*)aDecoder;
+- (void) setupOptionsfromHeader:(NSDictionary*)aHeader forListener:(uint32_t) listener_id andTracemap:(unsigned int*)tracemap withSize:(size_t)nadcs;
 - (void) dealloc;
+- (bool) openOrSet:(void*)someData;
+
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+@end
+
+@interface ORFCIOBaseDecoder : ORBaseDecoder {
+    ORFCIOConfigDecoder* config;
+}
+- (void) setConfig:(ORFCIOConfigDecoder*)another;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+
+@end
+
+@interface ORFCIOEventDecoder : ORBaseDecoder
+{
+   ORFCIOConfigDecoder* config;
+}
+- (void) setConfig:(ORFCIOConfigDecoder*)another;
+
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+@end
+
+@interface ORFCIOEventHeaderDecoder : ORBaseDecoder
+{
+   ORFCIOConfigDecoder* config;
+}
+- (void) setConfig:(ORFCIOConfigDecoder*)another;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+@end
+
+@interface ORFCIOStatusDecoder : ORBaseDecoder
+{
+   ORFCIOConfigDecoder* config;
+}
+- (void) setConfig:(ORFCIOConfigDecoder*)another;
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr;
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
 @end

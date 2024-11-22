@@ -20,238 +20,534 @@
 #import "ORFlashCamListenerDecoders.h"
 #import "fcio.h"
 #import "fcio_utils.h"
+#import "tmio.h"
 
-@implementation ORFCIODecoder
+@implementation ORFCIOBaseDecoder
 
-- (ORFCIODecoder*) init
+- (void) setConfig:(ORFCIOConfigDecoder*)another
 {
-    self = [super init];
+    config = another;
+}
+
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
+{
+    return 0;
+}
+
+@end
+
+
+@implementation ORFCIOConfigDecoder
+
+- (ORFCIOConfigDecoder*) init
+{
+    [super init];
     if (self != nil) {
         for (int i = 0; i < kMaxFCIOStreams; i++) {
             fcioStreams[i] = NULL;
             fspStates[i] = NULL;
             processors[i] = NULL;
+            initialized[i] = NO;
         }
     }
     return self;
 }
 
-
 - (void) dealloc
 {
+    [super dealloc];
     for (int i = 0; i < kMaxFCIOStreams; i++) {
         FCIOClose(fcioStreams[i]);
         FSPDestroy(processors[i]);
         free(fspStates[i]);
     }
-    [fcCards release];
-    [super dealloc];
 }
 
-- (void) addToObjectList:(NSMutableDictionary*)dict
+- (void)broadcastToOthers:(ORDecoder*)aDecoder
 {
-    NSString* cname = [dict objectForKey:@"className"];
-    if([cname isEqualToString:@""]) return;
-    NSMutableArray* objs = [dict objectForKey:@"objects"];
-    if(!objs){
-        objs = [NSMutableArray array];
-        [dict setObject:objs forKey:@"objects"];
+    if ([self decodersInitialized])
+        return;
+
+    NSArray *supportedDecoders = @[@"FlashCamEvent", @"FlashCamEventHeader", @"FlashCamStatus"];
+    for (NSString* dec in supportedDecoders) {
+        id dataId = [aDecoder headerObject:@"dataDescription",@"ORFlashCamListenerModel",dec,@"dataId",nil];
+        ORFCIOBaseDecoder* decoder = (ORFCIOBaseDecoder*)[aDecoder objectForKey: (id)dataId];
+        [decoder setConfig:self];
     }
-    [objs addObjectsFromArray:[[(ORAppDelegate*)[NSApp delegate] document]
-                            collectObjectsOfClass:NSClassFromString(cname)]];
+    initialized[currentListenerId] = YES;
 }
 
-- (bool) allocOrUpdate:(void*)someData withSize:(size_t)size andListener:(uint32_t)listener_id
+
+- (void) setupOptionsfromHeader:(NSDictionary*)aHeader forListener:(uint32_t) listener_id andTracemap:(unsigned int*)tracemap withSize:(size_t)nadcs;
 {
-    if (listener_id >= kMaxFCIOStreams) {
-        NSLogColor([NSColor redColor], @"ORFlashCamListenerDecoder: listener_id %u exceeds lookup array size %d. This is a hardcoded limit and needs to be changed in ORFLashCamListenerDecoders.h", listener_id, kMaxFCIOStreams);
+    if(!decoderOptions) decoderOptions = [[NSMutableDictionary dictionary] retain];
+    //set up the crate cache
+    NSArray* crates = [aHeader nestedObjectForKey:@"ObjectInfo",@"Crates",nil];
+
+    for (int crateIndex = 0; crateIndex < [crates count]; crateIndex++){
+
+        NSDictionary* headerCrateDictionary = [crates objectAtIndex:crateIndex];
+        NSNumber* crate = [headerCrateDictionary objectForKey:@"CrateNumber"];
+
+        NSArray* cards = [headerCrateDictionary objectForKey:@"Cards"];
+        for (int cardIndex = 0; cardIndex < [cards count]; cardIndex++){
+            NSDictionary* headerCardDictionary = [cards objectAtIndex:cardIndex];
+            NSNumber* card = [headerCardDictionary objectForKey:@"Card"];
+
+            unsigned int cardAddress = [[headerCardDictionary objectForKey:@"CardAddress"] unsignedIntValue];
+            for (int trace_idx = 0; trace_idx < nadcs; trace_idx++) {
+                unsigned int fcioCardAddress = tracemap[trace_idx] >> 16;
+                if (fcioCardAddress == cardAddress) {
+                    unsigned int chan = tracemap[trace_idx] & 0xFFFF;
+                    NSNumber* channel = [NSNumber numberWithUnsignedInteger:chan];
+                    [decoderOptions setObject:crate forKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,crate", listener_id, trace_idx]];
+                    [decoderOptions setObject:card forKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,card", listener_id, trace_idx]];
+                    [decoderOptions setObject:channel forKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,channel", listener_id, trace_idx]];
+                }
+            }
+        }
+    }
+}
+
+- (bool) openOrSet:(void*)someData 
+{
+    uint32* ptr = (uint32*) someData;
+    uint32* data_ptr = ptr + 3;
+
+    currentRecordLength = ExtractLength(*ptr);
+    currentListenerId =  ptr[2] & 0xffff;
+    size_t recordSize = (currentRecordLength - 3) * sizeof(uint32_t);
+
+    if (currentListenerId >= kMaxFCIOStreams) {
+        NSLogColor([NSColor redColor], @"ORFCIOConfigDecoder: listener_id %u exceeds lookup array size %d. This is a hardcoded limit and needs to be changed in ORFLashCamListenerDecoders.h", currentListenerId, kMaxFCIOStreams);
         return NO;
     }
 
-    if (!fcioStreams[listener_id]) {
-        NSString* peer = [NSString stringWithFormat:@"mem://%p/%zu", someData, size];
-        fcioStreams[listener_id] = FCIOOpen([peer UTF8String], 0, 0);
-        if (fcioStreams[listener_id]) {
-            fspStates[listener_id] = calloc(1, sizeof(FSPState));
-            processors[listener_id] = FSPCreate(0);
+    if (!fcioStreams[currentListenerId]) {
+        NSString* peer = [NSString stringWithFormat:@"mem://%p/%zu", data_ptr, recordSize];
+        fcioStreams[currentListenerId] = FCIOOpen([peer UTF8String], 0, 0);
+        if (fcioStreams[currentListenerId]) {
+            if (!fspStates[currentListenerId])
+                fspStates[currentListenerId] = calloc(1, sizeof(FSPState));
+            if (!processors[currentListenerId])
+                processors[currentListenerId] = FSPCreate(0);
             return YES;
         }
         return NO;
     } else {
-        return !FCIOSetMemField(FCIOStreamHandle(fcioStreams[listener_id]), someData, size);
+        return !FCIOSetMemField(FCIOStreamHandle(fcioStreams[currentListenerId]), data_ptr, recordSize);
     }
 }
 
-- (int) readFCIOExtension:(FCIOData*) fcio listener:(uint32_t)listener_id
+- (FCIOData*) fcioStream
 {
-    uint8_t br_buffer[FCIOMaxChannels];
-    uint64_t hwid_buffer[FCIOMaxChannels];
-    uint8_t crate_number[FCIOMaxChannels];
-    uint8_t crate_slot[FCIOMaxChannels];
+    return fcioStreams[currentListenerId];
+}
+- (FSPState*) fspState
+{
+    return fspStates[currentListenerId];
+}
+- (StreamProcessor*) processor
+{
+    return processors[currentListenerId];
+}
+- (bool) decodersInitialized
+{
+    return initialized[currentListenerId];
+}
+- (uint32_t) recordLength
+{
+    return currentRecordLength;
+}
 
-    int br_buffer_size = FCIORead(FCIOStreamHandle(fcio), FCIOMaxChannels, br_buffer)/sizeof(*br_buffer);
-    int hwid_buffer_size = FCIORead(FCIOStreamHandle(fcio), FCIOMaxChannels, hwid_buffer)/sizeof(*hwid_buffer);
-    int crate_number_size = FCIORead(FCIOStreamHandle(fcio), FCIOMaxChannels, crate_number)/sizeof(*crate_number);
-    int crate_slot_size = FCIORead(FCIOStreamHandle(fcio), FCIOMaxChannels, crate_slot)/sizeof(*crate_slot);
+- (NSNumber*) getCrateForTrace:(int)trace_idx
+{
+    return [decoderOptions objectForKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,crate", currentListenerId, trace_idx]];
+}
 
-    if(!decoderOptions) decoderOptions = [[NSMutableDictionary dictionary] retain];
+- (NSNumber*) getCardForTrace:(int)trace_idx
+{
+    return [decoderOptions objectForKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,card", currentListenerId, trace_idx]];
+}
 
-    for (int i = 0; i < fcio->config.adcs; i++) {
-        uint16_t channel = fcio->config.tracemap[i] & 0xffff;
-
-        [decoderOptions setObject:[NSNumber numberWithUnsignedInteger:crate_number[i]] forKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,crateKey",   listener_id, i]];
-        [decoderOptions setObject:[NSNumber numberWithUnsignedInteger:crate_slot[i]]   forKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,cardKey",    listener_id, i]];
-        [decoderOptions setObject:[NSNumber numberWithUnsignedInteger:channel]         forKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,channelKey", listener_id, i]];
-    }
-
-    return br_buffer_size + hwid_buffer_size + crate_number_size + crate_slot_size;
+- (NSNumber*) getChannelForTrace:(int)trace_idx
+{
+    return [decoderOptions objectForKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,channel", currentListenerId, trace_idx]];
 }
 
 - (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet
 {
     if (!someData)
         return 0;
-    uint32* ptr = (uint32*) someData;
-    uint32* data_ptr = ptr + 3;
 
-    uint32_t recordLength = ExtractLength(*ptr);
-    uint32_t listener_id =  ptr[2] & 0xffff;
-    uint32_t recordSize = (recordLength - 3) * sizeof(uint32_t);
+    if (![self openOrSet:someData])
+        return 0;
 
-    if (![self allocOrUpdate:data_ptr withSize: recordSize andListener: listener_id]) {
-        return NO;
-    }
+    //Only this decoder!
+    [self broadcastToOthers:aDecoder];
 
-    FCIOData* fcio = fcioStreams[listener_id];
+    FCIOData* fcio = [self fcioStream];
+    StreamProcessor* processor = [self processor];
 
-    int tag = FCIOGetRecord(fcio); // expect records defined in fcio.h, will be read automatically
-
-    switch (tag) {
-        case FCIOConfig:
-            // read orca extension of record
-            [self readFCIOExtension:fcio listener:listener_id];
-            break;
-        case FCIOSparseEvent:
-        case FCIOEvent:
-        case FCIOEventHeader: {
-            if (aDataSet) {
-                uint32_t wfSamples = fcio->config.eventsamples;
-                for (int i = 0; i < fcio->event.num_traces; i++) {
-                    int trace_idx = fcio->event.trace_list[i];
-                    unsigned int crate = [[decoderOptions objectForKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,crateKey", listener_id, trace_idx]] unsignedIntValue];
-                    unsigned int card = [[decoderOptions objectForKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,cardKey", listener_id, trace_idx]] unsignedIntValue];
-                    unsigned int channel = [[decoderOptions objectForKey:[NSString stringWithFormat:@"Listener %2d,Trace %4d,channelKey", listener_id, trace_idx]] unsignedIntValue];
-
-                    NSString* crateKey   = [self getCrateKey:crate];
-                    NSString* cardKey    = [self getCardKey:card] ;
-                    NSString* channelKey = [self getChannelKey:channel];
-
-                    uint16_t fpga_baseline = fcio->event.theader[trace_idx][0];
-                    uint16_t fpga_integrator = fcio->event.theader[trace_idx][1];
-
-                    [aDataSet histogram:fpga_baseline numBins:0xffff sender:self
-                               withKeys:@"FlashCamADC", @"Baseline", crateKey, cardKey, channelKey, nil];
-                    [aDataSet histogram:fpga_integrator numBins:0xffff sender:self
-                               withKeys:@"FlashCamADC", @"Energy", crateKey, cardKey, channelKey, nil];
-
-                    // get the flashcam card to add to the baseline history
-                    NSString* key = [crateKey stringByAppendingString:cardKey];
-                    if(!fcCards) fcCards = [[NSMutableDictionary alloc] init];
-                    id obj = [fcCards objectForKey:key];
-                    if(!obj){
-                        NSMutableDictionary* dict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"ORFlashCamADCModel",
-                                                                                                      @"className", nil];
-                        [self performSelectorOnMainThread:@selector(addToObjectList:) withObject:dict waitUntilDone:YES];
-                        [dict setObject:@"ORFlashCamADCStdModel" forKey:@"className"];
-                        [self performSelectorOnMainThread:@selector(addToObjectList:) withObject:dict waitUntilDone:YES];
-                        NSMutableArray* listOfCards = [dict objectForKey:@"objects"];
-                        NSEnumerator* e = [listOfCards objectEnumerator];
-                        id fccard;
-                        while(fccard = [e nextObject]){
-                            if([fccard slot] == card && [fccard crateNumber] == crate){
-                                [fcCards setObject:fccard forKey:key];
-                                obj = fccard;
-                                break;
-                            }
-                        }
-                    }
-                    if(obj)
-                        if(channel>=0 && channel<[obj numberOfChannels])
-                            [[obj baselineHistory:channel] addDataToTimeAverage:(float)fpga_baseline];
-
-                    if (tag == FCIOEventHeader)
-                        continue;
-
-                    // only decode the waveform if it has been 100 ms since the last decoded waveform and the plotting window is open
-                    BOOL fullDecode = NO;
-                    struct timeval tv;
-                    gettimeofday(&tv, NULL);
-                    uint64_t now = (uint64_t)(tv.tv_sec)*1000 + (uint64_t)(tv.tv_usec)/1000;
-                    if(!decoderOptions) decoderOptions = [[NSMutableDictionary dictionary] retain];
-                    NSString* lastTimeKey = [NSString stringWithFormat:@"%@,%@,%@,LastTime", crateKey, cardKey, channelKey];
-                    uint64_t lastTime = [[decoderOptions objectForKey:lastTimeKey] unsignedLongLongValue];
-                    if(now - lastTime >= 100){
-                        fullDecode = YES;
-                        [decoderOptions setObject:[NSNumber numberWithUnsignedLongLong:now] forKey:lastTimeKey];
-                    }
-                    BOOL someoneWatching = NO;
-                    if([aDataSet isSomeoneLooking:[NSString stringWithFormat:@"FlashCamADC,Waveforms,%d,%d,%d", crate, card, channel]]){
-                        someoneWatching = YES;
-                    }
-
-                    // decode the waveform if this is the first one or the above conditions are satisfied
-                    if(lastTime == 0 || (fullDecode && someoneWatching)){
-                        NSMutableData* tmpData = [NSMutableData dataWithCapacity:wfSamples*sizeof(unsigned short)];
-                        [tmpData setLength:wfSamples*sizeof(unsigned short)];
-                        memcpy((uint32_t*) [tmpData bytes], fcio->event.trace[i], wfSamples*sizeof(unsigned short));
-                        [aDataSet loadWaveform:tmpData offset:0 unitSize:2 sender:self
-                                      withKeys:@"FlashCamADC", @"Waveforms", crateKey, cardKey, channelKey, nil];
-                    }
-
-                    
-                }
-            }
-            break;
-        }
-        case FCIOStatus:
-            break;
-    }
-
-    // read software trigger record
-    FSPState* fspstate = fspStates[listener_id];
-    StreamProcessor* processor = processors[listener_id];
-
-    tag = FCIOGetRecord(fcio); // expect records defined in fsp.h. need to read the data explicitely.
-    switch (tag) {
-        case FCIOFSPConfig: {
+    int tag;
+    while ( (tag = FCIOGetRecord(fcio)) && tag != FCIOConfig && tag > 0) {
+        if (tag == FCIOFSPConfig)
             FCIOGetFSPConfig(fcio, processor);
-            break;
-        }
-        case FCIOFSPEvent: {
-            FCIOGetFSPEvent(fcio, fspstate);
-            break;
-        }
-        case FCIOFSPStatus: {
-            FCIOGetFSPStatus(fcio, processor);
-            break;
+        if (tag == -TMIO_PROTOCOL_TAG) {
+            FCIOClose(fcio);
+            fcioStreams[currentListenerId] = NULL;
+            [self openOrSet:someData];
         }
     }
+    if (tag <= 0) {
+        NSLogColor([NSColor redColor], @"ORFCIOConfigDecoder received malformed packet without FCIOConfig record.\n");
+        return 0;
+    }
+    if (currentListenerId != fcio->config.streamid)
+    [self setupOptionsfromHeader:[aDecoder fileHeader] forListener:currentListenerId andTracemap:fcio->config.tracemap withSize:fcio->config.adcs];
 
-
-
-
-
-
-    return recordLength;
+    return currentRecordLength;
 }
+
+
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
+{
+
+    [self decodeData:dataPtr fromDecoder:nil intoDataSet:nil];
+    FCIOData* fcio = [self fcioStream];
+    if (!fcio)
+        return @"ORFCIOConfigDecoder not initialized.\n";
+
+    uint32_t readout  = (dataPtr[2] & 0xffff0000) >> 16;
+    uint32_t listener =  dataPtr[2] & 0x0000ffff;
+
+    NSString* readid   = [NSString stringWithFormat:@"Readout Object ID:    %u\n", readout];
+    NSString* listenid = [NSString stringWithFormat:@"Listener Object ID:   %u\n", listener];
+    NSString* evlist   = [NSString stringWithFormat:@"Stream ID:            %d\n", fcio->config.streamid];
+    NSString* adcchan  = [NSString stringWithFormat:@"ADC  Channels:        %d\n", fcio->config.adcs];
+    NSString* trigchan = [NSString stringWithFormat:@"Trig Channels:        %d\n", fcio->config.triggers];
+    NSString* samples  = [NSString stringWithFormat:@"WF Samples:           %d\n", fcio->config.eventsamples];
+    NSString* adcbits  = [NSString stringWithFormat:@"Bits/sample:          %d\n", fcio->config.adcbits];
+    NSString* sumlen   = [NSString stringWithFormat:@"Integrator Length:    %d\n", fcio->config.sumlength];
+    NSString* blprec   = [NSString stringWithFormat:@"Baseline Precision:   %d\n", fcio->config.blprecision];
+    NSString* globals  = [NSString stringWithFormat:@"Global Trigger Cards: %d\n", fcio->config.mastercards];
+    NSString* triggers = [NSString stringWithFormat:@"Trigger Cards:        %d\n", fcio->config.triggercards];
+    NSString* adcs     = [NSString stringWithFormat:@"ADC Cards:            %d\n", fcio->config.adccards];
+    NSString* gps      = [NSString stringWithFormat:@"GPS Mode:             %d\n", fcio->config.gps];
+
+    NSMutableString* tracemap = [NSMutableString string];
+    [tracemap appendString:@"Trace Map (addr:chan):\n"];
+    for(unsigned int i=0; i<fcio->config.adcs; i++){
+        uint32_t val = fcio->config.tracemap[i];
+        if(val == 0) continue;
+        uint32_t addr = (val & 0xffff0000) >> 16;
+        uint32_t chan =  val & 0x0000ffff;
+        [tracemap appendString:[NSString stringWithFormat:@"0x%x:%u,", addr, chan]];
+    }
+
+//    NSMutableString* boardid = [NSMutableString string];
+//    [boardid appendString:@"ADC Main Board HW IDs:\n"];
+//    for(unsigned int i=0; i<nadc; i++){
+//        uint8_t boardRev = (uint8_t) ((dataPtr[offset+(i/4)] & (0xFF << (8*(i%4)))) >> (8*i%4));
+//        uint64_t hwID = (uint64_t)(dataPtr[offset+(uint32_t)ceil(nadc/4.0)+2*i]) << 32;
+//        hwID |= dataPtr[offset+(uint32_t)ceil(nadc/4.0)+2*i+1];
+//        [boardid appendString:[NSString stringWithFormat:@"%hhx-%llx,", boardRev, hwID]];
+//    }
+
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@\n%@", readid, listenid,
+            evlist, adcchan, trigchan, samples, adcbits, sumlen, blprec, globals, triggers, adcs, gps,
+            [tracemap substringWithRange:NSMakeRange(0, [tracemap length]-1)]];
+//            [boardid substringWithRange:NSMakeRange(0, [boardid length]-1)]];
+}
+
+@end
+
+
+@implementation ORFCIOEventDecoder
 
 - (NSString*) dataRecordDescription:(uint32_t*)dataPtr
 {
     [self decodeData:dataPtr fromDecoder:nil intoDataSet:nil];
-    return NULL;
+    FCIOData* fcio = [config fcioStream];
+    if (!fcio)
+        return @"ORFCIOConfig needs to be decoded first.\nPlease select this record.\n";
+
+    NSString* title = @"FlashCam Event Record\n\n";
+//    NSString* crate = [NSString stringWithFormat:@"Crate      = %U\n", (dataPtr[2] & 0xf8000000) >> 27];
+//    NSString* card  = [NSString stringWithFormat:@"Card       = %u\n", (dataPtr[2] & 0x07c00000) >> 22];
+//    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n", [self getChannel:dataPtr[2]]];
+//    NSString* index = [NSString stringWithFormat:@"Ch Index   = %u\n", [self getIndex:dataPtr[2]]];
+    NSString* type = [NSString stringWithFormat:@"Event type  = %u\n",  fcio->event.type];
+    NSString* evtno = [NSString stringWithFormat:@"Event no    = %d\n",  fcio->event.timestamp[0]];
+    NSString* num_traces = [NSString stringWithFormat:@"Num Channels    = %d\n",  fcio->event.num_traces];
+    NSString* header = @"Raw waveform header:\n";
+    for(int i=0; i<fcio->event.timeoffset_size; i++)
+        header = [header stringByAppendingFormat:@"timeoffset[%d]: %d\n", i, fcio->event.timeoffset[i]];
+    for(int i=0; i<fcio->event.deadregion_size; i++)
+        header = [header stringByAppendingFormat:@"deadregion[%d]: %d\n", i, fcio->event.deadregion[i]];
+    for(int i=0; i<fcio->event.timestamp_size; i++)
+        header = [header stringByAppendingFormat:@"timestamp[%d]:  %d\n", i, fcio->event.timestamp[i]];
+    for(int i=0; i<fcio->event.num_traces; i++)
+        header = [header stringByAppendingFormat:@"baseline[%d]:  %u\n", i, fcio->event.theader[fcio->event.trace_list[i]][0]];
+    for(int i=0; i<fcio->event.num_traces; i++)
+        header = [header stringByAppendingFormat:@"energy[%d]:  %u\n", i, fcio->event.theader[fcio->event.trace_list[i]][1]];
+
+    return [NSString stringWithFormat:@"%@%@%@%@%@", title, type, evtno, num_traces, header];
+}
+
+- (void) setConfig:(ORFCIOConfigDecoder *)another
+{
+    config = another;
+}
+
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+{
+    if (!someData)
+        return 0;
+
+
+    if (![config openOrSet:someData])
+        return 0;
+
+    FCIOData* fcio = [config fcioStream];
+    FSPState* fspState = [config fspState];
+
+    int tag;
+    while ( (tag = FCIOGetRecord(fcio)) && tag != FCIOEvent && tag != FCIOSparseEvent && tag > 0) {
+        if (tag == FCIOFSPEvent)
+            FCIOGetFSPEvent(fcio, fspState);
+    }
+    if (tag <= 0) {
+        NSLogColor([NSColor redColor], @"ORFCIOEventDecoder received malformed packet without FCIOConfig record.\n");
+        return 0;
+    }
+    if (aDataSet) {
+        uint32_t wfSamples = fcio->config.eventsamples;
+        for (int i = 0; i < fcio->event.num_traces; i++) {
+            int trace_idx = fcio->event.trace_list[i];
+            unsigned int crate = [[config getCrateForTrace:trace_idx] unsignedIntValue];
+            unsigned int card = [[config getCardForTrace:trace_idx] unsignedIntValue];
+            unsigned int  channel = [[config getChannelForTrace:trace_idx] unsignedIntValue];
+
+            NSString* crateKey = [self getCrateKey:crate];
+            NSString* cardKey = [self getCardKey:card];
+            NSString* channelKey = [self getChannelKey:channel];
+
+            uint16_t fpga_baseline = fcio->event.theader[trace_idx][0];
+            uint16_t fpga_integrator = fcio->event.theader[trace_idx][1];
+
+            [aDataSet histogram:fpga_baseline numBins:0xffff sender:self
+                       withKeys:@"FlashCamADC", @"Baseline", crateKey, cardKey, channelKey, nil];
+            [aDataSet histogram:fpga_integrator numBins:0xffff sender:self
+                       withKeys:@"FlashCamADC", @"Energy", crateKey, cardKey, channelKey, nil];
+
+            // Event specific, not in Header
+            // only decode the waveform if it has been 100 ms since the last decoded waveform and the plotting window is open
+            BOOL fullDecode = NO;
+            struct timeval tv;
+            gettimeofday(&tv, NULL);
+            uint64_t now = (uint64_t)(tv.tv_sec)*1000 + (uint64_t)(tv.tv_usec)/1000;
+            if(!decoderOptions) decoderOptions = [[NSMutableDictionary dictionary] retain];
+            NSString* lastTimeKey = [NSString stringWithFormat:@"%@,%@,%@,LastTime", crateKey, cardKey, channelKey];
+            uint64_t lastTime = [[decoderOptions objectForKey:lastTimeKey] unsignedLongLongValue];
+            if(now - lastTime >= 100){
+                fullDecode = YES;
+                [decoderOptions setObject:[NSNumber numberWithUnsignedLongLong:now] forKey:lastTimeKey];
+            }
+            BOOL someoneWatching = NO;
+            if([aDataSet isSomeoneLooking:[NSString stringWithFormat:@"FlashCamADC,Waveforms,%d,%d,%d", crate , card, channel]]){
+                someoneWatching = YES;
+            }
+
+            // decode the waveform if this is the first one or the above conditions are satisfied
+            if(lastTime == 0 || (fullDecode && someoneWatching)){
+                NSMutableData* tmpData = [NSMutableData dataWithCapacity:wfSamples*sizeof(unsigned short)];
+                [tmpData setLength:wfSamples*sizeof(unsigned short)];
+                memcpy((uint32_t*) [tmpData bytes], fcio->event.trace[i], wfSamples*sizeof(unsigned short));
+                [aDataSet loadWaveform:tmpData offset:0 unitSize:2 sender:self
+                              withKeys:@"FlashCamADC", @"Waveforms", crateKey, cardKey, channelKey, nil];
+            }
+        }
+    }
+
+    return [config recordLength];
 }
 
 @end
+
+
+@implementation ORFCIOEventHeaderDecoder
+
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
+{
+    [self decodeData:dataPtr fromDecoder:nil intoDataSet:nil];
+    FCIOData* fcio = [config fcioStream];
+    if (!fcio)
+        return @"ORFCIOConfig needs to be decoded first.\nPlease select this record.\n";
+
+    NSString* title = @"FlashCam Event Record\n\n";
+//    NSString* crate = [NSString stringWithFormat:@"Crate      = %U\n", (dataPtr[2] & 0xf8000000) >> 27];
+//    NSString* card  = [NSString stringWithFormat:@"Card       = %u\n", (dataPtr[2] & 0x07c00000) >> 22];
+//    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n", [self getChannel:dataPtr[2]]];
+//    NSString* index = [NSString stringWithFormat:@"Ch Index   = %u\n", [self getIndex:dataPtr[2]]];
+    NSString* type = [NSString stringWithFormat:@"Event type  = %u\n",  fcio->event.type];
+    NSString* evtno = [NSString stringWithFormat:@"Event no    = %d\n",  fcio->event.timestamp[0]];
+    NSString* num_traces = [NSString stringWithFormat:@"Num Channels    = %d\n",  fcio->event.num_traces];
+    NSString* header = @"Raw waveform header:\n";
+    for(int i=0; i<fcio->event.timeoffset_size; i++)
+        header = [header stringByAppendingFormat:@"timeoffset[%d]: %d\n", i, fcio->event.timeoffset[i]];
+    for(int i=0; i<fcio->event.deadregion_size; i++)
+        header = [header stringByAppendingFormat:@"deadregion[%d]: %d\n", i, fcio->event.deadregion[i]];
+    for(int i=0; i<fcio->event.timestamp_size; i++)
+        header = [header stringByAppendingFormat:@"timestamp[%d]:  %d\n", i, fcio->event.timestamp[i]];
+    for(int i=0; i<fcio->event.num_traces; i++)
+        header = [header stringByAppendingFormat:@"baseline[%d]:  %d\n", i, fcio->event.theader[i][0]];
+    for(int i=0; i<fcio->event.num_traces; i++)
+        header = [header stringByAppendingFormat:@"energy[%d]:  %d\n", i, fcio->event.theader[i][1]];
+
+    return [NSString stringWithFormat:@"%@%@%@%@%@", title, type, evtno, num_traces, header];
+}
+
+- (void) setConfig:(ORFCIOConfigDecoder *)another
+{
+    config = another;
+}
+
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+{
+    if (!someData)
+        return 0;
+
+
+    if (![config openOrSet:someData])
+        return 0;
+
+    FCIOData* fcio = [config fcioStream];
+    FSPState* fspState = [config fspState];
+
+    int tag;
+    while ( (tag = FCIOGetRecord(fcio)) && tag != FCIOEventHeader && tag > 0) {
+        if (tag == FCIOFSPEvent)
+            FCIOGetFSPEvent(fcio, fspState);
+    }
+    if (tag <= 0) {
+        NSLogColor([NSColor redColor], @"ORFCIOEventHeaderDecoder received malformed packet without FCIOConfig record.\n");
+        return 0;
+    }
+
+    if (aDataSet) {
+        for (int i = 0; i < fcio->event.num_traces; i++) {
+            int trace_idx = fcio->event.trace_list[i];
+            NSString* crateKey = [self getCrateKey:[[config getCrateForTrace:trace_idx] unsignedIntValue]];
+            NSString* cardKey = [self getCardKey:[[config getCardForTrace:trace_idx] unsignedIntValue]];
+            NSString* channelKey = [self getChannelKey:[[config getChannelForTrace:trace_idx] unsignedIntValue]];
+
+            uint16_t fpga_baseline = fcio->event.theader[trace_idx][0];
+            uint16_t fpga_integrator = fcio->event.theader[trace_idx][1];
+
+            [aDataSet histogram:fpga_baseline numBins:0xffff sender:self
+                       withKeys:@"FlashCamADC", @"Baseline", crateKey, cardKey, channelKey, nil];
+            [aDataSet histogram:fpga_integrator numBins:0xffff sender:self
+                       withKeys:@"FlashCamADC", @"Energy", crateKey, cardKey, channelKey, nil];
+        }
+    }
+
+    return [config recordLength];
+}
+
+@end
+
+
+@implementation ORFCIOStatusDecoder
+
+- (NSString*) dataRecordDescription:(uint32_t*)dataPtr
+{
+    [self decodeData:dataPtr fromDecoder:nil intoDataSet:nil];
+    FCIOData* fcio = [config fcioStream];
+    if (!fcio)
+        return @"ORFCIOConfig needs to be decoded first.\nPlease select this record.\n";
+
+    uint32_t readout  = (dataPtr[2] & 0xffff0000) >> 16;
+    uint32_t listener =  dataPtr[2] & 0x0000ffff;
+
+    NSString* readid    = [NSString stringWithFormat:@"Readout Object ID:    %u\n", readout];
+    NSString* listenid  = [NSString stringWithFormat:@"Listener Object ID:   %u\n", listener];
+    NSString* status    = [NSString stringWithFormat:@"Status (1=no errors): %d\n", fcio->status.status];
+    NSString* fcsec     = [NSString stringWithFormat:@"fc250 Seconds:        %d\n", fcio->status.statustime[0]];
+    NSString* fcusec    = [NSString stringWithFormat:@"fc250 uSeconds:       %d\n", fcio->status.statustime[1]];
+    NSString* cpusec    = [NSString stringWithFormat:@"CPU Seconds:          %d\n", fcio->status.statustime[2]];
+    NSString* cpuusec   = [NSString stringWithFormat:@"CPU uSeconds:         %d\n", fcio->status.statustime[3]];
+    NSString* startsec  = [NSString stringWithFormat:@"Start Seconds:        %d\n", fcio->status.statustime[5]];
+    NSString* startusec = [NSString stringWithFormat:@"Start uSeconds:       %d\n", fcio->status.statustime[6]];
+    NSString* cards     = [NSString stringWithFormat:@"Number of Cards:      %d\n", fcio->status.cards];
+    NSString* dsize     = [NSString stringWithFormat:@"Size of Card Data:    %d\n", fcio->status.size];
+
+    NSMutableString* cdata = [NSMutableString string];
+    for(int i=0; i<fcio->status.cards; i++){
+        [cdata appendString:[NSString stringWithFormat:@"Card Index %d:\n", i]];
+        [cdata appendString:[NSString stringWithFormat:@"  id:             %u\n", fcio->status.data[i].reqid]];
+        [cdata appendString:[NSString stringWithFormat:@"  status:         %u\n", fcio->status.data[i].status]];
+        [cdata appendString:[NSString stringWithFormat:@"  event:          %u\n", fcio->status.data[i].eventno]];
+        [cdata appendString:[NSString stringWithFormat:@"  pps:            %u\n", fcio->status.data[i].pps]];
+        [cdata appendString:[NSString stringWithFormat:@"  ticks:          %u\n", fcio->status.data[i].ticks]];
+        [cdata appendString:[NSString stringWithFormat:@"  maxticks:       %u\n", fcio->status.data[i].maxticks]];
+        [cdata appendString:[NSString stringWithFormat:@"  tot  errors:    %u\n", fcio->status.data[i].totalerrors]];
+        [cdata appendString:[NSString stringWithFormat:@"  env  errors:    %u\n", fcio->status.data[i].enverrors]];
+        [cdata appendString:[NSString stringWithFormat:@"  cti  errors:    %u\n", fcio->status.data[i].ctierrors]];
+        [cdata appendString:[NSString stringWithFormat:@"  link errors:    %u\n", fcio->status.data[i].linkerrors]];
+        [cdata appendString:[NSString stringWithFormat:@"  temp0     (mC): %u\n", fcio->status.data[i].environment[0]]];
+        [cdata appendString:[NSString stringWithFormat:@"  temp1     (mC): %u\n", fcio->status.data[i].environment[1]]];
+        [cdata appendString:[NSString stringWithFormat:@"  temp2     (mC): %u\n", fcio->status.data[i].environment[2]]];
+        [cdata appendString:[NSString stringWithFormat:@"  temp3     (mC): %u\n", fcio->status.data[i].environment[3]]];
+        [cdata appendString:[NSString stringWithFormat:@"  temp4     (mC): %u\n", fcio->status.data[i].environment[4]]];
+        [cdata appendString:[NSString stringWithFormat:@"  voltage0  (mV): %u\n", fcio->status.data[i].environment[5]]];
+        [cdata appendString:[NSString stringWithFormat:@"  voltage1  (mV): %u\n", fcio->status.data[i].environment[6]]];
+        [cdata appendString:[NSString stringWithFormat:@"  voltage2  (mV): %u\n", fcio->status.data[i].environment[7]]];
+        [cdata appendString:[NSString stringWithFormat:@"  voltage3  (mV): %u\n", fcio->status.data[i].environment[8]]];
+        [cdata appendString:[NSString stringWithFormat:@"  voltage4  (mV): %u\n", fcio->status.data[i].environment[9]]];
+        [cdata appendString:[NSString stringWithFormat:@"  voltage5  (mV): %u\n", fcio->status.data[i].environment[10]]];
+        [cdata appendString:[NSString stringWithFormat:@"  main I    (mA): %u\n", fcio->status.data[i].environment[11]]];
+        [cdata appendString:[NSString stringWithFormat:@"  humidity      : %u\n", fcio->status.data[i].environment[12]]];
+        [cdata appendString:[NSString stringWithFormat:@"  adc temp0 (mC): %u\n", fcio->status.data[i].environment[13]]];
+        [cdata appendString:[NSString stringWithFormat:@"  adc temp1 (mC): %u\n", fcio->status.data[i].environment[14]]];
+    }
+
+    return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@", readid, listenid,
+            status, fcsec, fcusec, cpusec, cpuusec, startsec, startusec, cards, dsize, cdata];
+}
+
+- (void) setConfig:(ORFCIOConfigDecoder *)another
+{
+    config = another;
+}
+
+- (uint32_t) decodeData:(void*)someData fromDecoder:(ORDecoder*)aDecoder intoDataSet:(ORDataSet*)aDataSet;
+{
+    if (!someData)
+        return 0;
+
+
+    if (![config openOrSet:someData])
+        return 0;
+
+    FCIOData* fcio = [config fcioStream];
+    StreamProcessor* processor = [config processor];
+
+    int tag;
+    while ( (tag = FCIOGetRecord(fcio)) && tag != FCIOStatus && tag > 0) {
+        if (tag == FCIOFSPStatus)
+            FCIOGetFSPStatus(fcio, processor);
+    }
+    if (tag <= 0) {
+        NSLogColor([NSColor redColor], @"ORFCIOStatusDecoder received malformed packet without FCIOConfig record.\n");
+        return 0;
+    }
+
+    return [config recordLength];
+}
+
+@end
+
 
 @implementation ORFlashCamListenerConfigDecoder
 
