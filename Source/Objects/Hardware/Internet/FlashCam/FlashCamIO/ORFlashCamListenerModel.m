@@ -1539,7 +1539,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         }
         char statestring[19] = {0};
         FSPFlags2char(fspstate, 18, statestring);
-        if (!fspstate->write) {
+        if (!fspstate->write_flags.write) {
             if (fspLogLevel > 5) {
                 fprintf(stderr, "%s: postprocessor record_flags=%s\n", [[self identifier] UTF8String], statestring);
             }
@@ -1670,15 +1670,18 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 {
     /* This function decides if the waveforms are removed,
        depending on the software trigger decision
+        - write header only if StreamProcessor is active (we have an FSPState)
+            - if there there is no reason to write
+            - if writeNonTriggered is not active
      */
-    if (fspstate && (fspstate->write_flags.write))
-        return state->last_tag;
-
-    else switch (state->last_tag) {
-        case FCIOEvent:
-        case FCIOSparseEvent:
-            return FCIOEventHeader;
+    if (fspstate && !fspstate->write_flags.write && !writeNonTriggered) {
+        switch (state->last_tag) {
+            case FCIOEvent:
+            case FCIOSparseEvent:
+                return FCIOEventHeader;
+        }
     }
+
     return state->last_tag;
 }
 
@@ -1753,7 +1756,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         DEBUG_PRINT( "%s %s: shipFCIO no FCIOState\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
         return NO;
     }
-
 
 
     uint32_t header_length = 3; // dataId + recordLength + readout/listenerId
