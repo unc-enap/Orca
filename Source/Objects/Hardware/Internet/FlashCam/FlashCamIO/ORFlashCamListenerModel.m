@@ -1256,7 +1256,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     fspMuonChannel = -1;
     fspPulserChannelThreshold = 0;
     fspBaselineChannelThreshold = 0;
-    fspBaselineChannelThreshold = 0;
+    fspMuonChannelThreshold = 0;
     for(ORReadOutObject* obj in [readOutList children]){
         if(![[obj object] isKindOfClass:NSClassFromString(@"ORFlashCamCard")]) continue;
         ORFlashCamCard* card = (ORFlashCamCard*) [obj object];
