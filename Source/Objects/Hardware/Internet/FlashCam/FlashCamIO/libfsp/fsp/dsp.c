@@ -524,6 +524,9 @@ void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int ntrac
   int nfound = 0;
   for (int i = 0; i < cfg->ntraces; i++) {
     int trace_idx = cfg->tracemap[i];
+    if (trace_idx < 0)
+      continue;
+
     unsigned short *trace = traces[trace_idx];
     unsigned short baseline = theaders[trace_idx][0];
 

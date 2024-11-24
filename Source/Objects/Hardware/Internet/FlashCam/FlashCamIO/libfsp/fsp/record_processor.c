@@ -547,7 +547,7 @@ static inline void fsp_process_state_timings(StreamProcessor* processor, FSPStat
   if (fsp_state->write_flags.event.is_retrigger) {
     FSPState* update_fsp_state = NULL;
     int previous_counter = 0;
-    uint8_t nretrigger = 1;
+    int nretrigger = 1;
     while ( (update_fsp_state = FSPBufferGetState(processor->buffer, previous_counter--)) ) {
       if (!update_fsp_state->has_timestamp)
         continue;

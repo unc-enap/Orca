@@ -15,7 +15,6 @@ int FSP_L200_SetAuxParameters(StreamProcessor* processor, FSPTraceFormat format,
               channelmap_fmt2str(format));
     return 0;
   }
-  // processor->dsp_ct = calloc(1, sizeof(DSPChannelThreshold));
 
   DSPChannelThreshold* ct_cfg = processor->dsp_ct;
 

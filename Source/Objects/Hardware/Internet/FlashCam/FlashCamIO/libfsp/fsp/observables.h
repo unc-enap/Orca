@@ -11,8 +11,8 @@ typedef struct {
 
 // Windows Peak Sum
 typedef struct wps_obs {
-  float max_value; // what is the maximum PE within the integration windows
-  int max_offset;  // when is the total sum offset reached?
+  float max_value; // what is the maximum peak amplitude sum within the integration windows
+  int max_offset;  // which sample offset is max_value at?
   int max_multiplicity;  // How many channels did have a peak above thresholds
   float max_single_peak_value;   // which one was the largest individual peak
   int max_single_peak_offset;  // which sample contains this peak
@@ -38,6 +38,7 @@ typedef struct ct_obs {
 typedef struct evt_obs {
   int nextension; // if we found re-triggers how many events are consecutive from then on. the event with the extension flag carries the total number
 } evt_obs;
+
 typedef struct FSPObervables {
 
   wps_obs wps;
