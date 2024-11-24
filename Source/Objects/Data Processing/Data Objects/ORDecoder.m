@@ -264,7 +264,7 @@
 	uint32_t theDataId = ExtractDataId(val);
 	
 	if(theDataId == 0x0) {		//great, this is easy... it's the new form
-		uint32_t theLength = ExtractLength(val);
+		uint32_t theLength = ExtractLength(*ptr);
 		[aDataSet loadGenericData:@" " sender:self withKeys:@"Header",nil];
 		
 		return theLength;
@@ -307,7 +307,7 @@
 		needToSwap = YES;
 		return YES;
 	}
-	if((*p & 0xffff0000) != 0x0000){
+	if((*p & kLongFormDataIdMask) != 0x0000){
 		//the dataID for the header is always zero the length of the record is always non-zero -- this
 		//gives us a way to determine endian-ness 
 		needToSwap = YES;
@@ -360,7 +360,7 @@
 	uint32_t lengthWhenPadded    = sizeof(int32_t)*(round(.5 + headerLength/(float)sizeof(int32_t)));					//in bytes
 	uint32_t padSize             = lengthWhenPadded - headerLength;							//in bytes
 	uint32_t totalLength		  = 2 + (lengthWhenPadded/4);									//in longs
-	uint32_t theHeaderWord = 0 | (0x1ffff & totalLength);										//compose the header word
+	uint32_t theHeaderWord = 0 | (kLongFormLengthMask & totalLength);										//compose the header word
 	NSMutableData* data = [NSMutableData dataWithBytes:&theHeaderWord length:sizeof(int32_t)];			//add the header word
 	[data appendBytes:&headerLength length:sizeof(int32_t)];											//add the header len in bytes
 	
