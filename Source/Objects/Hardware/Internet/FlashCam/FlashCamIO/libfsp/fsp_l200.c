@@ -19,15 +19,27 @@ int FSP_L200_SetAuxParameters(StreamProcessor* processor, FSPTraceFormat format,
   DSPChannelThreshold* ct_cfg = processor->dsp_ct;
 
   ct_cfg->tracemap_format = format;
-  ct_cfg->tracemap[0] = pulser_channel;
-  ct_cfg->tracemap[1] = baseline_channel;
-  ct_cfg->tracemap[2] = muon_channel;
-  ct_cfg->thresholds[0] = pulser_level_adc;
-  ct_cfg->thresholds[1] = baseline_level_adc;
-  ct_cfg->thresholds[2] = muon_level_adc;
-  ct_cfg->ntraces = 3;
+  ct_cfg->ntraces = 0;
 
-  ct_cfg->enabled = 1;
+  if (pulser_channel >= 0 && pulser_level_adc > 0) {
+    ct_cfg->tracemap[0] = pulser_channel;
+    ct_cfg->thresholds[0] = pulser_level_adc;
+    ct_cfg->ntraces++;
+  }
+
+  if (baseline_channel >= 0 && baseline_level_adc > 0) {
+    ct_cfg->tracemap[1] = baseline_channel;
+    ct_cfg->thresholds[1] = baseline_level_adc;
+    ct_cfg->ntraces++;
+  }
+
+  if (muon_channel >= 0 && muon_level_adc > 0) {
+    ct_cfg->tracemap[2] = muon_channel;
+    ct_cfg->thresholds[2] = muon_level_adc;
+    ct_cfg->ntraces++;
+  }
+
+  ct_cfg->enabled = ct_cfg->ntraces ? 1 : 0;
 
   if (processor->loglevel >= 4) {
     fprintf(stderr, "DEBUG FSP_L200_SetAuxParameters\n");
