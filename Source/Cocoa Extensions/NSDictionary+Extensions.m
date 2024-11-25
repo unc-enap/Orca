@@ -21,7 +21,19 @@
 #import "NSFileManager+Extensions.h"
 
 @implementation NSDictionary (OrcaExtensions)
-
+- (NSMutableDictionary*) mutableDeepCopy
+{
+   NSMutableDictionary * returnDict = [[NSMutableDictionary alloc] initWithCapacity:self.count];
+   NSArray* keys = [self allKeys];
+   for(id key in keys) {
+       id aValue  = [self objectForKey:key];
+       if([aValue conformsToProtocol:@protocol(MutableDeepCopying)])    [returnDict setValue:[aValue mutableDeepCopy] forKey:key]; //autoreleased in the recursive call
+       else if([aValue conformsToProtocol:@protocol(NSMutableCopying)]) [returnDict setValue:[[aValue mutableCopy]autorelease] forKey:key];
+       else if([aValue conformsToProtocol:@protocol(NSCopying)])        [returnDict setValue:[[aValue copy]autorelease] forKey:key];
+       else                                                             [returnDict setValue:[[aValue retain]autorelease] forKey:key];
+   }
+   return [returnDict autorelease];
+}
 - (NSArray*) allKeysStartingWith:(NSString*)aString
 {
     NSArray* allKeys = [self allKeys];

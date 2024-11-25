@@ -39,6 +39,19 @@
    return rows;
 }
 
+-(NSMutableArray*) mutableDeepCopy
+{
+  NSMutableArray *returnArray = [[NSMutableArray alloc] initWithCapacity:self.count];
+    for(int i=0;i<self.count;i++) {
+        id aValue = [self objectAtIndex:i];
+        if([aValue conformsToProtocol:@protocol(MutableDeepCopying)])    [returnArray addObject:[aValue mutableDeepCopy]]; //autoreleased in the recursive call
+        else if([aValue conformsToProtocol:@protocol(NSMutableCopying)]) [returnArray addObject:[[aValue mutableCopy] autorelease]];
+        else if([aValue conformsToProtocol:@protocol(NSCopying)])        [returnArray addObject:[[aValue copy] autorelease]];
+        else                                                             [returnArray addObject:[[aValue retain]autorelease]];
+    }
+  
+    return [returnArray autorelease];
+}
 
 - (NSString *)joinAsLinesOfEndingType:(LineEndingType)lineEndingType
 {

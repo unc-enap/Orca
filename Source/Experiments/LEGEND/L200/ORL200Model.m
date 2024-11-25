@@ -56,15 +56,16 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     [influxDB release];
     [rc release];
     [slowControls release];
-    [runGroups release];
+    [metaDataDict release];
     [metaFolder release];
+    [lastSourceArray release];
     [super dealloc];
 }
 
 - (void) awakeAfterDocumentLoaded
 {
     [super awakeAfterDocumentLoaded];
-    [self readRunGroup];
+    [self readMetaDict];
 }
 
 - (void) findObjects:(NSNotification*)aNote
@@ -200,7 +201,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [fm createDirectoryAtPath:tmpDir withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
-    [self addRunToGroup:theCurrentFile];
+    [self addRunToMetaDict:theCurrentFile];
 }
 
 - (void) runTypeChanged:(NSNotification*) aNote
@@ -1235,74 +1236,21 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
 #pragma mark •••MetaInfo routines
 - (void) finalizeMetaInfo
 {
-    if(![runGroups count])return;
-    //cycle has ended.. convert the runGroup into JSON
-    NSMutableDictionary* preJson = [NSMutableDictionary dictionary];
-    NSMutableArray*      allRuns = [NSMutableArray array];
+    //done with this L200 run .. reset things
+    sourcePosCount = 0;
+    if(![metaDataDict count])return;
+    [self writeJson:metaDataDict];
     
-    //---------------------------------------------
-    //collect all runs that are NOT cal runs
-    for(id type in [runGroups allKeys]){
-        //all types have the following data
-        if([type isEqualToString:@"SourceTable"])continue; //skip the calibration source LUT
-        if([type hasPrefix:@"X$X"])              continue; //look at cal runs below
-
-        NSArray* runSet         = [runGroups objectForKey:type];
-        for(id aRun in runSet)[allRuns addObject:[aRun objectForKey:@"name"]];
-        [preJson setObject:allRuns forKey:@"keys"];
-        [preJson setObject:[self metaInfo] forKey:@"info"];
-        [preJson setObject:[NSNumber numberWithLong:[allRuns count]] forKey:@"number_of_keys"];
-        if([preJson count]!=0)[self writeJson:preJson forType:type];
-    }
+    [metaDataDict release];
+    metaDataDict = nil;
     
-    //---------------------------------------------
-    //handle cal runs separately... there is a source LUT
-    NSArray* LUT = [runGroups objectForKey:@"SourceTable"];
-    [preJson removeAllObjects];
-    [allRuns removeAllObjects];
-    NSMutableDictionary* positionDict   = [NSMutableDictionary dictionary];
-    if([LUT count]){
-        int posIndex = 1;
-        for(id aLUTKey in LUT){
-            NSArray*             aPositionSet   = [runGroups objectForKey:aLUTKey];
-            NSMutableDictionary* sourceDict     = [NSMutableDictionary dictionary];
-            NSMutableArray*      allCalRuns     = [NSMutableArray array];
-
-            //-------------------------------------------
-            //source position will be the same for the set
-            //-------------------------------------------
-            NSMutableDictionary* posInMMDict    = [NSMutableDictionary dictionary];
-            NSArray* sourceArray = [[aPositionSet firstObject] objectForKey:@"sourcePositions"];
-            for(int i=0;i<[sourceArray count];i++){
-                [posInMMDict setObject:[sourceArray objectAtIndex:i] forKey:[NSString stringWithFormat:@"SIS%d",i+1]];
-            }
-            //-------------------------------------------
-            //keep a running list of all runs for inclusion at end
-            for(id aRun in aPositionSet){
-                [allRuns addObject:[aRun objectForKey:@"name"]];
-                [allCalRuns addObject:[aRun objectForKey:@"name"]];
-            }
-            [sourceDict setObject:posInMMDict        forKey:@"positions_in_mm"];
-            [sourceDict setObject:allCalRuns         forKey:@"keys"];
-            [sourceDict setObject:[NSNumber numberWithLong:[allCalRuns count]] forKey:@"number_of_keys"];
-
-            [positionDict setObject:sourceDict forKey:[NSString stringWithFormat:@"pos%d",posIndex]];
-            posIndex++;
-        }
-        [preJson setObject:allRuns forKey:@"keys"];
-        [preJson setObject:positionDict forKey:@"positionInfo"];
-        [preJson setObject:[self metaInfo] forKey:@"info"];
-        [preJson setObject:[NSNumber numberWithLong:[allRuns count]] forKey:@"number_of_keys"];
-
-        if([preJson count]!=0)[self writeJson:preJson forType:@"cal"];
-    }
-    
-    [runGroups release];
-    runGroups = nil;
-    [self checkRunGroup];
-    [self writeRunGroup];
+    [lastSourceArray release];
+    lastSourceArray = nil;
+    [self checkMetaDataDict];
+    [self storeMetaDict];
 }
-- (void) writeJson:(NSDictionary*) preJson forType:(NSString*)type
+
+- (void) writeJson:(NSDictionary*) preJson
 {
     NSError* error;
     NSData* jsonData = [NSJSONSerialization dataWithJSONObject:preJson
@@ -1316,7 +1264,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         NSString* jsonString = [[[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]autorelease];
         
         //{experiment}-{data period}-{data run}-{data type}-{timestamp}
-        NSString* path = [NSString stringWithFormat:@"l200-p%02d-r%03d-%@-T%c-keys",dataPeriod,lastDataCycle,type,'%'];
+        NSString* path = [NSString stringWithFormat:@"l200-p%02d-r%03d-keys",dataPeriod,lastDataCycle];
         if(metaFolder){
             NSString* fullPath = [metaFolder stringByAppendingPathComponent:path];
             fullPath = [fullPath stringByExpandingTildeInPath];
@@ -1345,10 +1293,10 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     return aDict;
 }
 
-- (void) checkRunGroup
+- (void) checkMetaDataDict
 {
-    if(!runGroups){
-        runGroups = [[NSMutableDictionary dictionary] retain];
+    if(!metaDataDict){
+        metaDataDict = [[NSMutableDictionary dictionary] retain];
     }
 }
 
@@ -1363,74 +1311,99 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     return NO;
 }
 
-- (void) addRunToGroup:(NSString*)dataFileName
+- (void) addRunToMetaDict:(NSString*)dataFileName
 {
-    [self checkRunGroup];
-    //runGroup is array containing an array of runs with the same runType and/or source position
+    [self checkMetaDataDict];
     //-------------------------------
-    //create structures for this run
     NSString* dataType    = [self getDataType];
     if(!dataType)return;
-    //-------------------------------
-    //create dictionary for this run holding type, name, etc
-    //use the run type as a key
-    //-------------------------------
-    NSMutableDictionary* thisRun = [NSMutableDictionary dictionary];
-    [thisRun setObject: dataType     forKey:@"type"];
-    [thisRun setObject: dataFileName forKey:@"name"];
-    NSString* runGroupKey = dataType;
+    //get the type set
+    NSMutableDictionary* thisSet = [metaDataDict objectForKey:dataType];
+    if(!thisSet){
+        thisSet = [NSMutableDictionary dictionary];
+        [metaDataDict setObject:thisSet forKey:dataType];
+    }
+    //get the run keys
+    NSMutableArray* keys = [thisSet objectForKey:@"keys"];
+    if(!keys){
+        keys = [NSMutableArray array];
+        [thisSet setObject:keys forKey:@"keys"];
+    }
+    [keys addObject:dataFileName];
+    
+    //set the meta info
+    [thisSet setObject:[self metaInfo] forKey:@"info"];
+    [thisSet setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
+    
+    //handle cal souce positions
     if(slowControls && [dataType isEqualToString:@"cal"]){
-        //change the group key here to make things easier later
-        NSMutableArray* sourceArray = [NSMutableArray array];
+        
+        NSMutableArray* currentSourceArray = [NSMutableArray array];
         for(int i=0;i<4;i++){
             NSString* sourcePos = [slowControls cmd:@"Source" dataAtRow:i column:2];
-            [sourceArray addObject:sourcePos];
+            [currentSourceArray addObject:sourcePos];
         }
-        runGroupKey = [self makeCalGroupKey:sourceArray];
-        [thisRun setObject: sourceArray forKey:@"sourcePositions"];
-        NSMutableArray* sourceTable = [runGroups objectForKey:@"SourceTable"];
-        if(!sourceTable){
-            sourceTable = [NSMutableArray array];
-            [runGroups setObject:sourceTable forKey:@"SourceTable"];
+        
+        if([self isArray:currentSourceArray differentFrom:lastSourceArray]){
+            [lastSourceArray release];
+            lastSourceArray = [[NSArray alloc]initWithArray:currentSourceArray];
+            sourcePosCount++;
         }
-        if(![sourceTable containsObject:runGroupKey])[sourceTable addObject:runGroupKey];
+
+        //--------------------------------
+        //get the positionInfo dictionary
+        NSMutableDictionary* positionInfo = [thisSet objectForKey:@"positionInfo"];
+        if(!positionInfo){
+            positionInfo = [NSMutableDictionary dictionary];
+            [thisSet setObject:positionInfo forKey:@"positionInfo"];
+        }
+        positionInfo = [thisSet objectForKey:@"positionInfo"];
+        
+        //--------------------------------
+        //get the current position dictionary
+        NSString* positionCountKey = [NSString stringWithFormat:@"pos%d",sourcePosCount];
+        NSMutableDictionary* positionDict = [positionInfo objectForKey:positionCountKey];
+        if(!positionDict){
+            positionDict = [NSMutableDictionary dictionary];
+        }
+        [positionInfo setObject:positionDict forKey:positionCountKey];
+
+        //--------------------------------
+        //get the run keys for this position
+        NSMutableArray* keys = [positionDict objectForKey:@"keys"];
+        if(!keys){
+            keys = [NSMutableArray array];
+            [positionDict setObject:keys forKey:@"keys"];
+        }
+        [keys addObject:dataFileName];
+        [positionDict setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
+
+        //--------------------------------
+        //put in the source array
+        NSMutableDictionary* sourcePositions = [positionDict objectForKey:@"positions_in_mm"];
+        if(!sourcePositions){
+            sourcePositions = [NSMutableDictionary dictionary];
+        }
+        [positionDict setObject:[self makeSourceDictionary:currentSourceArray] forKey:@"positions_in_mm"];
     }
-    
-    //-------------------------------------
-    //-----put this run into the proper group
-    NSMutableArray* currentRunSet = [runGroups objectForKey:runGroupKey];
-    if(!currentRunSet)currentRunSet = [NSMutableArray array]; //make set if needed
-    [currentRunSet addObject:thisRun];
-    [runGroups setObject:currentRunSet forKey:runGroupKey];
-    
-    [self writeRunGroup];
+
+    [self storeMetaDict];   //in case Orca is stopped
+    //NSLog(@"%@\n",metaDataDict); //temp for debugging
 }
 
-- (NSString*) makeCalGroupKey:(NSArray*)sourceArray
+- (void) readMetaDict
 {
-    NSMutableString* aKey = [[@"X$X" mutableCopy] autorelease];
-    for(int i=0;i<[sourceArray count];i++){
-        [aKey appendFormat:@"%d",[[sourceArray objectAtIndex:i] intValue]];
-    }
-    return aKey;
+    //read in the meta dictionary and make it mutable so we can add to it
+    if(metaDataDict)[metaDataDict release];
+    NSDictionary* oldMetaDict = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroupV3"];
+    if(oldMetaDict) metaDataDict = [[oldMetaDict mutableDeepCopy] retain];
+
+    [self checkMetaDataDict];
 }
 
-- (void) readRunGroup
+- (void) storeMetaDict
 {
-    //read in the rungroup and make it mutable so we can add to it
-    if(runGroups)[runGroups release];
-    NSDictionary* oldGroups = [[NSUserDefaults standardUserDefaults] objectForKey:@"L200RunGroupV1"];
-    runGroups = [[NSMutableDictionary dictionary]retain];
-    for(id aKey in [oldGroups allKeys]){
-        NSMutableArray* runsInGroup = [[[oldGroups objectForKey:aKey] mutableCopy]autorelease];
-        [runGroups setObject:runsInGroup forKey:aKey];
-    }
-    [self checkRunGroup];
-}
-
-- (void) writeRunGroup
-{
-    [[NSUserDefaults standardUserDefaults] setObject:runGroups forKey:@"L200RunGroupV1"];
+    if(metaDataDict) [[NSUserDefaults standardUserDefaults] setObject:metaDataDict forKey:@"L200RunGroupV3"];
 }
 
 @end
@@ -1441,3 +1414,4 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     return @"L200DataHeader";
 }
 @end
+

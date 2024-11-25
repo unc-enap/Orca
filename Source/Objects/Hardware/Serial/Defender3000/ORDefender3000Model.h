@@ -17,11 +17,12 @@
 //for the use of this software.
 //-------------------------------------------------------------
 #pragma mark ***Imported Files
+#import "ORAdcProcessing.h"
 
 @class ORSerialPort;
 @class ORTimeRate;
 
-@interface ORDefender3000Model : OrcaObject
+@interface ORDefender3000Model : OrcaObject <ORAdcProcessing>
 {
     @private
         NSString*       portName;
@@ -42,6 +43,13 @@
         uint8_t         command;
         uint8_t         unitData;
         uint8_t         modeData;
+    
+        BOOL            processedRunStart;
+        BOOL            processedCloseRun;
+        BOOL            processCheckedOnce;
+        float           processLimitHigh; //should be set by user
+        float           processLimitLow;
+
 }
 
 #pragma mark ***Initialization
@@ -97,6 +105,21 @@
 
 - (id)   initWithCoder:(NSCoder*)decoder;
 - (void) encodeWithCoder:(NSCoder*)encoder;
+
+#pragma mark •••Bit Processing Protocol
+- (void) processIsStarting;
+- (void) processIsStopping;
+- (void) startProcessCycle;
+- (void) endProcessCycle;
+- (NSString*) identifier;
+- (NSString*) processingTitle;
+- (double) convertedValue:(int)aChan;
+- (double) maxValueForChan:(int)aChan;
+- (double) minValueForChan:(int)aChan;
+- (void) getAlarmRangeLow:(double*)theLowLimit high:(double*)theHighLimit channel:(int)channel;
+- (BOOL) processValue:(int)channel;
+- (void) setProcessOutput:(int)channel value:(int)value;
+
 @end
 
 extern NSString* ORDefender3000ModelShipWeightChanged;

@@ -525,6 +525,77 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
         default:return @"kg";
     }
 }
+#pragma mark •••Adc Processing Protocol
+- (void) processIsStarting
+{
+    processCheckedOnce = NO;
+}
+
+- (void) processIsStopping
+{
+}
+
+//note that everything called by these routines MUST be threadsafe
+- (void) startProcessCycle
+{
+    if(!processCheckedOnce){
+        @try {
+            [self readWeight];
+            processCheckedOnce = YES;
+        }
+        @catch(NSException* localException) {
+            //catch this here to prevent it from falling thru, but nothing to do.
+        }
+    }
+}
+
+- (void) endProcessCycle
+{
+}
+
+- (NSString*) identifier
+{
+    return [NSString stringWithFormat:@"Defender3000,%u",[self uniqueIdNumber]];
+}
+
+- (NSString*) processingTitle
+{
+    return [self identifier];
+}
+
+- (double) convertedValue:(int)aChan
+{
+    return weight; //chan has no meaning for this object
+}
+
+- (double) maxValueForChan:(int)aChan
+{
+    return 1000;  //change to max scale reading
+}
+
+- (double) minValueForChan:(int)aChan
+{
+    return 0;
+}
+
+- (BOOL) processValue:(int)channel
+{
+    //channel has no meaning for this object
+    return weight;
+}
+
+- (void) setProcessOutput:(int)channel value:(int)value
+{
+    
+}
+
+- (void)getAlarmRangeLow:(double *)theLowLimit high:(double *)theHighLimit channel:(int)channel
+{
+    //these values need to come from the dialog and be set by user.
+    *theLowLimit = -10; 
+    *theHighLimit = 1000;
+}
+
 
 @end
 

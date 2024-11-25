@@ -49,12 +49,16 @@
     int dataCycle;
     int lastDataCycle;
     int dataType;
+    int sourcePosCount;
+    
     NSString* customType;
     NSString* l200FileName;
     NSString* metaInfo;
     NSString* metaError;
     NSString* metaFolder;
-    NSMutableDictionary* runGroups;
+    NSMutableDictionary* metaDataDict;
+    NSArray* lastSourceArray;
+
 }
 
 #pragma mark •••Accessors
@@ -109,10 +113,10 @@
 - (void) encodeWithCoder:(NSCoder*)encoder;
 
 #pragma mark •••MetaInfo routines
-- (void) readRunGroup;
-- (void) writeRunGroup;
+- (void) readMetaDict;
+- (void) storeMetaDict;
 - (void) finalizeMetaInfo;
-- (void) addRunToGroup:(NSString*)dataFile;
+- (void) addRunToMetaDict:(NSString*)dataFile;
 
 @end
 
