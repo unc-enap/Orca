@@ -18,6 +18,7 @@
 //-------------------------------------------------------------
 #pragma mark ***Imported Files
 #import "ORAdcProcessing.h"
+#import "ORInFluxDBModel.h"
 
 @class ORSerialPort;
 @class ORTimeRate;
@@ -26,6 +27,7 @@
 {
     @private
         NSString*       portName;
+        ORInFluxDBModel* InFluxDB; 
         BOOL            portWasOpen;
         ORSerialPort*   serialPort;
         uint32_t	    dataId;

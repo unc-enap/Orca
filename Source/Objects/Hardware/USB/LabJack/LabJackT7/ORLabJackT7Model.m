@@ -1297,7 +1297,7 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
         double currentTimeStamp = [[NSDate date] timeIntervalSince1970];
         
         // Create a new measurement object for the InfluxDB bucket
-        ORInFluxDBMeasurement *measurement = [ORInFluxDBMeasurement measurementForBucket:@"SlowControl_Labjack" org:[InFluxDB org]];
+        ORInFluxDBMeasurement *measurement = [ORInFluxDBMeasurement measurementForBucket:@"ENAP_SC_UNC" org:[InFluxDB org]];
         
         [measurement start:@"LabjackT7"];
         [measurement addTag:@"Device" withString:@"Channels"];

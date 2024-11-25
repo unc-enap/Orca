@@ -661,6 +661,7 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
         }
         else if([components count]==2){
             [self setWeight:[[components objectAtIndex:0]floatValue]];
+	    [self sendDefender3000ToInflux:[[components objectAtIndex:0]doubleValue]];
             [self setUnitData: [components objectAtIndex:1]];
             
             if([[components objectAtIndex:0] isEqualToString:@"UNIT"]){
@@ -672,6 +673,40 @@ NSString* ORDefender3000Lock                   = @"ORDefender3000Lock";
         }
 	}
 }
+
+-(void)sendDefender3000ToInflux:(double)weight
+{
+    @autoreleasepool {
+	// Retrieve the InFluxDB model instance                                                                                                                                                                                                                                                                                                                             
+        InFluxDB = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"] retain];
+
+	if (InFluxDB == nil) {
+            NSLog(@"Error: Unable to find the InfluxDB model.");
+            return;
+        }
+        // Current timestamp                                                                                                                                                                                                                                                                                                                                                
+	double currentTimeStamp = [[NSDate date] timeIntervalSince1970];
+
+        // Create a new measurement object for the InfluxDB bucket                                                                                                                                                                                                                                                                                                          
+        ORInFluxDBMeasurement *measurement = [ORInFluxDBMeasurement measurementForBucket:@"ENAP_SC_UNC" org:[InFluxDB org]];
+
+        [measurement start:@"Defender3000_1"];
+        [measurement addTag:@"GasOfWeight" withString:@"weightMeasured"];
+        [measurement addField:@"weight" withDouble:weight];
+
+        // Set the timestamp                                                                                                                                                                                                                                                                                                                                                
+        [measurement setTimeStamp:currentTimeStamp];
+
+        // Execute the database command                                                                                                                                                                                                                                                                                                                                     
+	[InFluxDB executeDBCmd:measurement];
+
+        // Manually release InFluxDB if using manual memory management (MRC)                                                                                                                                                                                                                                                                                                
+        [InFluxDB release];
+    }
+}
+
+
+
 
 - (void) pollWeight
 {
