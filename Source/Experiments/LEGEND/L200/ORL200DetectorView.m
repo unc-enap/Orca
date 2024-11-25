@@ -675,34 +675,70 @@
     const float inset = MIN(MIN(0.05*ix, 0.05*ox), 0.05*sy);
     for(int i=0; i<[group numSegments]; i++){
         ORDetectorSegment* segment = [group segment:i];
+	// Extract the SiPM (Silicon Photomultiplier) ID and relevant positional data                                                                                                                                                                                                                                                                                       
         const int sipm = [[segment objectForKey:@"kStringName"] intValue];
-        if(sipm >= 0 && sipm < kL200SiPMInnerChans+kL200SiPMOuterChans){
-            if([delegate validateSiPM:i]){
-                float x, dx, y;
-                if(sipm < kL200SiPMInnerChans){
-                    x  = idx + (ix+idx) * (sipm/2);
-                    dx = ix;
-                    if(sipm%2) y = byoff + 2*sdy + sy;
-                    else       y = tyoff + sdy;
-                }
-                else{
-                    x = odx + (ox+odx)*((sipm-kL200SiPMInnerChans)/2);
+        const int sip_barrel_pos = [[segment objectForKey:@"lv_board_B_pos"] intValue];
+        const int sip_loc = [[segment objectForKey:@"lv_board_string"] intValue];
+        //                                                                                                                                                                                                                                                                                                                                                                  
+        if (sipm<=0) continue;
+        // Validate the SiPM with the delegate method                                                                                                                                                                                                                                                                                                                       
+        if ([delegate validateSiPM:i]) {
+            // Initialize variables for position and size                                                                                                                                                                                                                                                                                                                   
+            // Default position is top outer barrel                                                                                                                                                                                                                                                                                                                         
+            float x = odx;
+            float dx = 0;
+            float y = tyoff + 2 * sdy + sy;
+
+            // Calculate position and size based on barrel position                                                                                                                                                                                                                                                                                                         
+            switch (sip_barrel_pos) {
+                case 1: // Top outer barrel                                                                                                                                                                                                                                                                                                                                 
+                    x = odx + (ox + ox) * (sip_loc - 1) / 1.5;
+                    y = tyoff + 2 * sdy + sy;
                     dx = ox;
-                    if(sipm%2) y = byoff + sdy;
-                    else       y = tyoff + 2*sdy + sy;
-                }
-                NSRect r = NSMakeRect(x, y, dx, sy);
-                [segmentPaths addObject:[NSBezierPath bezierPathWithRect:r]];
-                [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(r, -inset, -inset)]];
-                int iring = [[segment objectForKey:@"kRing"] intValue];
-                if([sipmLabel[iring] isEqualToString:@""]){
-                    sipmLabelY[iring] = y + sy/2;
-                    [sipmLabel[iring] release];
-                    sipmLabel[iring] = [[segment objectForKey:@"kRingLabel"] copy];
-                }
+                    break;
+
+                case 2: // Top inner barrel                                                                                                                                                                                                                                                                                                                                 
+                    x = idx + (ix + idx) * (sip_loc - 1);
+                    y = tyoff + sdy;
+                    dx = ix;
+                    break;
+
+                case 3: // Bottom inner barrel                                                                                                                                                                                                                                                                                                                              
+                    x = idx + (ix + idx) * (sip_loc - 1);
+                    y = byoff + 2 * sdy + sy;
+                    dx = ix;
+                    break;
+
+                case 4: // Bottom outer barrel                                                                                                                                                                                                                                                                                                                              
+                    x = odx + (ox + ox) * (sip_loc - 1) / 1.6;
+                    y = byoff + sdy;
+                    dx = ox;
+                    break;
+
+                default:
+                    // Handle unexpected barrel positions gracefully                                                                                                                                                                                                                                                                                                        
+                    NSLog(@"Unexpected sip_barrel_pos: %d", sip_barrel_pos);
+                    continue;
+            }
+
+            // Create a rectangle representing the detector element                                                                                                                                                                                                                                                                                                         
+            NSRect rect = NSMakeRect(x, y, dx, sy);
+
+            // Add the rectangle to the segmentPaths and errorPaths collections                                                                                                                                                                                                                                                                                             
+            [segmentPaths addObject:[NSBezierPath bezierPathWithRect:rect]];
+            [errorPaths addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(rect, -inset, -inset)]];
+
+            // Handle ring-specific labeling                                                                                                                                                                                                                                                                                                                                
+            int iring = [[segment objectForKey:@"kRing"] intValue];
+            if ([sipmLabel[iring] isEqualToString:@""]) {
+                // Update the label position and content                                                                                                                                                                                                                                                                                                                    
+                sipmLabelY[iring] = y + sy / 2;
+                [sipmLabel[iring] release];
+                sipmLabel[iring] = [[segment objectForKey:@"kRingLabel"] copy];
             }
         }
     }
+
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
     [detOutlines    addObjectsFromArray:errorPaths];
