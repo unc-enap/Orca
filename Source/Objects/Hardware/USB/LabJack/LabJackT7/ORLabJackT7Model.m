@@ -1273,7 +1273,7 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
                     [InFluxDBArry_Input addObject:[NSNumber numberWithDouble:volt_channel[i]]];
                 }
         
-        //Send data to influxDB
+        //Send data to influxDB in the system
         [self sendLabjackT7ToInflux:InFluxDBArry_Input];
     }
  }
