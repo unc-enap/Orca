@@ -245,19 +245,9 @@
         [tracemap appendString:[NSString stringWithFormat:@"0x%x:%u,", addr, chan]];
     }
 
-//    NSMutableString* boardid = [NSMutableString string];
-//    [boardid appendString:@"ADC Main Board HW IDs:\n"];
-//    for(unsigned int i=0; i<nadc; i++){
-//        uint8_t boardRev = (uint8_t) ((dataPtr[offset+(i/4)] & (0xFF << (8*(i%4)))) >> (8*i%4));
-//        uint64_t hwID = (uint64_t)(dataPtr[offset+(uint32_t)ceil(nadc/4.0)+2*i]) << 32;
-//        hwID |= dataPtr[offset+(uint32_t)ceil(nadc/4.0)+2*i+1];
-//        [boardid appendString:[NSString stringWithFormat:@"%hhx-%llx,", boardRev, hwID]];
-//    }
-
     return [NSString stringWithFormat:@"%@%@%@%@%@%@%@%@%@%@%@%@%@\n%@", readid, listenid,
             evlist, adcchan, trigchan, samples, adcbits, sumlen, blprec, globals, triggers, adcs, gps,
             [tracemap substringWithRange:NSMakeRange(0, [tracemap length]-1)]];
-//            [boardid substringWithRange:NSMakeRange(0, [boardid length]-1)]];
 }
 
 @end
@@ -273,10 +263,6 @@
         return @"ORFCIOConfig needs to be decoded first.\nPlease select this record.\n";
 
     NSString* title = @"FlashCam Event Record\n\n";
-//    NSString* crate = [NSString stringWithFormat:@"Crate      = %U\n", (dataPtr[2] & 0xf8000000) >> 27];
-//    NSString* card  = [NSString stringWithFormat:@"Card       = %u\n", (dataPtr[2] & 0x07c00000) >> 22];
-//    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n", [self getChannel:dataPtr[2]]];
-//    NSString* index = [NSString stringWithFormat:@"Ch Index   = %u\n", [self getIndex:dataPtr[2]]];
     NSString* type = [NSString stringWithFormat:@"Event type  = %u\n",  fcio->event.type];
     NSString* evtno = [NSString stringWithFormat:@"Event no    = %d\n",  fcio->event.timestamp[0]];
     NSString* num_traces = [NSString stringWithFormat:@"Num Channels    = %d\n",  fcio->event.num_traces];
@@ -386,10 +372,6 @@
         return @"ORFCIOConfig needs to be decoded first.\nPlease select this record.\n";
 
     NSString* title = @"FlashCam Event Record\n\n";
-//    NSString* crate = [NSString stringWithFormat:@"Crate      = %U\n", (dataPtr[2] & 0xf8000000) >> 27];
-//    NSString* card  = [NSString stringWithFormat:@"Card       = %u\n", (dataPtr[2] & 0x07c00000) >> 22];
-//    NSString* chan  = [NSString stringWithFormat:@"Channel    = %u\n", [self getChannel:dataPtr[2]]];
-//    NSString* index = [NSString stringWithFormat:@"Ch Index   = %u\n", [self getIndex:dataPtr[2]]];
     NSString* type = [NSString stringWithFormat:@"Event type  = %u\n",  fcio->event.type];
     NSString* evtno = [NSString stringWithFormat:@"Event no    = %d\n",  fcio->event.timestamp[0]];
     NSString* num_traces = [NSString stringWithFormat:@"Num Channels    = %d\n",  fcio->event.num_traces];
