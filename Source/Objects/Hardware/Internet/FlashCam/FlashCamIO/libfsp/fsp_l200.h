@@ -54,5 +54,4 @@ int FSP_L200_SetSiPMParameters(StreamProcessor *processor, int nchannels, int *c
                          float *calibration_factors, float *channel_thresholds_pe, int *shaping_width_samples,
                          float *lowpass_factors, int coincidence_pre_window_ns, int coincidence_post_window_ns,
                          int coincidence_window_samples, int sum_window_start_sample, int sum_window_stop_sample,
-                         float sum_threshold_pe, float coincidence_sum_threshold_pe, int prescale_ratio,
-                         int enable_muon_coincidence);
+                         float sum_threshold_pe, float coincidence_sum_threshold_pe, int prescale_ratio, int enable_muon_coincidence);

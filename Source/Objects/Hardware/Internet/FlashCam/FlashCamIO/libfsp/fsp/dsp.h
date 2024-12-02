@@ -102,6 +102,10 @@ int fsp_dsp_diff_and_smooth_post_samples(unsigned int shaping_width_samples, flo
 
 unsigned short fsp_dsp_trace_larger_than(unsigned short *trace, int start, int stop, int nsamples, unsigned short threshold);
 
+float fsp_dsp_local_peaks_f32(float *input_trace, float *peak_trace, int start, int stop, int nsamples,
+                               const float gain_adc, const float threshold_pe, float *peak_times,
+                               float *peak_amplitudes, int *npeaks, int* largest_peak_offset);
+
 void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int ntraces, unsigned short **traces);
 void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int ntraces, unsigned short **trace_headers);
 void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int ntraces, unsigned short **traces, unsigned short **theaders);

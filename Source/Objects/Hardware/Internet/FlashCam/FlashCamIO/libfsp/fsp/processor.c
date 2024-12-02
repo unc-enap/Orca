@@ -6,6 +6,7 @@
 #include <time_utils.h>
 
 #include "buffer.h"
+#include "fsp/flags.h"
 #include "record_processor.h"
 #include "processor.h"
 
@@ -22,12 +23,18 @@ void FSPEnableEventFlags(StreamProcessor* processor, EventFlags flags)
   if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPEnableEventFlags: %llu\n", (unsigned long long)flags.is_flagged);
 }
 
-void FSPSetWPSReferenceFlag(StreamProcessor* processor, uint64_t hwm_flags, uint64_t ct_flags, uint64_t wps_flags)
+void FSPSetWPSReferences(StreamProcessor* processor, HWMFlags hwm_flags, CTFlags ct_flags, WPSFlags wps_flags, int* ct_tracemap_index, int n_ct_tracemap_indices)
 {
-  processor->config.wps_reference_flags_ct.is_flagged = ct_flags;
-  processor->config.wps_reference_flags_hwm.is_flagged = hwm_flags;
-  processor->config.wps_reference_flags_wps.is_flagged = wps_flags;
-  if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPSetWPSReferenceFlags: hwm %llu ct %llu wps %llu\n", (unsigned long long)hwm_flags, (unsigned long long)ct_flags, (unsigned long long)wps_flags);
+  processor->config.wps_reference_flags_hwm = hwm_flags;
+  processor->config.wps_reference_flags_ct = ct_flags;
+  processor->config.wps_reference_flags_wps = wps_flags;
+  if (ct_tracemap_index && n_ct_tracemap_indices > 0) {
+    for (int i = 0; i < n_ct_tracemap_indices; i++) {
+      processor->config.wps_reference_tracemap_index[i] = ct_tracemap_index[i];
+    }
+    processor->config.n_wps_reference_tracemap_indices = n_ct_tracemap_indices;
+  }
+  if (processor->loglevel >= 4) fprintf(stderr, "DEBUG FSPSetWPSReferenceFlags: hwm %llu ct %llu wps %llu\n", (unsigned long long)hwm_flags.is_flagged, (unsigned long long)ct_flags.is_flagged, (unsigned long long)wps_flags.is_flagged);
 }
 
 void FSPSetLogLevel(StreamProcessor* processor, int loglevel)
@@ -82,7 +89,7 @@ StreamProcessor* FSPCreate(unsigned int buffer_depth)
   ref_hwm.multiplicity_threshold = 1;
   CTFlags ref_ct = {0};
   WPSFlags ref_wps = {0};
-  FSPSetWPSReferenceFlag(processor, ref_hwm.is_flagged, ref_ct.is_flagged, ref_wps.is_flagged);
+  FSPSetWPSReferences(processor, ref_hwm, ref_ct, ref_wps, NULL, 0);
 
   return processor;
 }

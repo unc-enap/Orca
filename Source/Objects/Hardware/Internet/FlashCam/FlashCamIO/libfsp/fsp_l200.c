@@ -21,15 +21,20 @@ int FSP_L200_SetAuxParameters(StreamProcessor* processor, FSPTraceFormat format,
   ct_cfg->tracemap_format = format;
   ct_cfg->ntraces = 0;
 
-  if (pulser_channel >= 0 && pulser_level_adc > 0) {
-    ct_cfg->tracemap[0] = pulser_channel;
-    ct_cfg->thresholds[0] = pulser_level_adc;
-    ct_cfg->ntraces++;
+  for (int i = 0; i < FCIOMaxChannels; i++) {
+    ct_cfg->tracemap[i] = -1;
+    ct_cfg->thresholds[i] = 0;
   }
 
   if (baseline_channel >= 0 && baseline_level_adc > 0) {
-    ct_cfg->tracemap[1] = baseline_channel;
-    ct_cfg->thresholds[1] = baseline_level_adc;
+    ct_cfg->tracemap[0] = baseline_channel;
+    ct_cfg->thresholds[0] = baseline_level_adc;
+    ct_cfg->ntraces++;
+  }
+
+  if (pulser_channel >= 0 && pulser_level_adc > 0) {
+    ct_cfg->tracemap[1] = pulser_channel;
+    ct_cfg->thresholds[1] = pulser_level_adc;
     ct_cfg->ntraces++;
   }
 
@@ -57,7 +62,7 @@ int FSP_L200_SetAuxParameters(StreamProcessor* processor, FSPTraceFormat format,
 int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* channelmap, FSPTraceFormat format,
                        int majority_threshold, int skip_full_counting, unsigned short* ge_prescale_threshold_adc,
                        int prescale_ratio) {
-  // processor->dsp_hwm = calloc(1, sizeof(DSPHardwareMajority));
+
   DSPHardwareMajority* fmc = processor->dsp_hwm;
 
   if (!is_known_channelmap_format(format)) {
@@ -113,9 +118,8 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
                          float* calibration_pe_adc, float* channel_thresholds_pe, int* shaping_width_samples,
                          float* lowpass_factors, int coincidence_pre_window_ns, int coincidence_post_window_ns,
                          int coincidence_window_samples, int sum_window_start_sample, int sum_window_stop_sample,
-                         float sum_threshold_pe, float coincidence_wps_threshold, int prescale_ratio,
-                         int enable_muon_coincidence) {
-  // processor->dsp_wps = calloc(1, sizeof(DSPWindowedPeakSum));
+                         float sum_threshold_pe, float coincidence_wps_threshold, int prescale_ratio, int enable_muon_coincidence) {
+
   DSPWindowedPeakSum* wps_cfg = processor->dsp_wps;
 
   if (!is_known_channelmap_format(format)) {
@@ -147,7 +151,6 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
   processor->config.pre_trigger_window.nanoseconds = coincidence_pre_window_ns % 1000000000L;
   processor->config.post_trigger_window.seconds = coincidence_post_window_ns / 1000000000L;
   processor->config.post_trigger_window.nanoseconds = coincidence_post_window_ns % 1000000000L;
-  processor->config.muon_coincidence = enable_muon_coincidence;
   if (prescale_ratio >= 0)
     processor->config.wps_prescale_ratio = prescale_ratio;
   else {
@@ -205,6 +208,12 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
 
   wps_cfg->enabled = 1;
 
+  if (enable_muon_coincidence) {
+    int ct_indices[1];
+    ct_indices[0] = 2; // see Set Aux Channels, tracemap idx 2 should be muon channel
+    FSPSetWPSReferences(processor, (HWMFlags){.multiplicity_threshold = 1}, (CTFlags){0}, (WPSFlags){0}, ct_indices, 1);
+  }
+
   if (processor->loglevel >= 4) {
     /* DEBUGGING enabled, print all inputs */
     fprintf(stderr, "DEBUG FSP_L200_SetSiPMParameters:\n");
@@ -219,7 +228,7 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
     fprintf(stderr, "DEBUG coincidence_window_samples   %d\n", wps_cfg->coincidence_window);
     fprintf(stderr, "DEBUG relative_wps_threshold       %f\n", processor->config.relative_wps_threshold);
     fprintf(stderr, "DEBUG absolute_sum_threshold       %f\n", processor->config.absolute_wps_threshold);
-    fprintf(stderr, "DEBUG enable_muon_coincidence      %d\n", processor->config.muon_coincidence);
+    fprintf(stderr, "DEBUG enable_muon_coincidence      %d\n", enable_muon_coincidence);
 
     for (int i = 0; i < wps_cfg->ntraces; i++) {
       if (wps_cfg->tracemap_format == 1) {

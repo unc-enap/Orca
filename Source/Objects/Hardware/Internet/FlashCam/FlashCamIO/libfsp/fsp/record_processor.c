@@ -351,15 +351,28 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
         fsp_state->obs.wps.max_single_peak_value = wps_cfg->max_peak_value;
         fsp_state->obs.wps.max_single_peak_offset = wps_cfg->max_peak_offset;
         fsp_state->obs.wps.max_multiplicity = wps_cfg->max_peak_sum_multiplicity;
+
+        // finally determine if one of the flags is a reference flag for the wps coincidence
+        if (ct_cfg->enabled) {
+          for (int i = 0; i < processor->config.n_wps_reference_tracemap_indices; i++) {
+            int reference_tracemap_idx = processor->config.wps_reference_tracemap_index[i];
+            for (int j = 0; j < ct_cfg->multiplicity; j++) {
+              int detected_tracemap_idx = ct_cfg->max_tracemap_idx[j];
+              if (reference_tracemap_idx == detected_tracemap_idx) {
+                proc_flags.wps.rel_reference = 1;
+                break; // stop at first found, don't need check for more
+              }
+            }
+          }
+        }
+        if ( processor->config.wps_reference_flags_ct.is_flagged & proc_flags.ct.is_flagged
+          || processor->config.wps_reference_flags_hwm.is_flagged & proc_flags.hwm.is_flagged
+          || processor->config.wps_reference_flags_wps.is_flagged & proc_flags.wps.is_flagged
+        ) {
+          proc_flags.wps.rel_reference = 1;
+        }
       }
 
-      // finally determine if one of the flags is a reference flag for the wps coincidence
-      if ( processor->config.wps_reference_flags_ct.is_flagged & proc_flags.ct.is_flagged
-        || processor->config.wps_reference_flags_hwm.is_flagged & proc_flags.hwm.is_flagged
-        || processor->config.wps_reference_flags_wps.is_flagged & proc_flags.wps.is_flagged
-      ) {
-        proc_flags.wps.rel_reference = 1;
-      }
 
       fsp_state->write_flags = write_flags;
       fsp_state->proc_flags = proc_flags;

@@ -22,6 +22,8 @@ typedef struct {
 
   HWMFlags wps_reference_flags_hwm;
   CTFlags wps_reference_flags_ct;
+  int n_wps_reference_tracemap_indices;
+  int wps_reference_tracemap_index[FCIOMaxChannels];
   WPSFlags wps_reference_flags_wps;
 
   FSPWriteFlags enabled_flags;
@@ -80,7 +82,7 @@ void FSPSetLogTime(StreamProcessor *processor, double log_time);
 
 void FSPEnableTriggerFlags(StreamProcessor *processor, STFlags flags);
 void FSPEnableEventFlags(StreamProcessor *processor, EventFlags flags);
-void FSPSetWPSReferenceFlag(StreamProcessor* processor, uint64_t hwm_flags, uint64_t ct_flags, uint64_t wps_flags);
+void FSPSetWPSReferences(StreamProcessor* processor, HWMFlags hwm_flags, CTFlags ct_flags, WPSFlags wps_flags, int* ct_channels, int n_ct_channels);
 
 /* Use FSPGetNextState to process states provided by FCIOStateReader until it returns NULL.
     - Feed FCIOStates from FCIOGetNextStatevia FSPInput
