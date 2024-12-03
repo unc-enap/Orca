@@ -1317,6 +1317,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     //-------------------------------
     NSString* dataType    = [self getDataType];
     if(!dataType)return;
+    
     //get the type set
     NSMutableDictionary* thisSet = [metaDataDict objectForKey:dataType];
     if(!thisSet){
@@ -1330,11 +1331,17 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [thisSet setObject:keys forKey:@"keys"];
     }
     [keys addObject:dataFileName];
-    
-    //set the meta info
-    [thisSet setObject:[self metaInfo] forKey:@"info"];
     [thisSet setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
-    
+
+    //set the meta info
+    NSMutableDictionary* infoSet = [metaDataDict objectForKey:@"info"];
+    if(!infoSet){
+        infoSet = [NSMutableDictionary dictionary];
+        [metaDataDict setObject:infoSet forKey:@"info"];
+    }
+
+    [infoSet setObject:[self metaInfo] forKey:dataFileName];
+
     //handle cal souce positions
     if(slowControls && [dataType isEqualToString:@"cal"]){
         
