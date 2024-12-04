@@ -219,9 +219,7 @@ in future revisions.
   stream->debug = debug;
   stream->iobufsize = bufkb > 0 ? bufkb * 1024 : 0;
   stream->protocol_timeout = protocol_timeout;
-  strncpy(stream->protocol, protocol, strlen(protocol) < TMIO_PROTOCOL_SIZE - 1
-                                          ? strlen(protocol)
-                                          : TMIO_PROTOCOL_SIZE - 1);
+  strncpy(stream->protocol, protocol, TMIO_PROTOCOL_SIZE - 1);
 
   if (debug > 1)
     fprintf(stderr, "tmio_init: context initialized with protocol %s\n",
@@ -463,14 +461,14 @@ TMIO_EPROTO     Protocols do not match
 
   // Read protocol
   int protocol_tag;
-  char protocol[TMIO_PROTOCOL_SIZE];
+  char protocol[TMIO_PROTOCOL_SIZE] = {0};
   if (buftcpread(&protocol_tag, sizeof(protocol_tag), fp) !=
           sizeof(protocol_tag) ||
       protocol_tag != TMIO_PROTOCOL_TAG ||
       buftcpread(protocol, TMIO_PROTOCOL_SIZE, fp) != TMIO_PROTOCOL_SIZE) {
     stream->status = TMIO_EHANDSHAKE;
     if (stream->debug)
-      fprintf(stderr, "tmio_open: protocol handshake failed\n");
+      fprintf(stderr, "tmio_open: protocol handshake failed, received protocol tag %d with protocol string %s\n", protocol_tag, protocol);
 
     tmio_close(stream);
     return -1;
