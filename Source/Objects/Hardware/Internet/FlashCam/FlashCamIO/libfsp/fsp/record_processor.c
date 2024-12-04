@@ -171,7 +171,7 @@ static inline HWMFlags fsp_swt_hardware_majority(StreamProcessor* processor, FCI
 
   fsp_dsp_hardware_majority(processor->dsp_hwm, config->adcs, event->theader);
 
-  if (processor->dsp_hwm->multiplicity >= processor->config.hwm_threshold) {
+  if (processor->dsp_hwm->multiplicity >= processor->triggerconfig.hwm_threshold) {
     hwmflags.multiplicity_threshold = 1;
 
     /* if majority is >= 1, then the following check is safe, otherwise think about what happens when majority == 0
@@ -185,22 +185,22 @@ static inline HWMFlags fsp_swt_hardware_majority(StreamProcessor* processor, FCI
 
   if (hwmflags.multiplicity_below) {
     processor->hwm_prescale_ready_counter++;
-    if (processor->config.hwm_prescale_ratio > 0) {
-      if ((processor->hwm_prescale_ready_counter % processor->config.hwm_prescale_ratio) == 0) {
+    if (processor->triggerconfig.hwm_prescale_ratio > 0) {
+      if ((processor->hwm_prescale_ready_counter % processor->triggerconfig.hwm_prescale_ratio) == 0) {
         hwmflags.prescaled = 1;
       }
     }
-    else if (processor->config.hwm_prescale_rate > 0.0) {
+    else if (processor->triggerconfig.hwm_prescale_rate > 0.0) {
       if (processor->hwm_prescale_timestamp.seconds == -1) {
         /* initialize with the first event in the stream.*/
-        processor->hwm_prescale_timestamp = generate_prescale_timestamp(processor->config.hwm_prescale_rate);
+        processor->hwm_prescale_timestamp = generate_prescale_timestamp(processor->triggerconfig.hwm_prescale_rate);
         if (processor->loglevel >= 4) {
           fprintf(stderr, "DEBUG hwm_prescale initializing first timestamp %ld.%09ld\n", processor->hwm_prescale_timestamp.seconds, processor->hwm_prescale_timestamp.nanoseconds);
         }
       }
       else if (timestamp_geq(event_timestamp, processor->hwm_prescale_timestamp)) {
         hwmflags.prescaled = 1;
-        Timestamp next_timestamp = generate_prescale_timestamp(processor->config.hwm_prescale_rate);
+        Timestamp next_timestamp = generate_prescale_timestamp(processor->triggerconfig.hwm_prescale_rate);
         if (processor->loglevel >= 4)
           fprintf(stderr, "DEBUG hwm_prescale event %ld.%09ld current prescale timestamp %ld.%09ld + %ld.%09ld\n",
             event_timestamp.seconds, event_timestamp.nanoseconds,
@@ -249,29 +249,29 @@ static inline WPSFlags fsp_swt_windowed_peak_sum(StreamProcessor* processor, FCI
     );
   }
 
-  if (processor->dsp_wps->max_peak_sum_value >= processor->config.absolute_wps_threshold) {
+  if (processor->dsp_wps->max_peak_sum_value >= processor->triggerconfig.absolute_wps_threshold) {
     wpsflags.abs_threshold = 1;
   }
 
-  if (processor->dsp_wps->max_peak_sum_value >= processor->config.relative_wps_threshold) {
+  if (processor->dsp_wps->max_peak_sum_value >= processor->triggerconfig.relative_wps_threshold) {
     wpsflags.rel_threshold = 1;
   }
 
   if (!wpsflags.abs_threshold && !wpsflags.rel_threshold) {
     processor->wps_prescale_ready_counter++;
-    if (processor->config.wps_prescale_ratio > 0) {
-      if ((processor->wps_prescale_ready_counter % processor->config.wps_prescale_ratio) == 0) {
+    if (processor->triggerconfig.wps_prescale_ratio > 0) {
+      if ((processor->wps_prescale_ready_counter % processor->triggerconfig.wps_prescale_ratio) == 0) {
         wpsflags.prescaled = 1;
       }
     }
-    else if (processor->config.wps_prescale_rate > 0.0) {
+    else if (processor->triggerconfig.wps_prescale_rate > 0.0) {
       if (processor->wps_prescale_timestamp.seconds == -1) {
         /* initialize with the first event in the stream.*/
-        processor->wps_prescale_timestamp = generate_prescale_timestamp(processor->config.wps_prescale_rate);
+        processor->wps_prescale_timestamp = generate_prescale_timestamp(processor->triggerconfig.wps_prescale_rate);
       }
       else if (timestamp_geq(event_timestamp, processor->wps_prescale_timestamp)) {
         wpsflags.prescaled = 1;
-        Timestamp next_timestamp = generate_prescale_timestamp(processor->config.wps_prescale_rate);
+        Timestamp next_timestamp = generate_prescale_timestamp(processor->triggerconfig.wps_prescale_rate);
         if (processor->loglevel >= 4)
           fprintf(stderr, "DEBUG wps_prescale current timestamp %ld.%09ld + %ld.%09ld\n",
             processor->hwm_prescale_timestamp.seconds, processor->hwm_prescale_timestamp.nanoseconds,
@@ -354,8 +354,8 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
 
         // finally determine if one of the flags is a reference flag for the wps coincidence
         if (ct_cfg->enabled) {
-          for (int i = 0; i < processor->config.n_wps_reference_tracemap_indices; i++) {
-            int reference_tracemap_idx = processor->config.wps_reference_tracemap_index[i];
+          for (int i = 0; i < processor->triggerconfig.n_wps_reference_tracemap_indices; i++) {
+            int reference_tracemap_idx = processor->triggerconfig.wps_reference_tracemap_index[i];
             for (int j = 0; j < ct_cfg->multiplicity; j++) {
               int detected_tracemap_idx = ct_cfg->max_tracemap_idx[j];
               if (reference_tracemap_idx == detected_tracemap_idx) {
@@ -365,9 +365,9 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
             }
           }
         }
-        if ( processor->config.wps_reference_flags_ct.is_flagged & proc_flags.ct.is_flagged
-          || processor->config.wps_reference_flags_hwm.is_flagged & proc_flags.hwm.is_flagged
-          || processor->config.wps_reference_flags_wps.is_flagged & proc_flags.wps.is_flagged
+        if ( processor->triggerconfig.wps_reference_flags_ct.is_flagged & proc_flags.ct.is_flagged
+          || processor->triggerconfig.wps_reference_flags_hwm.is_flagged & proc_flags.hwm.is_flagged
+          || processor->triggerconfig.wps_reference_flags_wps.is_flagged & proc_flags.wps.is_flagged
         ) {
           proc_flags.wps.rel_reference = 1;
         }
@@ -494,7 +494,7 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
 
         if (hwm_cfg->ntraces <= 0) {
           hwm_cfg->ntraces = state->config->adcs;
-          processor->config.hwm_threshold = 0;  // we pass the event even if there is no fpga_energy; it must be in the stream for a reason.
+          processor->triggerconfig.hwm_threshold = 0;  // we pass the event even if there is no fpga_energy; it must be in the stream for a reason.
         }
       }
 
@@ -531,8 +531,8 @@ static inline void fsp_process_state_timings(StreamProcessor* processor, FSPStat
     */
     processor->force_trigger_timestamp = fsp_state->timestamp;
     processor->post_trigger_timestamp =
-        timestamp_add(processor->force_trigger_timestamp, processor->config.post_trigger_window);
-    processor->pre_trigger_timestamp = timestamp_sub(processor->force_trigger_timestamp, processor->config.pre_trigger_window);
+        timestamp_add(processor->force_trigger_timestamp, processor->triggerconfig.post_trigger_window);
+    processor->pre_trigger_timestamp = timestamp_sub(processor->force_trigger_timestamp, processor->triggerconfig.pre_trigger_window);
 
     FSPState* update_fsp_state = NULL;
     int previous_counter = 0;  // current fsp_state is a peeked state, so GetState(0) is the "previous one"

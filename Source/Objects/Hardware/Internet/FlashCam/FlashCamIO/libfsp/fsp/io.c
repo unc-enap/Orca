@@ -65,7 +65,7 @@ static inline size_t wps_flag_2char(char* string, size_t strlen, WPSFlags wps_fl
   return written;
 }
 
-static inline size_t st_flag_2char(char* string, size_t strlen, STFlags st_flags) {
+static inline size_t st_flag_2char(char* string, size_t strlen, TriggerFlags st_flags) {
   const size_t nflags = 7;
   assert(strlen >= nflags);
 

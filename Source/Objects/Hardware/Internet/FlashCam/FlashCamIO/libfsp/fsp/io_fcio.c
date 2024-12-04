@@ -1,4 +1,5 @@
 #include "io_fcio.h"
+#include "fsp/processor.h"
 
 #include <fcio_utils.h>
 #include <tmio.h>
@@ -55,6 +56,32 @@ static inline int fcio_put_fspconfig_wps(FCIOStream stream, DSPWindowedPeakSum* 
   return 0;
 }
 
+static inline int fcio_put_fspconfig_trigger(FCIOStream stream, FSPTriggerConfig* config) {
+  if (!stream || !config)
+    return -1;
+  FCIOWriteInt(stream, config->hwm_threshold);
+  FCIOWriteInt(stream, config->hwm_prescale_ratio);
+  FCIOWriteInt(stream, config->wps_prescale_ratio);
+
+  FCIOWriteFloat(stream, config->relative_wps_threshold);
+  FCIOWriteFloat(stream, config->absolute_wps_threshold);
+  FCIOWriteFloat(stream, config->wps_prescale_rate);
+  FCIOWriteFloat(stream, config->hwm_prescale_rate);
+
+  FCIOWrite(stream, sizeof(FSPWriteFlags), &config->enabled_flags);
+  FCIOWrite(stream, sizeof(config->pre_trigger_window.seconds), &config->pre_trigger_window.seconds);
+  FCIOWrite(stream, sizeof(config->pre_trigger_window.nanoseconds), &config->pre_trigger_window.nanoseconds);
+  FCIOWrite(stream, sizeof(config->post_trigger_window.seconds), &config->post_trigger_window.seconds);
+  FCIOWrite(stream, sizeof(config->post_trigger_window.nanoseconds), &config->post_trigger_window.nanoseconds);
+
+  FCIOWrite(stream, sizeof(HWMFlags), &config->wps_reference_flags_hwm);
+  FCIOWrite(stream, sizeof(CTFlags), &config->wps_reference_flags_ct);
+  FCIOWrite(stream, sizeof(WPSFlags), &config->wps_reference_flags_wps);
+  FCIOWriteInts(stream, config->n_wps_reference_tracemap_indices, config->wps_reference_tracemap_index);
+
+  return 0;
+}
+
 int FCIOPutFSPConfig(FCIOStream output, StreamProcessor* processor)
 {
   if (!output || !processor)
@@ -63,7 +90,7 @@ int FCIOPutFSPConfig(FCIOStream output, StreamProcessor* processor)
   FCIOWriteMessage(output, FCIOFSPConfig);
 
   /* StreamProcessor config */
-  FCIOWrite(output, sizeof(processor->config), &processor->config);
+  fcio_put_fspconfig_trigger(output, &processor->triggerconfig);
 
   fcio_put_fspconfig_buffer(output, processor->buffer);
   fcio_put_fspconfig_hwm(output, processor->dsp_hwm);
@@ -126,12 +153,38 @@ static inline int fcio_get_fspconfig_wps(FCIOStream in, DSPWindowedPeakSum* dsp_
   return 0;
 }
 
+static inline int fcio_get_fspconfig_trigger(FCIOStream stream, FSPTriggerConfig* config) {
+  if (!stream || !config)
+    return -1;
+  FCIOReadInt(stream, config->hwm_threshold);
+  FCIOReadInt(stream, config->hwm_prescale_ratio);
+  FCIOReadInt(stream, config->wps_prescale_ratio);
+
+  FCIOReadFloat(stream, config->relative_wps_threshold);
+  FCIOReadFloat(stream, config->absolute_wps_threshold);
+  FCIOReadFloat(stream, config->wps_prescale_rate);
+  FCIOReadFloat(stream, config->hwm_prescale_rate);
+
+  FCIORead(stream, sizeof(FSPWriteFlags), &config->enabled_flags);
+  FCIORead(stream, sizeof(config->pre_trigger_window.seconds), &config->pre_trigger_window.seconds);
+  FCIORead(stream, sizeof(config->pre_trigger_window.nanoseconds), &config->pre_trigger_window.nanoseconds);
+  FCIORead(stream, sizeof(config->post_trigger_window.seconds), &config->post_trigger_window.seconds);
+  FCIORead(stream, sizeof(config->post_trigger_window.nanoseconds), &config->post_trigger_window.nanoseconds);
+
+  FCIORead(stream, sizeof(HWMFlags), &config->wps_reference_flags_hwm);
+  FCIORead(stream, sizeof(CTFlags), &config->wps_reference_flags_ct);
+  FCIORead(stream, sizeof(WPSFlags), &config->wps_reference_flags_wps);
+  config->n_wps_reference_tracemap_indices = FCIOReadInts(stream, FCIOMaxChannels, config->wps_reference_tracemap_index)/sizeof(int);
+
+  return 0;
+}
+
 static inline int fcio_get_fspconfig(FCIOStream in, StreamProcessor* processor) {
   if (!in || !processor)
     return -1;
   /* StreamProcessor config */
-  FCIORead(in, sizeof(processor->config), &processor->config);
 
+  fcio_get_fspconfig_trigger(in, &processor->triggerconfig);
   fcio_get_fspconfig_buffer(in, processor->buffer);
   fcio_get_fspconfig_hwm(in, processor->dsp_hwm);
   fcio_get_fspconfig_ct(in, processor->dsp_ct);
@@ -292,13 +345,30 @@ void FSPMeasureRecordSizes(StreamProcessor* processor, FSPState* fspstate, FCIOR
   FCIODisconnect(stream);
 }
 
-
 static inline size_t fspconfig_size(StreamProcessor* processor) {
   const size_t frame_header = sizeof(int);
   size_t total_size = 0;
 
   total_size += frame_header; // tag_size
-  total_size += frame_header + sizeof(((FSPConfig){0}));
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).hwm_threshold);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).hwm_prescale_ratio);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_prescale_ratio);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).relative_wps_threshold);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).absolute_wps_threshold);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_prescale_rate);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).hwm_prescale_rate);
+
+
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).enabled_flags);
+  total_size += frame_header + sizeof(((Timestamp){0}).seconds);
+  total_size += frame_header + sizeof(((Timestamp){0}).nanoseconds);
+  total_size += frame_header + sizeof(((Timestamp){0}).seconds);
+  total_size += frame_header + sizeof(((Timestamp){0}).nanoseconds);
+
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_reference_flags_hwm);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_reference_flags_ct);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_reference_flags_wps);
+  total_size += frame_header + sizeof(*((FSPTriggerConfig){0}).wps_reference_tracemap_index) * processor->triggerconfig.n_wps_reference_tracemap_indices;
 
   total_size += frame_header + sizeof(((FSPBuffer){0}).max_states);
   total_size += frame_header + sizeof(((Timestamp){0}).seconds);
@@ -366,6 +436,7 @@ void FSPCalculateRecordSizes(StreamProcessor* processor, FSPState* fspstate, FCI
   if (!processor || !fspstate || !sizes)
     return;
 
+  sizes->protocol = sizeof(int) + TMIO_PROTOCOL_SIZE;
   sizes->fspconfig = fspconfig_size(processor);
   sizes->fspevent = fspevent_size(fspstate);
   sizes->fspstatus = fspstatus_size();

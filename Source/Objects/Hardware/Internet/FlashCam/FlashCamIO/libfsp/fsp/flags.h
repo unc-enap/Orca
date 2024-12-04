@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-typedef union STFlags {
+typedef union TriggerFlags {
   struct {
     uint8_t hwm_multiplicity; // the multiplicity threshold has been reached
     uint8_t hwm_prescaled; // the event was prescaled due to the HWM condition
@@ -12,7 +12,7 @@ typedef union STFlags {
     uint8_t ct_multiplicity; // a channel was above the ChannelThreshold condition
   };
   uint64_t is_flagged;
-} STFlags;
+} TriggerFlags;
 
 typedef union EventFlags {
   struct {
@@ -56,7 +56,7 @@ typedef union CTFlags {
 typedef struct FSPWriteFlags {
   /* write flags */
   EventFlags event;
-  STFlags trigger;
+  TriggerFlags trigger;
 
   uint32_t write;
 } FSPWriteFlags;

@@ -13,24 +13,23 @@ typedef struct {
   int hwm_threshold;
   int hwm_prescale_ratio;
   int wps_prescale_ratio;
-  int muon_coincidence;
 
   float relative_wps_threshold;
   float absolute_wps_threshold;
   float wps_prescale_rate;
   float hwm_prescale_rate;
 
-  HWMFlags wps_reference_flags_hwm;
-  CTFlags wps_reference_flags_ct;
-  int n_wps_reference_tracemap_indices;
-  int wps_reference_tracemap_index[FCIOMaxChannels];
-  WPSFlags wps_reference_flags_wps;
-
   FSPWriteFlags enabled_flags;
   Timestamp pre_trigger_window;
   Timestamp post_trigger_window;
 
-} FSPConfig;
+  HWMFlags wps_reference_flags_hwm;
+  CTFlags wps_reference_flags_ct;
+  WPSFlags wps_reference_flags_wps;
+  int n_wps_reference_tracemap_indices;
+  int wps_reference_tracemap_index[FCIOMaxChannels];
+
+} FSPTriggerConfig;
 
 typedef struct StreamProcessor {
 
@@ -56,7 +55,7 @@ typedef struct StreamProcessor {
   int loglevel;
   int checks;
 
-  FSPConfig config;
+  FSPTriggerConfig triggerconfig;
 
   Timestamp minimum_buffer_window;
   unsigned int minimum_buffer_depth;
@@ -80,7 +79,7 @@ int FSPSetBufferSize(StreamProcessor *processor, unsigned int buffer_depth);
 void FSPSetLogLevel(StreamProcessor *processor, int loglevel);
 void FSPSetLogTime(StreamProcessor *processor, double log_time);
 
-void FSPEnableTriggerFlags(StreamProcessor *processor, STFlags flags);
+void FSPEnableTriggerFlags(StreamProcessor *processor, TriggerFlags flags);
 void FSPEnableEventFlags(StreamProcessor *processor, EventFlags flags);
 void FSPSetWPSReferences(StreamProcessor* processor, HWMFlags hwm_flags, CTFlags ct_flags, WPSFlags wps_flags, int* ct_channels, int n_ct_channels);
 

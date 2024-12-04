@@ -83,13 +83,13 @@ int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* cha
   }
   fmc->fast = skip_full_counting;
   if (majority_threshold >= 0)
-    processor->config.hwm_threshold = majority_threshold;
+    processor->triggerconfig.hwm_threshold = majority_threshold;
   else {
     fprintf(stderr, "CRITICAL majority_threshold needs to be >= 0 is %d\n", majority_threshold);
     return 0;
   }
   if (prescale_ratio >= 0)
-    processor->config.hwm_prescale_ratio = prescale_ratio;
+    processor->triggerconfig.hwm_prescale_ratio = prescale_ratio;
   else {
     fprintf(stderr, "CRITICAL Ge prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
@@ -134,25 +134,25 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
   wps_cfg->tracemap_format = format;
 
   if (coincidence_wps_threshold >= 0)
-    processor->config.relative_wps_threshold = coincidence_wps_threshold;
+    processor->triggerconfig.relative_wps_threshold = coincidence_wps_threshold;
   else {
     fprintf(stderr, "CRICITAL coincidence_wps_threshold needs to be >= 0 is %f\n", coincidence_wps_threshold);
     return 0;
   }
 
   if (sum_threshold_pe >= 0)
-    processor->config.absolute_wps_threshold = sum_threshold_pe;
+    processor->triggerconfig.absolute_wps_threshold = sum_threshold_pe;
   else {
     fprintf(stderr, "CRICITAL sum_threshold_pe needs to be >= 0 is %f\n", sum_threshold_pe);
     return 0;
   }
 
-  processor->config.pre_trigger_window.seconds = coincidence_pre_window_ns / 1000000000L;
-  processor->config.pre_trigger_window.nanoseconds = coincidence_pre_window_ns % 1000000000L;
-  processor->config.post_trigger_window.seconds = coincidence_post_window_ns / 1000000000L;
-  processor->config.post_trigger_window.nanoseconds = coincidence_post_window_ns % 1000000000L;
+  processor->triggerconfig.pre_trigger_window.seconds = coincidence_pre_window_ns / 1000000000L;
+  processor->triggerconfig.pre_trigger_window.nanoseconds = coincidence_pre_window_ns % 1000000000L;
+  processor->triggerconfig.post_trigger_window.seconds = coincidence_post_window_ns / 1000000000L;
+  processor->triggerconfig.post_trigger_window.nanoseconds = coincidence_post_window_ns % 1000000000L;
   if (prescale_ratio >= 0)
-    processor->config.wps_prescale_ratio = prescale_ratio;
+    processor->triggerconfig.wps_prescale_ratio = prescale_ratio;
   else {
     fprintf(stderr, "CRITICAL SiPM prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
@@ -218,16 +218,16 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
     /* DEBUGGING enabled, print all inputs */
     fprintf(stderr, "DEBUG FSP_L200_SetSiPMParameters:\n");
     fprintf(stderr, "DEBUG channelmap_format %d : %s\n", wps_cfg->tracemap_format, channelmap_fmt2str(format));
-    fprintf(stderr, "DEBUG prescale_ratio               %d\n", processor->config.wps_prescale_ratio);
+    fprintf(stderr, "DEBUG prescale_ratio               %d\n", processor->triggerconfig.wps_prescale_ratio);
     fprintf(stderr, "DEBUG sum_window_start_sample      %d\n", wps_cfg->sum_window_start_sample);
     fprintf(stderr, "DEBUG sum_window_stop_sample       %d\n", wps_cfg->sum_window_stop_sample);
     fprintf(stderr, "DEBUG dsp_pre_max_samples          %d\n", wps_cfg->dsp_pre_max_samples);
     fprintf(stderr, "DEBUG dsp_post_max_samples         %d\n", wps_cfg->dsp_post_max_samples);
-    fprintf(stderr, "DEBUG coincidence_pre_window_ns    %ld\n", processor->config.pre_trigger_window.nanoseconds);
-    fprintf(stderr, "DEBUG coincidence_post_window_ns   %ld\n", processor->config.post_trigger_window.nanoseconds);
+    fprintf(stderr, "DEBUG coincidence_pre_window_ns    %ld\n", processor->triggerconfig.pre_trigger_window.nanoseconds);
+    fprintf(stderr, "DEBUG coincidence_post_window_ns   %ld\n", processor->triggerconfig.post_trigger_window.nanoseconds);
     fprintf(stderr, "DEBUG coincidence_window_samples   %d\n", wps_cfg->coincidence_window);
-    fprintf(stderr, "DEBUG relative_wps_threshold       %f\n", processor->config.relative_wps_threshold);
-    fprintf(stderr, "DEBUG absolute_sum_threshold       %f\n", processor->config.absolute_wps_threshold);
+    fprintf(stderr, "DEBUG relative_wps_threshold       %f\n", processor->triggerconfig.relative_wps_threshold);
+    fprintf(stderr, "DEBUG absolute_sum_threshold       %f\n", processor->triggerconfig.absolute_wps_threshold);
     fprintf(stderr, "DEBUG enable_muon_coincidence      %d\n", enable_muon_coincidence);
 
     for (int i = 0; i < wps_cfg->ntraces; i++) {
