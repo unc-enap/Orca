@@ -6,7 +6,7 @@
 #include <time_utils.h>
 
 #include "buffer.h"
-#include "fsp/flags.h"
+#include "flags.h"
 #include "record_processor.h"
 #include "processor.h"
 
