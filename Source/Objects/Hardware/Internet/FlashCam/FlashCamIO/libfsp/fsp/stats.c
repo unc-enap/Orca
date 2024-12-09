@@ -7,7 +7,7 @@
 #include "processor.h"
 
 int FSPStatsUpdate(StreamProcessor* processor, int force) {
-  FSPStats* stats = processor->stats;
+  FSPStats* stats = &processor->stats;
 
   if (elapsed_time(stats->dt_logtime) > stats->log_time || force) {
     stats->runtime = elapsed_time(stats->start_time);
@@ -38,7 +38,7 @@ int FSPStatsUpdate(StreamProcessor* processor, int force) {
 
 int FSPStatsInfluxString(StreamProcessor* processor, char* logstring, size_t logstring_size) {
 
-  FSPStats* stats = processor->stats;
+  FSPStats* stats = &processor->stats;
 
   int ret = snprintf(logstring, logstring_size,
                      "run_time=%.03f,cur_read_hz=%.03f,cur_write_hz=%.03f,cur_discard_hz=%.03f,avg_read_hz=%.03f,avg_write_hz=%.03f,"

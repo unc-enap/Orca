@@ -23,16 +23,21 @@ typedef struct {
   Timestamp pre_trigger_window;
   Timestamp post_trigger_window;
 
-  HWMFlags wps_reference_flags_hwm;
-  CTFlags wps_reference_flags_ct;
-  WPSFlags wps_reference_flags_wps;
-  int n_wps_reference_tracemap_indices;
-  int wps_reference_tracemap_index[FCIOMaxChannels];
+  HWMFlags wps_ref_flags_hwm;
+  CTFlags wps_ref_flags_ct;
+  WPSFlags wps_ref_flags_wps;
+  int n_wps_ref_map_idx;
+  int wps_ref_map_idx[FCIOMaxChannels];
 
 } FSPTriggerConfig;
 
 typedef struct StreamProcessor {
 
+  // run-time configuration
+  int loglevel;
+  int checks;
+
+  // run-time tracking of event type records
   int nrecords_read;
   int nrecords_written;
   int nrecords_discarded;
@@ -41,7 +46,7 @@ typedef struct StreamProcessor {
   int nevents_written;
   int nevents_discarded;
 
-  /* move to processor */
+  /* run-time tracking of trigger flagging */
   Timestamp force_trigger_timestamp;
   Timestamp post_trigger_timestamp;
   Timestamp pre_trigger_timestamp;
@@ -52,19 +57,22 @@ typedef struct StreamProcessor {
   int hwm_prescale_ready_counter;
   Timestamp hwm_prescale_timestamp;
 
-  int loglevel;
-  int checks;
-
-  FSPTriggerConfig triggerconfig;
-
+  // buffer configuration: written to FSPConfig
   Timestamp minimum_buffer_window;
   unsigned int minimum_buffer_depth;
   FSPBuffer *buffer;
 
-  DSPWindowedPeakSum *dsp_wps;
-  DSPHardwareMajority *dsp_hwm;
-  DSPChannelThreshold *dsp_ct;
-  FSPStats *stats;
+  // dsp and trigger configuration: written to FSPConfig
+  FSPTriggerConfig triggerconfig;
+  DSPWindowedPeakSum dsp_wps;
+  DSPHardwareMajority dsp_hwm;
+  DSPChannelThreshold dsp_ct;
+
+  // processor statistics: written to FSPStatus
+  FSPStats stats;
+
+  // points to first entry in buffer _or_ to last returned by FSPGetNextState(): written to FSPEvent
+  FSPState* fsp_state;
 
 } StreamProcessor;
 

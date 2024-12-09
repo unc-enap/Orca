@@ -3,10 +3,10 @@
 #include <fcio.h>
 
 #include "observables.h"
+#include "tracemap.h"
 
 typedef struct DSPWindowedPeakSum {
-  int tracemap_format;
-  int tracemap[FCIOMaxChannels];
+  FSPTraceMap tracemap;
   float gains[FCIOMaxChannels];
   float thresholds[FCIOMaxChannels];
   float lowpass[FCIOMaxChannels];
@@ -17,7 +17,6 @@ typedef struct DSPWindowedPeakSum {
   int dsp_stop_sample[FCIOMaxChannels];
   int dsp_pre_max_samples;
   int dsp_post_max_samples;
-  int ntraces;
 
   int apply_gain_scaling;
 
@@ -59,9 +58,7 @@ typedef struct DSPWindowedPeakSum {
 } DSPWindowedPeakSum;
 
 typedef struct DSPHardwareMajority {
-  int tracemap_format;
-  int ntraces;
-  int tracemap[FCIOMaxChannels];
+  FSPTraceMap tracemap;
   unsigned short fpga_energy_threshold_adc[FCIOMaxChannels];
 
   int fast;
@@ -76,13 +73,11 @@ typedef struct DSPHardwareMajority {
 } DSPHardwareMajority;
 
 typedef struct DSPChannelThreshold {
-  int tracemap_format;
-  int ntraces;
-  int tracemap[FCIOMaxChannels];
+  FSPTraceMap tracemap;
   unsigned short thresholds[FCIOMaxChannels];
+  char label[FCIOMaxChannels];
   /* result fields */
   unsigned short max_values[FCIOMaxChannels];
-  int max_tracemap_idx[FCIOMaxChannels];
   int multiplicity;
 
   int enabled;
@@ -106,9 +101,9 @@ float fsp_dsp_local_peaks_f32(float *input_trace, float *peak_trace, int start, 
                                const float gain_adc, const float threshold_pe, float *peak_times,
                                float *peak_amplitudes, int *npeaks, int* largest_peak_offset);
 
-void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int ntraces, unsigned short **traces);
-void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int ntraces, unsigned short **trace_headers);
-void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int ntraces, unsigned short **traces, unsigned short **theaders);
+void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces);
+void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers);
+void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces, unsigned short **theaders);
 
 
 void tracewindow(int n, float *trace, int ss, double gain, float *out);

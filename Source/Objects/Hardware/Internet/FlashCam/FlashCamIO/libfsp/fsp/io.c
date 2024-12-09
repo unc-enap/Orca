@@ -5,6 +5,7 @@
 
 #include <assert.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 static inline size_t event_flag_2char(char* string, size_t strlen, EventFlags event_flags) {
   const size_t nflags = 2;
@@ -128,9 +129,6 @@ void FSPFlags2Char(FSPState* fsp_state, size_t strlen, char* cstring) {
   curr_offset += wps_flag_2char(&cstring[curr_offset], 6, fsp_state->proc_flags.wps);
 
   cstring[curr_offset++] = ':';
-  for (int i = 0; curr_offset < strlen && i < fsp_state->obs.ct.multiplicity; i++, curr_offset++) {
-    cstring[curr_offset] = (char)i;
-  }
   cstring[curr_offset] = '\0';
 }
 

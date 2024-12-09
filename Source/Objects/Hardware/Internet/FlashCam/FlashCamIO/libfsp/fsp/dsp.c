@@ -396,8 +396,8 @@ void fsp_dsp_diff_and_smooth(int nsamples, int *start, int *stop, unsigned int s
   }
 }
 
-void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int ntraces, unsigned short **traces) {
-  assert(cfg->ntraces <= ntraces);
+void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces) {
+
   int *npulses = NULL;
   float *pulse_times = NULL;
   float *pulse_amplitudes = NULL;
@@ -408,20 +408,25 @@ void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int ntrace
     *(cfg->total_pulses) = 0;
   }
 
-  for (int i = 0; i < nsamples; i++) cfg->peak_trace[i] = 0;
+  for (int j = 0; j < nsamples; j++) cfg->peak_trace[j] = 0;
 
   int multiplicity = 0;
   float total_largest_peak = 0;
   int total_largest_peak_offset = -1;
-  for (int i = 0; i < cfg->ntraces; i++) {
-    assert(nsamples + (4 * (cfg->shaping_widths[i] + 1) <= 3 * FCIOMaxSamples));
+  for (int i = 0; i < num_traces; i++) {
+    int trace_idx = trace_list[i];
+    if (cfg->tracemap.enabled[trace_idx] < 0)
+      continue;
+    int map_idx = cfg->tracemap.enabled[trace_idx];
+    assert(trace_idx == cfg->tracemap.map[map_idx]);
 
-    int trace_idx = cfg->tracemap[i];
-    float gain = cfg->gains[i];
-    float threshold = cfg->thresholds[i];
-    float lowpass = cfg->lowpass[i];
-    int shaping_width_samples = cfg->shaping_widths[i];
     unsigned short *trace = traces[trace_idx];
+    assert(nsamples + (4 * (cfg->shaping_widths[map_idx] + 1) <= 3 * FCIOMaxSamples));
+
+    float gain = cfg->gains[map_idx];
+    float threshold = cfg->thresholds[map_idx];
+    float lowpass = cfg->lowpass[map_idx];
+    int shaping_width_samples = cfg->shaping_widths[map_idx];
 
     for (int j = 0; j < 4 * (shaping_width_samples + 1); j++) {
       cfg->work_trace[j] = 0;
@@ -437,8 +442,8 @@ void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int ntrace
     float largest_peak = 0.0;
     int largest_peak_offset = -1;
     /* TODO pre-calculate from sum cfg */
-    int start = cfg->dsp_start_sample[i];
-    int stop = cfg->dsp_stop_sample[i];
+    int start = cfg->dsp_start_sample[map_idx];
+    int stop = cfg->dsp_stop_sample[map_idx];
 
     fsp_dsp_diff_and_smooth(nsamples, &start, &stop, shaping_width_samples, trace, cfg->diff_trace, cfg->peak_trace,
                              cfg->work_trace, cfg->work_trace2, gain, cfg->apply_gain_scaling, threshold, lowpass,
@@ -465,22 +470,25 @@ void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int ntrace
   cfg->max_peak_offset = total_largest_peak_offset;
 }
 
-void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int ntraces, unsigned short **trace_headers) {
-  assert(cfg->ntraces <= ntraces);
+void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers) {
 
   int multiplicity = 0;
   int mult_below_threshold = 0;
   unsigned short max = 0;
   unsigned short min = USHRT_MAX;
-  for (int i = 0; i < cfg->ntraces; i++) {
-    int trace_idx = cfg->tracemap[i];
+  for (int i = 0; i < num_traces; i++) {
+    int trace_idx = trace_list[i];
+    if (cfg->tracemap.enabled[trace_idx] < 0)
+      continue;
+    int map_idx = cfg->tracemap.enabled[trace_idx];
+    assert(trace_idx == cfg->tracemap.map[map_idx]);
 
     /* FCIO Trace Header 1 contains fpga_energy */
     unsigned short fpga_energy = trace_headers[trace_idx][1];
     if (fpga_energy) {
       multiplicity++;
 
-      if (fpga_energy < cfg->fpga_energy_threshold_adc[i])
+      if (fpga_energy < cfg->fpga_energy_threshold_adc[map_idx])
         mult_below_threshold++;
 
       if (fpga_energy < min) min = fpga_energy;
@@ -518,21 +526,21 @@ unsigned short fsp_dsp_trace_larger_than(unsigned short *trace, int start, int s
   return 0;
 }
 
-void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int ntraces, unsigned short **traces, unsigned short** theaders) {
-  assert(cfg->ntraces <= ntraces);
+void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces, unsigned short** theaders) {
 
   int nfound = 0;
-  for (int i = 0; i < cfg->ntraces; i++) {
-    int trace_idx = cfg->tracemap[i];
-    if (trace_idx < 0)
+  for (int i = 0; i < num_traces; i++) {
+    int trace_idx = trace_list[i];
+    if (cfg->tracemap.enabled[trace_idx] < 0)
       continue;
+    int map_idx = cfg->tracemap.enabled[trace_idx];
+    assert(trace_idx == cfg->tracemap.map[map_idx]);
 
     unsigned short *trace = traces[trace_idx];
     unsigned short baseline = theaders[trace_idx][0];
 
-    cfg->max_values[nfound] = fsp_dsp_trace_larger_than(trace, 0, nsamples, nsamples, cfg->thresholds[i] + baseline);
-    if (cfg->max_values[nfound]) {
-      cfg->max_tracemap_idx[nfound] = i;
+    cfg->max_values[map_idx] = fsp_dsp_trace_larger_than(trace, 0, nsamples, nsamples, cfg->thresholds[map_idx] + baseline);
+    if (cfg->max_values[map_idx]) {
       nfound++;
     }
   }
