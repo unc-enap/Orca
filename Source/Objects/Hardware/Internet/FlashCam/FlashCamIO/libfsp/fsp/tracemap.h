@@ -5,10 +5,16 @@
 
 typedef struct {
   int format; // contains the format of the channel map. For processors it must be converted to trace_idx
+
   int map[FCIOMaxChannels]; // the list of mapped traces for this processor, up to n_mapped
   int n_mapped; // the number of mapped traces, applies to trace_list
+
+  // reverse lookup for mapped channels:
   int enabled[FCIOMaxChannels]; // a list of map_idx, index with trace_idx from fcio_event.trace_list
   int n_enabled; // the total number of traces available, must equal fcio_config.adcs
+
+   // a human readable label, index similar to `map`.
+  char label[FCIOMaxChannels][8];
 
 } FSPTraceMap;
 

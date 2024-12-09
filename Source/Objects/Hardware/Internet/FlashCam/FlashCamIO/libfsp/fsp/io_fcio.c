@@ -1,8 +1,8 @@
 #include "io_fcio.h"
-#include "fsp/dsp.h"
-#include "fsp/processor.h"
-#include "fsp/state.h"
-#include "fsp/timestamps.h"
+#include "dsp.h"
+#include "processor.h"
+#include "state.h"
+#include "timestamps.h"
 
 #include <fcio_utils.h>
 #include <tmio.h>
@@ -16,6 +16,7 @@ static inline int fcio_put_fsp_tracemap(FCIOStream stream, FSPTraceMap* map) {
   FCIOWriteInt(stream, map->format);
   FCIOWriteInts(stream, map->n_mapped, map->map);
   FCIOWriteInts(stream, map->n_enabled, map->enabled);
+  FCIOWrite(stream, map->n_mapped * sizeof(*map->label), map->label);
   return 0;
 }
 static inline int fcio_get_fsp_tracemap(FCIOStream stream, FSPTraceMap* map) {
@@ -24,6 +25,11 @@ static inline int fcio_get_fsp_tracemap(FCIOStream stream, FSPTraceMap* map) {
   FCIOReadInt(stream, map->format);
   map->n_mapped = FCIOReadInts(stream, FCIOMaxChannels, map->map) / sizeof(*map->map);
   map->n_enabled = FCIOReadInts(stream, FCIOMaxChannels, map->enabled) / sizeof(*map->enabled);
+  int nlabels = FCIORead(stream, FCIOMaxChannels * sizeof(*map->label), map->label) / sizeof(*map->label);
+
+  if (nlabels != map->n_mapped)
+    return -1;
+
   return 0;
 }
 
@@ -85,7 +91,7 @@ static inline int fcio_put_fspconfig_ct(FCIOStream stream, DSPChannelThreshold* 
     return -1;
   fcio_put_fsp_tracemap(stream, &dsp_ct->tracemap);
   FCIOWriteUShorts(stream, dsp_ct->tracemap.n_mapped, dsp_ct->thresholds);
-  FCIOWrite(stream, dsp_ct->tracemap.n_mapped, dsp_ct->label);
+
 
   return 0;
 }
@@ -94,7 +100,6 @@ static inline int fcio_get_fspconfig_ct(FCIOStream in, DSPChannelThreshold* dsp_
     return -1;
   fcio_get_fsp_tracemap(in, &dsp_ct->tracemap);
   FCIOReadUShorts(in, FCIOMaxChannels, dsp_ct->thresholds);
-  FCIORead(in, FCIOMaxChannels, dsp_ct->label);
 
   return 0;
 }
@@ -368,6 +373,7 @@ static inline size_t fsptracemap_size(FSPTraceMap* map)
   size_t total_size = 0;
   total_size += frame_header + sizeof(map->format);
   total_size += frame_header + sizeof(*((FSPTraceMap){0}).map) * map->n_mapped;
+  total_size += frame_header + sizeof(*((FSPTraceMap){0}).label) * map->n_mapped;
   total_size += frame_header + sizeof(*((FSPTraceMap){0}).enabled) * map->n_enabled;
   return total_size;
 }
@@ -409,7 +415,6 @@ static inline size_t fspconfig_size(StreamProcessor* processor) {
 
   total_size += fsptracemap_size(&processor->dsp_ct.tracemap);
   total_size += frame_header + sizeof(*((DSPChannelThreshold){0}).thresholds) * processor->dsp_ct.tracemap.n_mapped;
-  total_size += frame_header + sizeof(*((DSPChannelThreshold){0}).label) * processor->dsp_ct.tracemap.n_mapped;
 
   total_size += fsptracemap_size(&processor->dsp_wps.tracemap);
 

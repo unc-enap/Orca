@@ -75,7 +75,6 @@ typedef struct DSPHardwareMajority {
 typedef struct DSPChannelThreshold {
   FSPTraceMap tracemap;
   unsigned short thresholds[FCIOMaxChannels];
-  char label[FCIOMaxChannels];
   /* result fields */
   unsigned short max_values[FCIOMaxChannels];
   int multiplicity;
