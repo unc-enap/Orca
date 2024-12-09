@@ -1384,8 +1384,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         return NO;
     }
 
-//                const char* filepath = "<path_to_config>/fspconfig_local.txt";
-//                FSPSetParametersFromFile(postprocessor, filepath);
     NSLog(@"%@: Software trigger initialized.\n", [self identifier]);
     return YES;
 }
@@ -1563,11 +1561,8 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     // keep this for consistency check after the stream ended
     fcio_last_tag = state->last_tag;
 
-
     // the following switch updates the monitoring data of the attached ADC Cards and
-    // could/should  could as well be implemented in ORFlashCamADCModel.
-    // The event parsing was previously using the -shipEvent method,
-    // while readStatus was called in previous versions of the listener.
+    // could as well be implemented in each ORFlashCamADCModel.
     switch(fcio_last_tag) {
         case FCIOEvent:
         case FCIOSparseEvent:
@@ -1576,6 +1571,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                 int trace_idx = state->event->trace_list[i];
                 uint16_t addr = (state->config->tracemap[trace_idx] & 0xFFFF0000) >> 16;
                 uint16_t channel = (state->config->tracemap[i] & 0xffff);
+                // a lookup for cards per addr would prevent the second loop
                 for(id obj in [readOutList children]){
                     ORFlashCamADCModel* card = [obj object];
                     if([card cardAddress] != (uint32_t) addr)
@@ -1631,10 +1627,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     switch (write_tag) {
         case FCIOConfig:
             requiredSize += fcioSizes.protocol + fcioSizes.config;
-            // Orca extends the config record by shipping:
-            // board revisions and hardware ids and crate and cardslot numbers
-            size_t orca_extension_size = state->config->adcs * (3 * sizeof(uint8_t) + sizeof(uint64_t)) + 4 * sizeof(int);
-            requiredSize += orca_extension_size;
             break;
         case FCIOEvent:
             requiredSize += fcioSizes.event;
@@ -1671,7 +1663,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     /* This function decides if the waveforms are removed,
        depending on the software trigger decision
         - write header only if StreamProcessor is active (we have an FSPState)
-            - if there there is no reason to write
+            - if there the software trigger marked it as discard (!write)
             - if writeNonTriggered is not active
      */
     if (fspstate && !fspstate->write_flags.write && !writeNonTriggered) {
@@ -1702,7 +1694,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
 }
 
-- (int) addBoardInfoToRecord:(FCIOStream) stream from:(fcio_config*) config
+- (int) __attribute__((deprecated("just leave for reference, should be handled by the run header"))) addBoardInfoToRecord:(FCIOStream) stream from:(fcio_config*) config
 {
     size_t br_data_size = config->adcs * sizeof(uint8_t) ;
     size_t hwid_data_size = config->adcs * sizeof(uint64_t);
@@ -1742,7 +1734,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     return written_size;
 }
 
-- (int) ORExtendFCIOState:(FCIOStream) stream from: (FCIOState*) state as:(int)writeTag
+- (int) __attribute__((deprecated("see used functions for reason"))) ORExtendFCIOState:(FCIOStream) stream from: (FCIOState*) state as:(int)writeTag
 {
     switch (writeTag)
         case FCIOConfig:
@@ -1756,7 +1748,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         DEBUG_PRINT( "%s %s: shipFCIO no FCIOState\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
         return NO;
     }
-
 
     uint32_t header_length = 3; // dataId + recordLength + readout/listenerId
     size_t header_size = header_length * sizeof(int32_t);
@@ -1772,15 +1763,12 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     // get a slot to write the data to, using getBlockForAddingLongs to prevent memcpy
     uint32_t* dataRecord = [aDataPacket getBlockForAddingLongs: recordLength];
 
-    // TODO: remove if not implemented, currently one dataId is used per listener, not per tag
-    // get dataId corresponding to the FCIOTag which was read from stream
+    // get dataId corresponding to the FCIOTag received from readout-fc250b
     uint32_t dataId = [self getWriteDataId:writeTag];
-//    uint32_t dataId = listenerDataId;
     if ( !dataId ) {
         DEBUG_PRINT( "%s %s: shipFCIO no valid dataId\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
         return NO;
     }
-
 
     dataRecord[0] = dataId; // use extended format, write recordLength to the second entry
     dataRecord[1] = recordLength;
