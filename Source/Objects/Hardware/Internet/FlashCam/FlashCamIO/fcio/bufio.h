@@ -38,7 +38,8 @@ typedef enum {
   BUFIO_EPIPE = -1,    // Device or socket has been disconnected or an I/O error occured
   BUFIO_OKAY = 0,      // Success
   BUFIO_TIMEDOUT = 1,  // Poll or I/O operation timed out
-  BUFIO_EOF = 2        // Reached end-of-file
+  BUFIO_EOF = 2,       // Reached end-of-file
+  BUFIO_NOSPACE = 3    // Not enough space available for write operation. Only returned when writing to mem:// (so far)
 } bufio_stream_status;
 
 typedef struct {
