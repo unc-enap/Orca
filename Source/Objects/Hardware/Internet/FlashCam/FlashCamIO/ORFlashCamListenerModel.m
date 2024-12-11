@@ -671,35 +671,35 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 - (double) swtRunTime
 {
     if (processor)
-        return processor->stats->runtime;
+        return processor->stats.runtime;
     return 0.0;
 }
 
 - (int) swtEventCount
 {
     if (processor)
-        return processor->stats->n_written_events;
+        return processor->stats.n_written_events;
     return 0;
 }
 
 - (double) swtAvgInputRate
 {
     if (processor)
-        return processor->stats->avg_rate_read_events;
+        return processor->stats.avg_rate_read_events;
     return 0.0;
 }
 
 - (double) swtAvgOutputRate
 {
     if (processor)
-        return processor->stats->avg_rate_write_events;
+        return processor->stats.avg_rate_write_events;
     return 0.0;
 }
 
 - (double) swtAvgDiscardRate
 {
     if (processor)
-        return processor->stats->avg_rate_discard_events;
+        return processor->stats.avg_rate_discard_events;
     return 0.0;
 }
 
@@ -1470,7 +1470,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 {
     // TODO make this as performant as possible - prevent lot's of calculations, check they are needed
     FCIOStateCalculateRecordSizes(state, &fcioSizes);
-    FSPCalculateRecordSizes(processor, fspstate, &fcioSizes);
+    FSPCalculateRecordSizes(processor, &fcioSizes);
 }
 
 
@@ -1519,8 +1519,8 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             // returns 1 if stats have been updated, or if the stream ends.
             // only updates stats every fsp log time period
             [swtBufferFillLevelHistory  addDataToTimeAverage:(float)FSPFreeStates(processor)];
-            [swtDiscardRateHistory addDataToTimeAverage:(float)processor->stats->dt_rate_discard_events];
-            [swtOutputRateHistory  addDataToTimeAverage:(float)processor->stats->dt_rate_write_events];
+            [swtDiscardRateHistory addDataToTimeAverage:(float)processor->stats.dt_rate_discard_events];
+            [swtOutputRateHistory  addDataToTimeAverage:(float)processor->stats.dt_rate_write_events];
 
             [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamListenerModelSWTStatusChanged object:self];
         }
