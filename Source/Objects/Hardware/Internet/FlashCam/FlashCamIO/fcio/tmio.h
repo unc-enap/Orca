@@ -62,6 +62,7 @@ typedef struct {
   tmio_stream_type type;  // Type of the stream
   int iobufsize;  // Size of the I/O buffer in Byte
   char protocol[TMIO_PROTOCOL_SIZE];  // Protocol identifier
+  char stream_protocol[TMIO_PROTOCOL_SIZE];  // Protocol identifier read from the stream
   char skipbuf[TMIO_SKIPBUF_SIZE];  // Scratch buffer used for skipping data frames
   // Statistics
   int flushes;
@@ -112,6 +113,8 @@ const char *tmio_status_str(tmio_stream *stream)
 int tmio_timeout(tmio_stream *stream, int protocol_timeout)
 ;
 const char *tmio_protocol(tmio_stream *stream)
+;
+const char *tmio_stream_protocol(tmio_stream *stream)
 ;
 int tmio_type(tmio_stream *stream)
 ;

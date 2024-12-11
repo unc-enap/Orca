@@ -132,6 +132,7 @@ typedef struct {
   int iobufsize;  // Size of the I/O buffer in Byte
 
   char protocol[TMIO_PROTOCOL_SIZE];  // Protocol identifier
+  char stream_protocol[TMIO_PROTOCOL_SIZE];  // Protocol identifier read from the stream
   char skipbuf[TMIO_SKIPBUF_SIZE];  // Scratch buffer used for skipping data frames
 
   // Statistics
@@ -364,7 +365,7 @@ tmio_status.
 //--- Errors -----------------------------------------------------------------//
 
 TMIO_ENOTCONN   Error while connecting
-TMIO_EHANDSHAKE Error while writing protocol
+TMIO_EHANDSHAKE Error while writing protocol identifier
 
 //----------------------------------------------------------------------------*/
 {
@@ -408,6 +409,49 @@ TMIO_EHANDSHAKE Error while writing protocol
   return stream->type;
 }
 
+/* Internal helper function to read the protocol string and check for
+   protocol version match.
+
+   Returns 0 on success, or -1 on error.
+
+   On error, sets the stream status to:
+   TMIO_EHANDSHAKE Error while reading protocol identifier
+   TMIO_EPROTO     Protocols do not match
+*/
+static int tmio_read_and_match_protocol(tmio_stream *stream)
+{
+  buftcpfile *fp = (buftcpfile *) stream->f;
+
+  char protocol[TMIO_PROTOCOL_SIZE] = {0};
+  if (buftcpread(protocol, TMIO_PROTOCOL_SIZE, fp) != TMIO_PROTOCOL_SIZE) {
+    stream->status = TMIO_EHANDSHAKE;
+    if (stream->debug)
+      fprintf(stderr, "tmio_read_and_match_protocol: protocol read failed");
+    return -1;
+  }
+
+  stream->bytesread += TMIO_PROTOCOL_SIZE;
+
+  // Copy input into stream_protocol before checking such that the user
+  // can inspect which protocol has been received. We never touch the last
+  // byte of stream_protocol, which is calloc()ed to zero in tmio_init().
+  memcpy(stream->stream_protocol, protocol, TMIO_PROTOCOL_SIZE - 1);
+
+  // Compare up to strlen(requested protocol) bytes
+  if (strncmp(stream->stream_protocol, stream->protocol, strlen(stream->protocol)) != 0) {
+    stream->status = TMIO_EPROTO;
+    if (stream->debug)
+      fprintf(stderr, "tmio_read_and_match_protocol: peer has wrong protocol %s,"
+              "expected %s\n", stream->stream_protocol, stream->protocol);
+    return -1;
+  }
+
+  if (stream->debug > 1)
+    fprintf(stderr, "tmio_read_and_match_protocol: protocol handshake successful: %s\n",
+            protocol);
+
+  return 0;
+}
 
 /*=== Function ===============================================================*/
 
@@ -437,7 +481,7 @@ tmio_status.
 //--- Errors -----------------------------------------------------------------//
 
 TMIO_ENOTCONN   Error while connecting
-TMIO_EHANDSHAKE Error while reading protocol
+TMIO_EHANDSHAKE Error while reading protocol identifier
 TMIO_EPROTO     Protocols do not match
 
 //----------------------------------------------------------------------------*/
@@ -459,40 +503,21 @@ TMIO_EPROTO     Protocols do not match
 
   tmio_init_stream(stream, fp);
 
-  // Read protocol
   int protocol_tag;
-  char protocol[TMIO_PROTOCOL_SIZE] = {0};
   if (buftcpread(&protocol_tag, sizeof(protocol_tag), fp) !=
           sizeof(protocol_tag) ||
-      protocol_tag != TMIO_PROTOCOL_TAG ||
-      buftcpread(protocol, TMIO_PROTOCOL_SIZE, fp) != TMIO_PROTOCOL_SIZE) {
+      protocol_tag != TMIO_PROTOCOL_TAG) {
+    if (stream->debug)
+      fprintf(stderr, "tmio_open: tmio protocol tag missing.\n");
     stream->status = TMIO_EHANDSHAKE;
-    if (stream->debug)
-      fprintf(stderr, "tmio_open: protocol handshake failed, received protocol tag %d with protocol string %s\n", protocol_tag, protocol);
+    return -1;
+  }
+  stream->bytesread += sizeof(protocol_tag);
 
+  if (tmio_read_and_match_protocol(stream)) {
     tmio_close(stream);
     return -1;
   }
-  stream->bytesread += sizeof(protocol_tag) + TMIO_PROTOCOL_SIZE;
-
-  // Sanitise input
-  protocol[TMIO_PROTOCOL_SIZE - 1] = 0;
-
-  // Compare up to strlen(requested protocol) bytes
-  if (strncmp(protocol, stream->protocol,
-              strlen(stream->protocol) < TMIO_PROTOCOL_SIZE
-                  ? strlen(stream->protocol)
-                  : TMIO_PROTOCOL_SIZE) != 0) {
-    stream->status = TMIO_EPROTO;
-    if (stream->debug)
-      fprintf(stderr, "tmio_open: peer/file has wrong protocol %s\n", protocol);
-
-    tmio_close(stream);
-    return -1;
-  }
-
-  // Copy protocol from peer
-  strncpy(stream->protocol, protocol, TMIO_PROTOCOL_SIZE);
 
   if (stream->debug > 1)
     fprintf(stderr, "tmio_open: connected file/peer %s\n", name);
@@ -807,6 +832,9 @@ Reads a tag from the stream of data. Skips any data frames when required.
 Since tags mark the beginning of a message, which in some protocols might come
 with any delay, a timeout does not mark the stream inoperable.
 
+If the start of a new stream is found, checks for protocol match in the same way
+as `tmio_open()` and updates `tmio_current_stream()` accordingly.
+
 //--- Return values ----------------------------------------------------------//
 
 Returns the tag found. If a timeout occurs, 0 is returned. If an error occurs,
@@ -814,8 +842,10 @@ Returns the tag found. If a timeout occurs, 0 is returned. If an error occurs,
 
 //--- Errors -----------------------------------------------------------------//
 
-TMIO_EREAD     An error occured while reading
-TMIO_ETIMEDOUT A timeout occured while skipping a data frame
+TMIO_EREAD      An error occured while reading
+TMIO_ETIMEDOUT  A timeout occured while skipping a data frame
+TMIO_EHANDSHAKE Error while reading protocol identifier
+TMIO_EPROTO     Protocols do not match
 
 //----------------------------------------------------------------------------*/
 {
@@ -852,8 +882,24 @@ TMIO_ETIMEDOUT A timeout occured while skipping a data frame
       return -1;
     }
 
-    if (frame_header < 0)
+    if (frame_header < 0) {
+      // Received a tag
+      if (frame_header == TMIO_PROTOCOL_TAG) {
+        stream->bytesread += sizeof(frame_header);
+        if (tmio_read_and_match_protocol(stream))
+          return -1;  // protocol does not match
+        continue;  // wait for next tag
+      } else if (-frame_header > TMIO_MAX_TAG) {
+        // Unknown tag in reserved region; treat this as a read error
+        stream->status = TMIO_EREAD;
+        if (stream->debug)
+          fprintf(stderr, "tmio_read_tag: received unknown reserved tag %d\n",
+                  frame_header);
+        return -1;
+      }
+
       break;
+    }
 
     stream->bufferedheader = frame_header;
     stream->hasbufferedheader = 1;
@@ -1037,13 +1083,35 @@ const char *tmio_protocol(tmio_stream *stream)
 
 /*--- Description ------------------------------------------------------------//
 
-Returns a pointer to the protocol identifier.
+Returns a pointer to the protocol identifier that has been requested
+with `tmio_init()`.
+
+After calling `tmio_open()` to open a stream for reading you may access the
+protocol identifier that has been received using `tmio_stream_protocol()`.
 
 //----------------------------------------------------------------------------*/
 {
   return stream->protocol;
 }
 
+/*=== Function ===============================================================*/
+
+const char *tmio_stream_protocol(tmio_stream *stream)
+
+/*--- Description ------------------------------------------------------------//
+
+Returns a pointer to the latest protocol identifier read from the stream.
+Initially this is an empty, null-terminated string. It is populated when
+`tmio_open()` is called and succeeds or returns EPROTO (in which case this
+function returns the received protocol identifier).
+
+The protocol identifier may change over time when reading multiple concatenated
+streams.
+
+//----------------------------------------------------------------------------*/
+{
+  return stream->stream_protocol;
+}
 
 /*=== Function ===============================================================*/
 
