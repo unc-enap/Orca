@@ -514,8 +514,7 @@ static inline void fsp_process_state_timings(StreamProcessor* processor, FSPStat
       the trigger windows.
     */
     processor->force_trigger_timestamp = fsp_state->timestamp;
-    processor->post_trigger_timestamp =
-        timestamp_add(processor->force_trigger_timestamp, processor->triggerconfig.post_trigger_window);
+    processor->post_trigger_timestamp = timestamp_add(processor->force_trigger_timestamp, processor->triggerconfig.post_trigger_window);
     processor->pre_trigger_timestamp = timestamp_sub(processor->force_trigger_timestamp, processor->triggerconfig.pre_trigger_window);
 
     FSPState* update_fsp_state = NULL;
