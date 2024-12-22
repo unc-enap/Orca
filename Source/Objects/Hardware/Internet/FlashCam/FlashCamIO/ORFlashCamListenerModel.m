@@ -478,8 +478,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
     else if([p isEqualToString:@"fspHWPreScaleRatio"])
         return [NSNumber numberWithDouble:[[configParams objectForKey:p] intValue]];
-//    else if([p isEqualToString:@"fspHWCheckAll"])
-//        return [NSNumber numberWithBool:[[configParams objectForKey:p] boolValue]];
     else if([p isEqualToString:@"fspPSPreWindow"])
         return [NSNumber numberWithInt:[[configParams objectForKey:p] intValue]];
     else if([p isEqualToString:@"fspPSPostWindow"])
@@ -988,8 +986,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         [configParams setObject:[NSNumber numberWithInt:MAX(0,[v intValue])] forKey:p];
     else if([p isEqualToString:@"fspHWPreScaleThreshold"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0,[v intValue])] forKey:p];
-//    else if([p isEqualToString:@"fspHWCheckAll"])
-//        [configParams setObject:[NSNumber numberWithBool:[v boolValue]] forKey:p];
     else if([p isEqualToString:@"fspPSPreWindow"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(0,[v intValue]),2147483647)] forKey:p];
     else if([p isEqualToString:@"fspPSPostWindow"])
@@ -1562,7 +1558,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     fcio_last_tag = state->last_tag;
 
     // the following switch updates the monitoring data of the attached ADC Cards and
-    // could as well be implemented in each ORFlashCamADCModel.
+    // could as well be implemented in each ORFlashCamADCModel as a dedicated method.
     switch(fcio_last_tag) {
         case FCIOEvent:
         case FCIOSparseEvent:
@@ -2446,15 +2442,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 - (NSDictionary*) dataRecordDescription
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-//    NSDictionary* dl =  [NSDictionary dictionaryWithObjectsAndKeys:
-//                        @"ORFCIODecoder",                                    @"decoder",
-//                        [NSNumber numberWithLong:listenerDataId],            @"dataId",
-//                        [NSNumber numberWithBool:YES],                       @"variable",
-//                        [NSNumber numberWithLong:-1],                        @"length",
-//                        [NSNumber numberWithLong:[self uniqueIdNumber]],     @"listenerId",
-//                        [NSNumber numberWithLong:[guardian uniqueIdNumber]], @"readoutId",
-//                        nil];
-//    [dict setObject:dl forKey:@"FlashCamDataStream"];
     NSDictionary* dc = [NSDictionary dictionaryWithObjectsAndKeys:
                         @"ORFCIOConfigDecoder",                          @"decoder",
                         [NSNumber numberWithLong:configId],              @"dataId",
