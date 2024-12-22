@@ -45,7 +45,6 @@
     if (self != nil) {
         for (int i = 0; i < kMaxFCIOStreams; i++) {
             fcioStreams[i] = NULL;
-            fspStates[i] = NULL;
             processors[i] = NULL;
             initialized[i] = NO;
         }
@@ -59,7 +58,6 @@
     for (int i = 0; i < kMaxFCIOStreams; i++) {
         FCIOClose(fcioStreams[i]);
         FSPDestroy(processors[i]);
-        free(fspStates[i]);
     }
 }
 
@@ -127,8 +125,6 @@
         NSString* peer = [NSString stringWithFormat:@"mem://%p/%zu", data_ptr, recordSize];
         fcioStreams[currentListenerId] = FCIOOpen([peer UTF8String], 0, 0);
         if (fcioStreams[currentListenerId]) {
-            if (!fspStates[currentListenerId])
-                fspStates[currentListenerId] = calloc(1, sizeof(FSPState));
             if (!processors[currentListenerId])
                 processors[currentListenerId] = FSPCreate(0);
             return YES;
@@ -142,10 +138,6 @@
 - (FCIOData*) fcioStream
 {
     return fcioStreams[currentListenerId];
-}
-- (FSPState*) fspState
-{
-    return fspStates[currentListenerId];
 }
 - (StreamProcessor*) processor
 {
@@ -296,12 +288,12 @@
         return 0;
 
     FCIOData* fcio = [config fcioStream];
-    FSPState* fspState = [config fspState];
+    StreamProcessor* processor = [config processor];
 
     int tag;
     while ( (tag = FCIOGetRecord(fcio)) && tag != FCIOEvent && tag != FCIOSparseEvent && tag > 0) {
         if (tag == FCIOFSPEvent)
-            FCIOGetFSPEvent(fcio, fspState);
+            FCIOGetFSPEvent(fcio, processor);
     }
     if (tag <= 0) {
         NSLogColor([NSColor redColor], @"ORFCIOEventDecoder received malformed packet without FCIOConfig record.\n");
@@ -405,12 +397,12 @@
         return 0;
 
     FCIOData* fcio = [config fcioStream];
-    FSPState* fspState = [config fspState];
+    StreamProcessor* processor = [config processor];
 
     int tag;
     while ( (tag = FCIOGetRecord(fcio)) && tag != FCIOEventHeader && tag > 0) {
         if (tag == FCIOFSPEvent)
-            FCIOGetFSPEvent(fcio, fspState);
+            FCIOGetFSPEvent(fcio, processor);
     }
     if (tag <= 0) {
         NSLogColor([NSColor redColor], @"ORFCIOEventHeaderDecoder received malformed packet without FCIOConfig record.\n");

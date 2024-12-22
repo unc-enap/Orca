@@ -45,14 +45,12 @@
 @interface ORFCIOConfigDecoder : ORBaseDecoder {
     @private
     FCIOData* fcioStreams[kMaxFCIOStreams];
-    FSPState* fspStates[kMaxFCIOStreams];
     StreamProcessor* processors[kMaxFCIOStreams];
     bool initialized[kMaxFCIOStreams];
     uint32_t currentListenerId;
     uint32_t currentRecordLength;
 }
 - (FCIOData*) fcioStream;
-- (FSPState*) fspState;
 - (StreamProcessor*) processor;
 - (bool) decodersInitialized;
 - (uint32_t) recordLength;
