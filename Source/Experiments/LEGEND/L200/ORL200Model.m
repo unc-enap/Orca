@@ -513,26 +513,26 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         int index = [name intValue];
         if(index < kL200SiPMInnerChans){
             if(index%2){
-                [group setSegment:i object:[NSNumber numberWithInt:1] forKey:@"kRing"];
-                [group setSegment:i object:@"bottom : inner"            forKey:@"kRingName"];
+                [group setSegment:i object:[NSNumber numberWithInt:1]   forKey:@"kRing"];
+                [group setSegment:i object:@"top/bottom : inner"        forKey:@"kRingName"];
                 [group setSegment:i object:@"Bot : IB"                  forKey:@"kRingLabel"];
             }
             else{
-                [group setSegment:i object:[NSNumber numberWithInt:0] forKey:@"kRing"];
-                [group setSegment:i object:@"top : inner"               forKey:@"kRingName"];
+                [group setSegment:i object:[NSNumber numberWithInt:0]   forKey:@"kRing"];
+                [group setSegment:i object:@"top/bottom : inner"        forKey:@"kRingName"];
                 [group setSegment:i object:@"TOP : IB"                  forKey:@"kRingLabel"];
             }
         }
         else{
             if(index%2){
-                [group setSegment:i object:[NSNumber numberWithInt:3] forKey:@"kRing"];
-                [group setSegment:i object:@"bottom : outer"            forKey:@"kRingName"];
+                [group setSegment:i object:[NSNumber numberWithInt:3]   forKey:@"kRing"];
+                [group setSegment:i object:@"top/bottom : outer"        forKey:@"kRingName"];
                 [group setSegment:i object:@"Bot : OB"                  forKey:@"kRingLabel"];
             }
             else{
-                [group setSegment:i object:[NSNumber numberWithInt:2] forKey:@"kRing"];
-                [group setSegment:i object:@"top : outer"               forKey:@"kRingName"];
-                [group setSegment:i object:@"TOP : OB"                  forKey:@"kRingLabel"];
+                [group setSegment:i object:[NSNumber numberWithInt:2]  forKey:@"kRing"];
+                [group setSegment:i object:@"top/bottom : outer"       forKey:@"kRingName"];
+                [group setSegment:i object:@"TOP : OB"                 forKey:@"kRingLabel"];
             }
         }
     }
