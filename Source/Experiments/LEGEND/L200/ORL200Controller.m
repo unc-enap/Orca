@@ -315,7 +315,6 @@
 
 - (void) disableRunAndPeriod
 {
-    [self endEditing];
     [dataCycleField setEnabled:NO];
     [dataPeriodField setEnabled:NO];
     [cycleStepper setEnabled:NO];
@@ -370,19 +369,16 @@
 
 - (void) dataCycleChanged:(NSNotification*) aNote
 {
-    [self endEditing];
     [dataCycleField setIntValue:[model dataCycle]];
 }
 
 - (void) dataPeriodChanged:(NSNotification*) aNote
 {
-    [self endEditing];
     [dataPeriodField setIntValue:[model dataPeriod]];
 }
 
 - (void) dataTypeChanged:(NSNotification*) aNote
 {
-    [self endEditing];
     [dataTypePopup selectItemWithTag:[model dataType]];
     if([dataTypePopup selectedTag]==32){
         [customTypeLabel setHidden:NO];
@@ -396,7 +392,6 @@
 
 - (void) customTypeChanged:(NSNotification*) aNote
 {
-    [self endEditing];
     [customTypeField setStringValue:[model customType]];
 }
 

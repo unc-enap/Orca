@@ -514,25 +514,25 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         if(index < kL200SiPMInnerChans){
             if(index%2){
                 [group setSegment:i object:[NSNumber numberWithInt:1] forKey:@"kRing"];
-                [group setSegment:i object:@"bottom inner"            forKey:@"kRingName"];
-                [group setSegment:i object:@"Bot IB"                  forKey:@"kRingLabel"];
+                [group setSegment:i object:@"bottom / top : inner / outer"            forKey:@"kRingName"];
+                [group setSegment:i object:@"Bot /TOP : IB / OB"                  forKey:@"kRingLabel"];
             }
             else{
                 [group setSegment:i object:[NSNumber numberWithInt:0] forKey:@"kRing"];
-                [group setSegment:i object:@"top inner"               forKey:@"kRingName"];
-                [group setSegment:i object:@"Top IB"                  forKey:@"kRingLabel"];
+                [group setSegment:i object:@"bottom / top : inner / outer"               forKey:@"kRingName"];
+                [group setSegment:i object:@"Bot /TOP : IB / OB"                  forKey:@"kRingLabel"];
             }
         }
         else{
             if(index%2){
                 [group setSegment:i object:[NSNumber numberWithInt:3] forKey:@"kRing"];
-                [group setSegment:i object:@"bottom outer"            forKey:@"kRingName"];
-                [group setSegment:i object:@"Bot OB"                  forKey:@"kRingLabel"];
+                [group setSegment:i object:@"bottom / top : inner / outer"            forKey:@"kRingName"];
+                [group setSegment:i object:@"Bot /TOP : IB / OB"                  forKey:@"kRingLabel"];
             }
             else{
                 [group setSegment:i object:[NSNumber numberWithInt:2] forKey:@"kRing"];
-                [group setSegment:i object:@"top outer"               forKey:@"kRingName"];
-                [group setSegment:i object:@"Top OB"                  forKey:@"kRingLabel"];
+                [group setSegment:i object:@"bottom / top : inner / outer"               forKey:@"kRingName"];
+                [group setSegment:i object:@"Bot /TOP : IB / OB"                  forKey:@"kRingLabel"];
             }
         }
     }
@@ -622,7 +622,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         if(groupIndex == kL200SiPMType)
             keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
                     @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", @"adc_serial",
-                    @"lv_crate",  @"lv_board_slot", @"lv_board_chan", nil];
+                    @"lv_crate",  @"lv_board_slot", @"lv_board_chan", @"lv_board_B_pos", @"lv_board_string", nil];
         else if(groupIndex == kL200PMTType)
             keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
                     @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", @"adc_serial",
@@ -946,6 +946,8 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [s appendFormat:@"          Crate: %@\n", [self valueForLabel:@"v_crate"        fromParts:parts]];
         [s appendFormat:@"           Slot: %@\n", [self valueForLabel:@"v_board_slot"   fromParts:parts]];
         [s appendFormat:@"           Chan: %@\n", [self valueForLabel:@"v_board_chan"   fromParts:parts]];
+        [s appendFormat:@" Board Position: %@\n", [self valueForLabel:@"v_board_B_pos"  fromParts:parts]];
+        [s appendFormat:@"            Loc: %@\n", [self valueForLabel:@"v_board_string"  fromParts:parts]];
     }
     else if(aSet == kL200DetType){
         [s appendFormat:@"         Cable: %@\n", [self valueForLabel:@"v_cable"         fromParts:parts]];
@@ -1317,7 +1319,6 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     //-------------------------------
     NSString* dataType    = [self getDataType];
     if(!dataType)return;
-    
     //get the type set
     NSMutableDictionary* thisSet = [metaDataDict objectForKey:dataType];
     if(!thisSet){
@@ -1331,17 +1332,11 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [thisSet setObject:keys forKey:@"keys"];
     }
     [keys addObject:dataFileName];
-    [thisSet setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
-
+    
     //set the meta info
-    NSMutableDictionary* infoSet = [metaDataDict objectForKey:@"info"];
-    if(!infoSet){
-        infoSet = [NSMutableDictionary dictionary];
-        [metaDataDict setObject:infoSet forKey:@"info"];
-    }
-
-    [infoSet setObject:[self metaInfo] forKey:dataFileName];
-
+    [thisSet setObject:[self metaInfo] forKey:@"info"];
+    [thisSet setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
+    
     //handle cal souce positions
     if(slowControls && [dataType isEqualToString:@"cal"]){
         
