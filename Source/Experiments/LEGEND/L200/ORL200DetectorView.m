@@ -305,11 +305,11 @@
     }
     else if(viewType == kL200CC4View){
         [self makeDummySet];//place holder for Dets
-        [self makeSIPMs];
+        [self makeCC4sSiPMS];
         [self makePMTs];
         [self makeDummySet];//place holder for AuxChans
         [self makeCC4s];
-        //[self makeCC4sInSiPMS];
+        //[self makeCC4sSiPMS];
         //[self makeCC4sOutSiPMS];
         //[self makeDummySet];//place holder for AuxChans
        
@@ -451,7 +451,7 @@
     if(!cc4LabelAttr){
         NSMutableParagraphStyle* style = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease ];
         style.alignment = NSTextAlignmentCenter;
-        NSFont* font = [NSFont fontWithName:@"Geneva" size:8];
+        NSFont* font = [NSFont fontWithName:@"Geneva" size:10];
         cc4LabelAttr = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
                           [NSColor blueColor], NSForegroundColorAttributeName,style,NSParagraphStyleAttributeName,nil] retain];
     }
@@ -466,6 +466,7 @@
     angle = kL200CC4StartAngle+15;
     float tRadius = kL200CC4OuterR+75;
     float nRadius = kL200CC4OuterR-20+75;
+    float aRadius = kL200CC4OuterR-20;
     for(int i=0; i<kNumCC4Positions; i++){
         //----outer ring numbers
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",i+1] attributes:cc4LabelAttr];
@@ -499,8 +500,8 @@
         NSString* label = cc4Label[i*2];
         if(label){
             s = [[NSAttributedString alloc] initWithString:label attributes:cc4LabelAttr1];
-            tRect = NSMakeRect( xc + nRadius/2*cosf(radN1)-[s size].width/2,
-                               yc + nRadius/2*sinf(radN1)-[s size].height/2,
+            tRect = NSMakeRect( xc + aRadius/2*cosf(radN1)-[s size].width/2,
+                               yc + aRadius/2*sinf(radN1)-[s size].height/2,
                                [s size].width,
                                [s size].height);
             [s drawInRect:tRect];
@@ -510,8 +511,8 @@
         if(label){
             float radN2 = (angle-25) * M_PI/180.;
             s = [[NSAttributedString alloc] initWithString:label attributes:cc4LabelAttr1];
-            tRect = NSMakeRect( xc + nRadius/2*cosf(radN2)-[s size].width/2,
-                               yc + nRadius/2*sinf(radN2)-[s size].height/2,
+            tRect = NSMakeRect( xc + aRadius/2*cosf(radN2)-[s size].width/2,
+                               yc + aRadius/2*sinf(radN2)-[s size].height/2,
                                [s size].width,
                                [s size].height);
             [s drawInRect:tRect];
@@ -798,34 +799,77 @@
     [self setNeedsDisplay:YES];
 }
 //himal add ...currently not have correct mapping
-- (void) makeCC4sInSiPMS
+- (void) makeCC4sSiPMS
 {
+    if(!strLabelAttr){
+        NSFont* font = [NSFont fontWithName:@"Geneva" size:8];
+        strLabelAttr = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
+                         [NSColor blueColor], NSForegroundColorAttributeName, nil] retain];
+    }
+    for(int i=0; i<kL200SiPMRings; i++){
+        [sipmLabel[i] autorelease];
+        sipmLabel[i] = [@"" copy];
+    }
+    
     float xc     = [self bounds].size.width/2+kL200CC4XOffset;
     float yc     = [self bounds].size.height/2;
+    
+    [delegate setSiPMPositions];
     NSMutableArray* segmentPaths   = [NSMutableArray array];
     NSMutableArray* errorPaths     = [NSMutableArray array];
-    //himal add
+    ORSegmentGroup* group = [delegate segmentGroup:kL200SiPMType];
+    
     int SIPMs_i_cha=kL200SiPMInnerChans;
-    //red the chennels from the imputs to find out inner simpms numbers
-    for(int aPos=0; aPos<SIPMs_i_cha; aPos++){
-        //Himal add
-        //do sth for top and bottom barrel
-        NSRect        segRect   = NSMakeRect(29,29,8,8);
-        NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
-        NSAffineTransform* transform = [NSAffineTransform transform];
-        [transform translateXBy:xc yBy:yc];
-        [transform rotateByDegrees:360/SIPMs_i_cha*aPos];
-        [segPath   transformUsingAffineTransform: transform];
-        [segmentPaths addObject:segPath];
-        
-        NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
-        [errorPaths   addObject:errPath];
-        [detOutlines  addObject:errPath];
+    int SIPMs_o_cha=kL200SiPMOuterChans;
+    int aPos=0;
+    for(int i=0; i<[group numSegments]; i++){
+        ORDetectorSegment* segment = [group segment:i];
+        const int sipm = [[segment objectForKey:@"kStringName"] intValue];
+        if (sipm<=0) continue;
+        if (i<kL200SiPMInnerChans){
+            aPos=i;
+            NSRect        segRect   = NSMakeRect(29,29,8,8);
+            NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+            NSAffineTransform* transform = [NSAffineTransform transform];
+            [transform translateXBy:xc yBy:yc];
+            [transform rotateByDegrees:360/SIPMs_i_cha*aPos];
+            [segPath   transformUsingAffineTransform: transform];
+            [segmentPaths addObject:segPath];
+            
+            NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
+            [errorPaths   addObject:errPath];
+            [detOutlines  addObject:errPath];
+        }
+        else{
+            aPos=i-SIPMs_i_cha;
+            NSRect        segRect   = NSMakeRect(103,103,20,10);
+            NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+            NSAffineTransform* transform = [NSAffineTransform transform];
+            [transform translateXBy:xc yBy:yc];
+            [transform rotateByDegrees:360/SIPMs_o_cha*aPos];
+            
+            [segPath   transformUsingAffineTransform: transform];
+            [segmentPaths addObject:segPath];
+            
+            NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
+            [errorPaths   addObject:errPath];
+            [detOutlines  addObject:errPath];
+        }
+        int iring = [[segment objectForKey:@"kRing"] intValue];
+        if ([sipmLabel[iring] isEqualToString:@""]) {
+            // Update the label position and content
+            //sipmLabelY[iring] = y + sy / 2;
+            [sipmLabel[iring] release];
+            sipmLabel[iring] = [[segment objectForKey:@"kRingLabel"] copy];
+        }
     }
+    
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
+    [detOutlines addObjectsFromArray:errorPaths];
+    [self setNeedsDisplay:YES];
 }
-
+/*
 - (void) makeCC4sOutSiPMS
 {
     float xc     = [self bounds].size.width/2+kL200CC4XOffset;
@@ -853,7 +897,7 @@
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
 }
-
+*/
 
 - (void) makeCC4s
 {
