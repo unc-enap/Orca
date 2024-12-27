@@ -51,6 +51,8 @@
 - (void) makeSIPMs;
 - (void) makePMTs;
 - (void) makeCC4s;
+//- (void) makeCC4sInSiPMS;
+//- (void) makeCC4sOutSiPMS;
 - (void) makeAuxChans;
 - (void) makeDummySet;
 - (void) drawLabels;
@@ -307,6 +309,13 @@
         [self makePMTs];
         [self makeDummySet];//place holder for AuxChans
         [self makeCC4s];
+        //[self makeCC4sInSiPMS];
+        //[self makeCC4sOutSiPMS];
+        //[self makeDummySet];//place holder for AuxChans
+       
+        //[self makeCC4sInSiPMS];
+        //[self makeCC4sOutSiPMS];
+        
     }
     [self setNeedsDisplay:YES];
 }
@@ -414,6 +423,12 @@
     [[NSColor blackColor] set];
     NSBezierPath* circPaths = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-kL200CC4InnerR/2,-kL200CC4InnerR/2,kL200CC4InnerR,kL200CC4InnerR)];
     [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-kL200CC4OuterR/2,-kL200CC4OuterR/2,kL200CC4OuterR,kL200CC4OuterR)]];
+    //Himal Add
+    
+    [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-(kL200CC4OuterR+kL200CC4InnerR/2)/2, -(kL200CC4OuterR+kL200CC4InnerR/2)/2, kL200CC4OuterR+kL200CC4InnerR/2, kL200CC4OuterR+kL200CC4InnerR/2)]];
+    
+    [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-((kL200CC4InnerR-kL200CC4InnerR/3)/2), -((kL200CC4InnerR-kL200CC4InnerR/3)/2),kL200CC4InnerR-kL200CC4InnerR/3, kL200CC4InnerR-kL200CC4InnerR/3)]];
+    
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:xc yBy:yc];
     [circPaths transformUsingAffineTransform: transform];
@@ -422,8 +437,8 @@
     float angle = kL200CC4StartAngle+kL200CC4DeltaAngle/2.;
     for(int i=0;i<kNumCC4Positions;i++){
         NSBezierPath* aLineSeg = [NSBezierPath bezierPath];
-        [aLineSeg moveToPoint:NSMakePoint(kL200CC4InnerR/2,0)];
-        [aLineSeg lineToPoint:NSMakePoint(kL200CC4OuterR/2,0)];
+        [aLineSeg moveToPoint:NSMakePoint((kL200CC4InnerR-kL200CC4InnerR/3)/2,0)];
+        [aLineSeg lineToPoint:NSMakePoint((kL200CC4OuterR+kL200CC4InnerR/2)/2,0)];
         NSAffineTransform* transform = [NSAffineTransform transform];
         [transform translateXBy:xc yBy:yc];
         [transform rotateByDegrees:angle];
@@ -449,8 +464,8 @@
     }
 
     angle = kL200CC4StartAngle+15;
-    float tRadius = kL200CC4OuterR+15;
-    float nRadius = kL200CC4OuterR-20;
+    float tRadius = kL200CC4OuterR+75;
+    float nRadius = kL200CC4OuterR-20+75;
     for(int i=0; i<kNumCC4Positions; i++){
         //----outer ring numbers
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",i+1] attributes:cc4LabelAttr];
@@ -782,6 +797,63 @@
     [detOutlines addObjectsFromArray:errorPaths];
     [self setNeedsDisplay:YES];
 }
+//himal add ...currently not have correct mapping
+- (void) makeCC4sInSiPMS
+{
+    float xc     = [self bounds].size.width/2+kL200CC4XOffset;
+    float yc     = [self bounds].size.height/2;
+    NSMutableArray* segmentPaths   = [NSMutableArray array];
+    NSMutableArray* errorPaths     = [NSMutableArray array];
+    //himal add
+    int SIPMs_i_cha=kL200SiPMInnerChans;
+    //red the chennels from the imputs to find out inner simpms numbers
+    for(int aPos=0; aPos<SIPMs_i_cha; aPos++){
+        //Himal add
+        //do sth for top and bottom barrel
+        NSRect        segRect   = NSMakeRect(29,29,8,8);
+        NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+        NSAffineTransform* transform = [NSAffineTransform transform];
+        [transform translateXBy:xc yBy:yc];
+        [transform rotateByDegrees:360/SIPMs_i_cha*aPos];
+        [segPath   transformUsingAffineTransform: transform];
+        [segmentPaths addObject:segPath];
+        
+        NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
+        [errorPaths   addObject:errPath];
+        [detOutlines  addObject:errPath];
+    }
+    [segmentPathSet addObject:segmentPaths];
+    [errorPathSet   addObject:errorPaths];
+}
+
+- (void) makeCC4sOutSiPMS
+{
+    float xc     = [self bounds].size.width/2+kL200CC4XOffset;
+    float yc     = [self bounds].size.height/2;
+    NSMutableArray* segmentPaths   = [NSMutableArray array];
+    NSMutableArray* errorPaths     = [NSMutableArray array];
+    //himal add
+    int SIPMs_o_cha=kL200SiPMOuterChans;
+    
+    for(int aPos=0; aPos<SIPMs_o_cha; aPos++){
+        //do sth for top and bottom barrel
+        NSRect        segRect   = NSMakeRect(103,103,20,10);
+        NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+        NSAffineTransform* transform = [NSAffineTransform transform];
+        [transform translateXBy:xc yBy:yc];
+        [transform rotateByDegrees:360/SIPMs_o_cha*aPos];
+        [segPath   transformUsingAffineTransform: transform];
+        [segmentPaths addObject:segPath];
+    
+        NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
+        [errorPaths   addObject:errPath];
+        [detOutlines  addObject:errPath];
+        //end
+    }
+    [segmentPathSet addObject:segmentPaths];
+    [errorPathSet   addObject:errorPaths];
+}
+
 
 - (void) makeCC4s
 {
@@ -821,6 +893,7 @@
     [errorPathSet   addObject:errorPaths];
     [self setNeedsDisplay:YES];
 }
+
 
 - (void) makeAuxChans
 {

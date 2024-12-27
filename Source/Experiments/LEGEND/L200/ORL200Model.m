@@ -510,32 +510,37 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
                 name = [name substringWithRange:NSMakeRange(1, [name length]-1)];
         }
         [group setSegment:i object:name forKey:@"kStringName"];
-        int index = [name intValue];
-        if(index < kL200SiPMInnerChans){
-            if(index%2){
+       
+        NSString* si_b = [[group segment:i] objectForKey:@"lv_board_B_pos"];
+            
+            if ([si_b isEqualToString:@"3"]){
                 [group setSegment:i object:[NSNumber numberWithInt:1]   forKey:@"kRing"];
-                [group setSegment:i object:@"top/bottom : inner"        forKey:@"kRingName"];
+                
+                [group setSegment:i object:@"bottom inner"              forKey:@"kRingName"];
                 [group setSegment:i object:@"Bot : IB"                  forKey:@"kRingLabel"];
             }
-            else{
+            else if ([si_b isEqualToString:@"2"]){
                 [group setSegment:i object:[NSNumber numberWithInt:0]   forKey:@"kRing"];
-                [group setSegment:i object:@"top/bottom : inner"        forKey:@"kRingName"];
+                [group setSegment:i object:@"top inner"                 forKey:@"kRingName"];
                 [group setSegment:i object:@"TOP : IB"                  forKey:@"kRingLabel"];
             }
-        }
-        else{
-            if(index%2){
-                [group setSegment:i object:[NSNumber numberWithInt:3]   forKey:@"kRing"];
-                [group setSegment:i object:@"top/bottom : outer"        forKey:@"kRingName"];
-                [group setSegment:i object:@"Bot : OB"                  forKey:@"kRingLabel"];
-            }
-            else{
+            else if ([si_b isEqualToString:@"1"]){
                 [group setSegment:i object:[NSNumber numberWithInt:2]  forKey:@"kRing"];
-                [group setSegment:i object:@"top/bottom : outer"       forKey:@"kRingName"];
+                [group setSegment:i object:@"top outer"                forKey:@"kRingName"];
                 [group setSegment:i object:@"TOP : OB"                 forKey:@"kRingLabel"];
             }
+            else if ([si_b isEqualToString:@"4"]){
+                [group setSegment:i object:[NSNumber numberWithInt:3]   forKey:@"kRing"];
+                [group setSegment:i object:@"bottom outer"              forKey:@"kRingName"];
+                [group setSegment:i object:@"Bot : OB"                  forKey:@"kRingLabel"];
+            }
+        
+            else{
+                NSLog(@"Unecpected board position for sipms");
+            }
+        si_b=nil;
         }
-    }
+        
 }
 
 - (void) setPMTPositions
