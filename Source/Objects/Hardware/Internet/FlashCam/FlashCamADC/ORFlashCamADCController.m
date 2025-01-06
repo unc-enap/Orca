@@ -752,7 +752,7 @@
     }
     [baseBiasTextField      setEnabled:!lock];
     [majorityLevelPUButton  setEnabled:!lock];
-//    [majorityWidthTextField setEnabled:!lock];
+    [majorityWidthTextField setEnabled:!lock];
     [trigOutEnableButton    setEnabled:!lock];
     if (lock) {
         [trigOutEnabledMatrix   setEnabled:!lock];
