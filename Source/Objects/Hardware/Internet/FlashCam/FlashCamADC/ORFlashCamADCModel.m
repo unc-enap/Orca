@@ -872,37 +872,38 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     //nothing to yet. A call from the Listener ships the data.
 }
 
-- (void) shipEvent:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel use:(ORDataPacket*)aDataPacket includeWF:(bool)includeWF
-{
-    if(channel >= [self numberOfChannels]){
-        NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
-        return;
-    }
-    else{
-        if(includeWF) wfCount[channel] ++;
-        int fpgaEnergy = event->theader[index][1];
-        if(fpgaEnergy > 0){
-            trigCount[channel]++;
-            [self shipToInflux:channel energy:fpgaEnergy baseline:event->theader[index][0]];
-        }
-    }
-    
-    //ship the data
-    uint32_t lengths = dataLengths;
-    if(!includeWF) lengths &= 0xFFFC0003F;
-    dataRecord[0] = dataId   | (dataRecordLength&0x3ffff);
-    dataRecord[1] = lengths  | (event->type&0x3f);
-    dataRecord[2] = location | ((channel&0x1f) << 9) | (index&0x1ff);
-    int offset = 3;
-    for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) dataRecord[offset++] = event->timeoffset[i];
-    for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) dataRecord[offset++] = event->deadregion[i];
-    for(unsigned int i=0; i<kFlashCamADCTimeStampLength;  i++) dataRecord[offset++] = event->timestamp[i];
-    dataRecord[kFlashCamADCWFHeaderLength]  = (unsigned int)(*(event->theader[index]+1) << 16);
-    dataRecord[kFlashCamADCWFHeaderLength] |= (unsigned int)(*event->theader[index]);
-    if(includeWF)
-        memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, event->theader[index]+2, wfSamples*sizeof(unsigned short));
-    [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
-}
+// TODO: find out how to keep the code for reference but make it unusable
+//- (void) shipEvent:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel use:(ORDataPacket*)aDataPacket includeWF:(bool)includeWF
+//{
+//    if(channel >= [self numberOfChannels]){
+//        NSLog(@"ORFlashCamADCModel: invalid channel passed to event:withIndex:andChannel:, skipping packet\n");
+//        return;
+//    }
+//    else{
+//        if(includeWF) wfCount[channel] ++;
+//        int fpgaEnergy = event->theader[index][1];
+//        if(fpgaEnergy > 0){
+//            trigCount[channel]++;
+//            [self shipToInflux:channel energy:fpgaEnergy baseline:event->theader[index][0]];
+//        }
+//    }
+//
+//    //ship the data
+//    uint32_t lengths = dataLengths;
+//    if(!includeWF) lengths &= 0xFFFC0003F;
+//    dataRecord[0] = dataId   | (dataRecordLength&0x3ffff);
+//    dataRecord[1] = lengths  | (event->type&0x3f);
+//    dataRecord[2] = location | ((channel&0x1f) << 9) | (index&0x1ff);
+//    int offset = 3;
+//    for(unsigned int i=0; i<kFlashCamADCTimeOffsetLength; i++) dataRecord[offset++] = event->timeoffset[i];
+//    for(unsigned int i=0; i<kFlashCamADCDeadRegionLength; i++) dataRecord[offset++] = event->deadregion[i];
+//    for(unsigned int i=0; i<kFlashCamADCTimeStampLength;  i++) dataRecord[offset++] = event->timestamp[i];
+//    dataRecord[kFlashCamADCWFHeaderLength]  = (unsigned int)(*(event->theader[index]+1) << 16);
+//    dataRecord[kFlashCamADCWFHeaderLength] |= (unsigned int)(*event->theader[index]);
+//    if(includeWF)
+//        memcpy(dataRecord+kFlashCamADCWFHeaderLength+1, event->theader[index]+2, wfSamples*sizeof(unsigned short));
+//    [aDataPacket addLongsToFrameBuffer:dataRecord length:dataRecordLength];
+//}
 
 - (void) shipToInflux:(int)aChan energy:(int)anEnergy baseline:(int)aBaseline
 {
@@ -972,18 +973,19 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     }
 }
 
-- (NSDictionary*) dataRecordDescription
-{
-    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
-    NSDictionary* d = [NSDictionary dictionaryWithObjectsAndKeys:
-                       @"ORFlashCamWaveformDecoder",     @"decoder",
-                       [NSNumber numberWithLong:dataId], @"dataId",
-                       [NSNumber numberWithBool:YES],    @"variable",
-                       [NSNumber numberWithLong:-1],     @"length", nil];
-    if([self fwType] == 0)      [dict setObject:d forKey:@"FlashCamADCStd"];
-    else if([self fwType] == 1) [dict setObject:d forKey:@"FlashCamADC"];
-    return dict;
-}
+// INFO: removed in favor of shipEvent in the listener
+//- (NSDictionary*) dataRecordDescription
+//{
+//    NSMutableDictionary* dict = [NSMutableDictionary dictionary];
+//    NSDictionary* d = [NSDictionary dictionaryWithObjectsAndKeys:
+//                       @"ORFlashCamWaveformDecoder",     @"decoder",
+//                       [NSNumber numberWithLong:dataId], @"dataId",
+//                       [NSNumber numberWithBool:YES],    @"variable",
+//                       [NSNumber numberWithLong:-1],     @"length", nil];
+//    if([self fwType] == 0)      [dict setObject:d forKey:@"FlashCamADCStd"];
+//    else if([self fwType] == 1) [dict setObject:d forKey:@"FlashCamADC"];
+//    return dict;
+//}
 
 
 #pragma mark •••AdcProviding Protocol

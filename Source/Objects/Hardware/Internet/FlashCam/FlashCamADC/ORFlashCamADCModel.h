@@ -172,15 +172,15 @@
 
 #pragma mark •••Data taker methods
 - (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
-- (void) shipEvent:(fcio_event*)event withIndex:(int)index
-        andChannel:(unsigned int)channel    use:(ORDataPacket*)aDataPacket includeWF:(bool) includeWF;
+//- (void) shipEvent:(fcio_event*)event withIndex:(int)index
+//        andChannel:(unsigned int)channel    use:(ORDataPacket*)aDataPacket includeWF:(bool) includeWF;
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) reset;
 - (void) startRates;
 - (void) clearCounts;
-- (NSDictionary*) dataRecordDescription;
+//- (NSDictionary*) dataRecordDescription;
 
 #pragma mark •••AdcProviding Protocol
 - (BOOL) onlineMaskBit:(int)bit;

@@ -735,16 +735,12 @@
     bool runInProgress = [[ORGlobal sharedGlobal] runInProgress];
     lock |= runInProgress || [gSecurity isLocked:ORFlashCamCardSettingsLock];
     [super settingsLock:lock];
-    [chanEnabledMatrix      setEnabled:!lock];
-    [baselineMatrix         setEnabled:!lock];
-    [thresholdMatrix        setEnabled:!lock];
-    [adcGainMatrix          setEnabled:!lock];
-//    [trigGainMatrix         setEnabled:!lock];
-    [shapeTimeMatrix        setEnabled:!lock];
-//    [filterTypeMatrix       setEnabled:!lock];
-//    [flatTopTimeMatrix      setEnabled:!lock];
-    [poleZeroTimeMatrix     setEnabled:!lock];
-//    [postTriggerMatrix      setEnabled:!lock];
+//    [chanEnabledMatrix      setEnabled:!lock];
+//    [baselineMatrix         setEnabled:!lock];
+//    [thresholdMatrix        setEnabled:!lock];
+//    [adcGainMatrix          setEnabled:!lock];
+//    [shapeTimeMatrix        setEnabled:!lock];
+//    [poleZeroTimeMatrix     setEnabled:!lock];
     [baselineSlewMatrix     setEnabled:!lock];
     [swtIncludeMatrix       setEnabled:!lock];
     if (lock) {
@@ -756,7 +752,7 @@
     }
     [baseBiasTextField      setEnabled:!lock];
     [majorityLevelPUButton  setEnabled:!lock];
-    [majorityWidthTextField setEnabled:!lock];
+//    [majorityWidthTextField setEnabled:!lock];
     [trigOutEnableButton    setEnabled:!lock];
     if (lock) {
         [trigOutEnabledMatrix   setEnabled:!lock];

@@ -1579,7 +1579,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                     [card increaseWfCountForChannel:channel];
                     if (fpga_energy > 0) {
                         [card increaseTrigCountForChannel:channel];
-                        [card shipToInflux:channel energy:fpga_energy baseline:fpga_baseline];
+                        // for performance reasons, if the processor is active, only write
+                        // software triggered information
+                        if (!processor || (fspstate && fspstate->write_flags.write))
+                            [card shipToInflux:channel energy:fpga_energy baseline:fpga_baseline];
                     }
 
                     break;
@@ -1609,6 +1612,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
 
     // fspstate is allowed to be NULL - it steers the data packet output depending on StreamProcessor activation.
+    // is a bit redundant, processor activation could also be checked inside shipFCIO.
     return [self shipFCIO:aDataPacket state:state fspState:fspstate];
 }
 
@@ -1984,7 +1988,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         if([cname isEqualToString:@"ORFlashCamGlobalTriggerModel"]) [gtriggerCards addObject:conobj];
         else if([cname isEqualToString:@"ORFlashCamGlobalTriggerModel"]) [triggerCards addObject:conobj];
     }
-    // check that the trigger  ards are connected to one of the remote interfaces
+    // check that the trigger cards are connected to one of the remote interfaces
     NSMutableSet* gtriggers = [NSMutableSet set];
     NSMutableSet* triggers  = [NSMutableSet set];
     for(NSString* e in [self remoteInterfaces]){
