@@ -423,7 +423,6 @@
     [[NSColor blackColor] set];
     NSBezierPath* circPaths = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-kL200CC4InnerR/2,-kL200CC4InnerR/2,kL200CC4InnerR,kL200CC4InnerR)];
     [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-kL200CC4OuterR/2,-kL200CC4OuterR/2,kL200CC4OuterR,kL200CC4OuterR)]];
-    //Himal Add
     
     [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-(kL200CC4OuterR+kL200CC4InnerR/2)/2, -(kL200CC4OuterR+kL200CC4InnerR/2)/2, kL200CC4OuterR+kL200CC4InnerR/2, kL200CC4OuterR+kL200CC4InnerR/2)]];
     
@@ -872,35 +871,6 @@
     [detOutlines addObjectsFromArray:errorPaths];
     [self setNeedsDisplay:YES];
 }
-/*
-- (void) makeCC4sOutSiPMS
-{
-    float xc     = [self bounds].size.width/2+kL200CC4XOffset;
-    float yc     = [self bounds].size.height/2;
-    NSMutableArray* segmentPaths   = [NSMutableArray array];
-    NSMutableArray* errorPaths     = [NSMutableArray array];
-    //himal add
-    int SIPMs_o_cha=kL200SiPMOuterChans;
-    
-    for(int aPos=0; aPos<SIPMs_o_cha; aPos++){
-        //do sth for top and bottom barrel
-        NSRect        segRect   = NSMakeRect(103,103,20,10);
-        NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
-        NSAffineTransform* transform = [NSAffineTransform transform];
-        [transform translateXBy:xc yBy:yc];
-        [transform rotateByDegrees:360/SIPMs_o_cha*aPos];
-        [segPath   transformUsingAffineTransform: transform];
-        [segmentPaths addObject:segPath];
-    
-        NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
-        [errorPaths   addObject:errPath];
-        [detOutlines  addObject:errPath];
-        //end
-    }
-    [segmentPathSet addObject:segmentPaths];
-    [errorPathSet   addObject:errorPaths];
-}
-*/
 
 - (void) makeCC4s
 {
