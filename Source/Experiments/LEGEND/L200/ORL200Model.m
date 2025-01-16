@@ -1385,12 +1385,6 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [keys addObject:dataFileName];
         [positionDict setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
 
-        //--------------------------------
-        //put in the source array
-        NSMutableDictionary* sourcePositions = [positionDict objectForKey:@"positions_in_mm"];
-        if(!sourcePositions){
-            sourcePositions = [NSMutableDictionary dictionary];
-        }
         [positionDict setObject:[self makeSourceDictionary:currentSourceArray] forKey:@"positions_in_mm"];
     }
 
