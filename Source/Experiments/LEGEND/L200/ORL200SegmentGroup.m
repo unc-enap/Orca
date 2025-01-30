@@ -207,10 +207,12 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
             }
             else if(type == kL200SiPMType){
                 NSDictionary* lv_dict = [ch_dict objectForKey:@"low_voltage"];
-                NSString* lv = [NSString stringWithFormat:@"%@,%@,%@",
+                NSString* lv = [NSString stringWithFormat:@"%@,%@,%@,%@,%@",
                                 [lv_dict objectForKey:@"crate"],
                                 [lv_dict objectForKey:@"board_slot"],
-                                [lv_dict objectForKey:@"board_chan"]];
+                                [lv_dict objectForKey:@"board_chan"],
+                                [lv_dict objectForKey:@"board_B_pos"],
+                                [lv_dict objectForKey:@"board_string"]];
                 line = [NSString stringWithFormat:@"%@%@%@", ch, daq, lv];
                 
             }
@@ -337,7 +339,9 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
                     NSDictionary* v_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
                                              [params objectAtIndex:7], @"crate",
                                              [params objectAtIndex:8], @"board_slot",
-                                             [params objectAtIndex:9], @"board_chan", nil];
+                                             [params objectAtIndex:9], @"board_chan",
+                                             [params objectAtIndex:10], @"board_B_pos",
+                                             [params objectAtIndex:11], @"board_string",nil];
                     if(type == kL200SiPMType)
                         ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                    @"spm", @"system",

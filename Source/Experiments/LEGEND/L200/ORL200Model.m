@@ -510,32 +510,37 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
                 name = [name substringWithRange:NSMakeRange(1, [name length]-1)];
         }
         [group setSegment:i object:name forKey:@"kStringName"];
-        int index = [name intValue];
-        if(index < kL200SiPMInnerChans){
-            if(index%2){
-                [group setSegment:i object:[NSNumber numberWithInt:1] forKey:@"kRing"];
-                [group setSegment:i object:@"bottom inner"            forKey:@"kRingName"];
-                [group setSegment:i object:@"Bot IB"                  forKey:@"kRingLabel"];
+       
+        NSString* si_b = [[group segment:i] objectForKey:@"lv_board_B_pos"];
+            
+            if ([si_b isEqualToString:@"3"]){
+                [group setSegment:i object:[NSNumber numberWithInt:1]   forKey:@"kRing"];
+                
+                [group setSegment:i object:@"bottom inner"              forKey:@"kRingName"];
+                [group setSegment:i object:@"Bot : IB"                  forKey:@"kRingLabel"];
             }
+            else if ([si_b isEqualToString:@"2"]){
+                [group setSegment:i object:[NSNumber numberWithInt:0]   forKey:@"kRing"];
+                [group setSegment:i object:@"top inner"                 forKey:@"kRingName"];
+                [group setSegment:i object:@"TOP : IB"                  forKey:@"kRingLabel"];
+            }
+            else if ([si_b isEqualToString:@"1"]){
+                [group setSegment:i object:[NSNumber numberWithInt:2]  forKey:@"kRing"];
+                [group setSegment:i object:@"top outer"                forKey:@"kRingName"];
+                [group setSegment:i object:@"TOP : OB"                 forKey:@"kRingLabel"];
+            }
+            else if ([si_b isEqualToString:@"4"]){
+                [group setSegment:i object:[NSNumber numberWithInt:3]   forKey:@"kRing"];
+                [group setSegment:i object:@"bottom outer"              forKey:@"kRingName"];
+                [group setSegment:i object:@"Bot : OB"                  forKey:@"kRingLabel"];
+            }
+        
             else{
-                [group setSegment:i object:[NSNumber numberWithInt:0] forKey:@"kRing"];
-                [group setSegment:i object:@"top inner"               forKey:@"kRingName"];
-                [group setSegment:i object:@"Top IB"                  forKey:@"kRingLabel"];
+                NSLog(@"Unecpected board position for sipms");
             }
+        si_b=nil;
         }
-        else{
-            if(index%2){
-                [group setSegment:i object:[NSNumber numberWithInt:3] forKey:@"kRing"];
-                [group setSegment:i object:@"bottom outer"            forKey:@"kRingName"];
-                [group setSegment:i object:@"Bot OB"                  forKey:@"kRingLabel"];
-            }
-            else{
-                [group setSegment:i object:[NSNumber numberWithInt:2] forKey:@"kRing"];
-                [group setSegment:i object:@"top outer"               forKey:@"kRingName"];
-                [group setSegment:i object:@"Top OB"                  forKey:@"kRingLabel"];
-            }
-        }
-    }
+        
 }
 
 - (void) setPMTPositions
@@ -622,7 +627,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         if(groupIndex == kL200SiPMType)
             keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
                     @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", @"adc_serial",
-                    @"lv_crate",  @"lv_board_slot", @"lv_board_chan", nil];
+                    @"lv_crate",  @"lv_board_slot", @"lv_board_chan", @"lv_board_B_pos", @"lv_board_string", nil];
         else if(groupIndex == kL200PMTType)
             keys = [NSArray arrayWithObjects:@"serial",  @"det_type",
                     @"daq_crate", @"daq_board_id",  @"daq_board_slot", @"daq_board_ch", @"adc_serial",
@@ -946,6 +951,8 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [s appendFormat:@"          Crate: %@\n", [self valueForLabel:@"v_crate"        fromParts:parts]];
         [s appendFormat:@"           Slot: %@\n", [self valueForLabel:@"v_board_slot"   fromParts:parts]];
         [s appendFormat:@"           Chan: %@\n", [self valueForLabel:@"v_board_chan"   fromParts:parts]];
+        [s appendFormat:@" Board Position: %@\n", [self valueForLabel:@"v_board_B_pos"  fromParts:parts]];
+        [s appendFormat:@"            Loc: %@\n", [self valueForLabel:@"v_board_string"  fromParts:parts]];
     }
     else if(aSet == kL200DetType){
         [s appendFormat:@"         Cable: %@\n", [self valueForLabel:@"v_cable"         fromParts:parts]];
@@ -1317,7 +1324,6 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     //-------------------------------
     NSString* dataType    = [self getDataType];
     if(!dataType)return;
-    
     //get the type set
     NSMutableDictionary* thisSet = [metaDataDict objectForKey:dataType];
     if(!thisSet){
@@ -1331,17 +1337,11 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [thisSet setObject:keys forKey:@"keys"];
     }
     [keys addObject:dataFileName];
-    [thisSet setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
-
+    
     //set the meta info
-    NSMutableDictionary* infoSet = [metaDataDict objectForKey:@"info"];
-    if(!infoSet){
-        infoSet = [NSMutableDictionary dictionary];
-        [metaDataDict setObject:infoSet forKey:@"info"];
-    }
-
-    [infoSet setObject:[self metaInfo] forKey:dataFileName];
-
+    [thisSet setObject:[self metaInfo] forKey:@"info"];
+    [thisSet setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
+    
     //handle cal souce positions
     if(slowControls && [dataType isEqualToString:@"cal"]){
         
@@ -1385,12 +1385,6 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [keys addObject:dataFileName];
         [positionDict setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
 
-        //--------------------------------
-        //put in the source array
-        NSMutableDictionary* sourcePositions = [positionDict objectForKey:@"positions_in_mm"];
-        if(!sourcePositions){
-            sourcePositions = [NSMutableDictionary dictionary];
-        }
         [positionDict setObject:[self makeSourceDictionary:currentSourceArray] forKey:@"positions_in_mm"];
     }
 

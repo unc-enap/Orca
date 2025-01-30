@@ -25,6 +25,7 @@
 #import "ORAdcProcessing.h"
 #import "ORBitProcessing.h"
 #import "I2CProtocol.h"
+#import "ORInFluxDBModel.h"
 
 #include "orca_t7.h"
 
@@ -57,6 +58,7 @@
 
 @interface ORLabJackT7Model : OrcaObject <ORAdcProcessing,ORBitProcessing,I2CProtocol> {
     NSLock* localLock;
+    ORInFluxDBModel* InFluxDB; 
     BOOL  enabled[kNumT7AdcChannels];
     double adc[kNumT7AdcChannels];
     int    adcRange[kNumT7AdcChannels];

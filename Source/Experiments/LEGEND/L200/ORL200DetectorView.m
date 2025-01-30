@@ -51,6 +51,8 @@
 - (void) makeSIPMs;
 - (void) makePMTs;
 - (void) makeCC4s;
+//- (void) makeCC4sInSiPMS;
+//- (void) makeCC4sOutSiPMS;
 - (void) makeAuxChans;
 - (void) makeDummySet;
 - (void) drawLabels;
@@ -303,10 +305,17 @@
     }
     else if(viewType == kL200CC4View){
         [self makeDummySet];//place holder for Dets
-        [self makeSIPMs];
+        [self makeCC4sSiPMS];
         [self makePMTs];
         [self makeDummySet];//place holder for AuxChans
         [self makeCC4s];
+        //[self makeCC4sSiPMS];
+        //[self makeCC4sOutSiPMS];
+        //[self makeDummySet];//place holder for AuxChans
+       
+        //[self makeCC4sInSiPMS];
+        //[self makeCC4sOutSiPMS];
+        
     }
     [self setNeedsDisplay:YES];
 }
@@ -414,6 +423,11 @@
     [[NSColor blackColor] set];
     NSBezierPath* circPaths = [NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-kL200CC4InnerR/2,-kL200CC4InnerR/2,kL200CC4InnerR,kL200CC4InnerR)];
     [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-kL200CC4OuterR/2,-kL200CC4OuterR/2,kL200CC4OuterR,kL200CC4OuterR)]];
+    
+    [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-(kL200CC4OuterR+kL200CC4InnerR/2)/2, -(kL200CC4OuterR+kL200CC4InnerR/2)/2, kL200CC4OuterR+kL200CC4InnerR/2, kL200CC4OuterR+kL200CC4InnerR/2)]];
+    
+    [circPaths appendBezierPath:[NSBezierPath bezierPathWithOvalInRect:NSMakeRect(-((kL200CC4InnerR-kL200CC4InnerR/3)/2), -((kL200CC4InnerR-kL200CC4InnerR/3)/2),kL200CC4InnerR-kL200CC4InnerR/3, kL200CC4InnerR-kL200CC4InnerR/3)]];
+    
     NSAffineTransform* transform = [NSAffineTransform transform];
     [transform translateXBy:xc yBy:yc];
     [circPaths transformUsingAffineTransform: transform];
@@ -422,8 +436,8 @@
     float angle = kL200CC4StartAngle+kL200CC4DeltaAngle/2.;
     for(int i=0;i<kNumCC4Positions;i++){
         NSBezierPath* aLineSeg = [NSBezierPath bezierPath];
-        [aLineSeg moveToPoint:NSMakePoint(kL200CC4InnerR/2,0)];
-        [aLineSeg lineToPoint:NSMakePoint(kL200CC4OuterR/2,0)];
+        [aLineSeg moveToPoint:NSMakePoint((kL200CC4InnerR-kL200CC4InnerR/3)/2,0)];
+        [aLineSeg lineToPoint:NSMakePoint((kL200CC4OuterR+kL200CC4InnerR/2)/2,0)];
         NSAffineTransform* transform = [NSAffineTransform transform];
         [transform translateXBy:xc yBy:yc];
         [transform rotateByDegrees:angle];
@@ -436,7 +450,7 @@
     if(!cc4LabelAttr){
         NSMutableParagraphStyle* style = [[[NSParagraphStyle defaultParagraphStyle] mutableCopy] autorelease ];
         style.alignment = NSTextAlignmentCenter;
-        NSFont* font = [NSFont fontWithName:@"Geneva" size:8];
+        NSFont* font = [NSFont fontWithName:@"Geneva" size:10];
         cc4LabelAttr = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
                           [NSColor blueColor], NSForegroundColorAttributeName,style,NSParagraphStyleAttributeName,nil] retain];
     }
@@ -449,8 +463,9 @@
     }
 
     angle = kL200CC4StartAngle+15;
-    float tRadius = kL200CC4OuterR+15;
-    float nRadius = kL200CC4OuterR-20;
+    float tRadius = kL200CC4OuterR+75;
+    float nRadius = kL200CC4OuterR-20+75;
+    float aRadius = kL200CC4OuterR-20;
     for(int i=0; i<kNumCC4Positions; i++){
         //----outer ring numbers
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%d",i+1] attributes:cc4LabelAttr];
@@ -484,8 +499,8 @@
         NSString* label = cc4Label[i*2];
         if(label){
             s = [[NSAttributedString alloc] initWithString:label attributes:cc4LabelAttr1];
-            tRect = NSMakeRect( xc + nRadius/2*cosf(radN1)-[s size].width/2,
-                               yc + nRadius/2*sinf(radN1)-[s size].height/2,
+            tRect = NSMakeRect( xc + aRadius/2*cosf(radN1)-[s size].width/2,
+                               yc + aRadius/2*sinf(radN1)-[s size].height/2,
                                [s size].width,
                                [s size].height);
             [s drawInRect:tRect];
@@ -495,8 +510,8 @@
         if(label){
             float radN2 = (angle-25) * M_PI/180.;
             s = [[NSAttributedString alloc] initWithString:label attributes:cc4LabelAttr1];
-            tRect = NSMakeRect( xc + nRadius/2*cosf(radN2)-[s size].width/2,
-                               yc + nRadius/2*sinf(radN2)-[s size].height/2,
+            tRect = NSMakeRect( xc + aRadius/2*cosf(radN2)-[s size].width/2,
+                               yc + aRadius/2*sinf(radN2)-[s size].height/2,
                                [s size].width,
                                [s size].height);
             [s drawInRect:tRect];
@@ -675,31 +690,58 @@
     const float inset = MIN(MIN(0.05*ix, 0.05*ox), 0.05*sy);
     for(int i=0; i<[group numSegments]; i++){
         ORDetectorSegment* segment = [group segment:i];
+        // Extract the SiPM (Silicon Photomultiplier) ID and relevant positional data
         const int sipm = [[segment objectForKey:@"kStringName"] intValue];
-        if(sipm >= 0 && sipm < kL200SiPMInnerChans+kL200SiPMOuterChans){
-            if([delegate validateSiPM:i]){
-                float x, dx, y;
-                if(sipm < kL200SiPMInnerChans){
-                    x  = idx + (ix+idx) * (sipm/2);
-                    dx = ix;
-                    if(sipm%2) y = byoff + 2*sdy + sy;
-                    else       y = tyoff + sdy;
-                }
-                else{
-                    x = odx + (ox+odx)*((sipm-kL200SiPMInnerChans)/2);
+        const int sip_barrel_pos = [[segment objectForKey:@"lv_board_B_pos"] intValue];
+        const int sip_loc = [[segment objectForKey:@"lv_board_string"] intValue];
+        //if no sipms
+        if (sipm<=0) continue;
+        // Validate the SiPM with the delegate method
+        if ([delegate validateSiPM:i]) {
+            // Initialize variables for position and size
+            // Default position is top outer barrel
+            float x = odx;
+            float dx = 0;
+            float y = tyoff + 2 * sdy + sy;
+            // Calculate position and size based on barrel position
+            switch (sip_barrel_pos) {
+                case 1: // Top outer barrel
+                    x = odx + (ox + ox) * (sip_loc - 1) / 1.5;
+                    y = tyoff + 2 * sdy + sy;
                     dx = ox;
-                    if(sipm%2) y = byoff + sdy;
-                    else       y = tyoff + 2*sdy + sy;
-                }
-                NSRect r = NSMakeRect(x, y, dx, sy);
-                [segmentPaths addObject:[NSBezierPath bezierPathWithRect:r]];
-                [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(r, -inset, -inset)]];
-                int iring = [[segment objectForKey:@"kRing"] intValue];
-                if([sipmLabel[iring] isEqualToString:@""]){
-                    sipmLabelY[iring] = y + sy/2;
-                    [sipmLabel[iring] release];
-                    sipmLabel[iring] = [[segment objectForKey:@"kRingLabel"] copy];
-                }
+                    break;
+                case 2: // Top inner barrel
+                    x = idx + (ix + idx) * (sip_loc - 1);
+                    y = tyoff + sdy;
+                    dx = ix;
+                    break;
+                case 3: // Bottom inner barrel
+                    x = idx + (ix + idx) * (sip_loc - 1);
+                    y = byoff + 2 * sdy + sy;
+                    dx = ix;
+                    break;
+                case 4: // Bottom outer barrel
+                    x = odx + (ox + ox) * (sip_loc - 1) / 1.6;
+                    y = byoff + sdy;
+                    dx = ox;
+                    break;
+                default:
+                    // Handle unexpected barrel positions gracefully
+                    NSLog(@"Unexpected sip_barrel_pos: %d", sip_barrel_pos);
+                    continue;
+            }
+            // Create a rectangle representing the detector element
+            NSRect rect = NSMakeRect(x, y, dx, sy);
+            // Add the rectangle to the segmentPaths and errorPaths collections
+            [segmentPaths addObject:[NSBezierPath bezierPathWithRect:rect]];
+            [errorPaths addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(rect, -inset, -inset)]];
+            // Handle ring-specific labeling
+            int iring = [[segment objectForKey:@"kRing"] intValue];
+            if ([sipmLabel[iring] isEqualToString:@""]) {
+                // Update the label position and content
+                sipmLabelY[iring] = y + sy / 2;
+                [sipmLabel[iring] release];
+                sipmLabel[iring] = [[segment objectForKey:@"kRingLabel"] copy];
             }
         }
     }
@@ -755,6 +797,80 @@
     [detOutlines addObjectsFromArray:errorPaths];
     [self setNeedsDisplay:YES];
 }
+- (void) makeCC4sSiPMS
+{
+    if(!strLabelAttr){
+        NSFont* font = [NSFont fontWithName:@"Geneva" size:8];
+        strLabelAttr = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
+                         [NSColor blueColor], NSForegroundColorAttributeName, nil] retain];
+    }
+    for(int i=0; i<kL200SiPMRings; i++){
+        [sipmLabel[i] autorelease];
+        sipmLabel[i] = [@"" copy];
+    }
+    
+    float xc     = [self bounds].size.width/2+kL200CC4XOffset;
+    float yc     = [self bounds].size.height/2;
+    
+    [delegate setSiPMPositions];
+    NSMutableArray* segmentPaths   = [NSMutableArray array];
+    NSMutableArray* errorPaths     = [NSMutableArray array];
+    ORSegmentGroup* group = [delegate segmentGroup:kL200SiPMType];
+    
+    int SIPMs_i_cha=kL200SiPMInnerChans;
+    int SIPMs_o_cha=kL200SiPMOuterChans;
+    int aPosIn=0;
+    int aPosOut=0;
+    
+    for(int i=0; i<[group numSegments]; i++){
+        ORDetectorSegment* segment = [group segment:i];
+        const int sipm = [[segment objectForKey:@"kStringName"] intValue];
+        const int sip_barrel_pos = [[segment objectForKey:@"lv_board_B_pos"] intValue];
+        
+        if (sipm<=0) continue;
+        if (sip_barrel_pos > 1 && sip_barrel_pos < 4){
+            NSRect        segRect   = NSMakeRect(29,29,8,8);
+            NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+            NSAffineTransform* transform = [NSAffineTransform transform];
+            [transform translateXBy:xc yBy:yc];
+            [transform rotateByDegrees:360/SIPMs_i_cha*aPosIn];
+            [segPath   transformUsingAffineTransform: transform];
+            [segmentPaths addObject:segPath];
+            
+            NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
+            [errorPaths   addObject:errPath];
+            [detOutlines  addObject:errPath];
+            aPosIn++;
+        }
+        else{
+            NSRect        segRect   = NSMakeRect(103,103,20,10);
+            NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
+            NSAffineTransform* transform = [NSAffineTransform transform];
+            [transform translateXBy:xc yBy:yc];
+            [transform rotateByDegrees:360/SIPMs_o_cha*aPosOut];
+            
+            [segPath   transformUsingAffineTransform: transform];
+            [segmentPaths addObject:segPath];
+            
+            NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
+            [errorPaths   addObject:errPath];
+            [detOutlines  addObject:errPath];
+            aPosOut++;
+        }
+        int iring = [[segment objectForKey:@"kRing"] intValue];
+        if ([sipmLabel[iring] isEqualToString:@""]) {
+            // Update the label position and content
+            //sipmLabelY[iring] = y + sy / 2;
+            [sipmLabel[iring] release];
+            sipmLabel[iring] = [[segment objectForKey:@"kRingLabel"] copy];
+        }
+    }
+    
+    [segmentPathSet addObject:segmentPaths];
+    [errorPathSet   addObject:errorPaths];
+    [detOutlines addObjectsFromArray:errorPaths];
+    [self setNeedsDisplay:YES];
+}
 
 - (void) makeCC4s
 {
@@ -794,6 +910,7 @@
     [errorPathSet   addObject:errorPaths];
     [self setNeedsDisplay:YES];
 }
+
 
 - (void) makeAuxChans
 {
