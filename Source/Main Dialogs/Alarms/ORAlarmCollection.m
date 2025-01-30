@@ -241,10 +241,9 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(AlarmCollection);
 			[alarms insertObject:anAlarm atIndex:[alarms count]];
 		}
 		[[NSNotificationCenter defaultCenter] postNotificationName:ORAlarmAddedToCollection object:anAlarm];
-		
-		NSLogColor([NSColor redColor],@" Alarm: [%@] Posted\n",[anAlarm name]);
-
     }
+		
+	NSLogColor([NSColor redColor],@" Alarm: [%@] Posted\n",[anAlarm name]);
 }
 
 - (void) removeAlarm:(ORAlarm*)anAlarm
