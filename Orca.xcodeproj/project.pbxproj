@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 53;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -3511,6 +3511,26 @@
 		A8175F8B220D8D07003AC7E5 /* ADEIControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = A8175F82220D8D06003AC7E5 /* ADEIControl.nib */; };
 		A8175F8C220D8D07003AC7E5 /* ORADEIControlController.h in Headers */ = {isa = PBXBuildFile; fileRef = A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */; };
 		A86253F3221217E7005D26EC /* ORADEIControlDefs.h in Headers */ = {isa = PBXBuildFile; fileRef = A86253F2221217E6005D26EC /* ORADEIControlDefs.h */; };
+		A87C69932BB32D43003017F4 /* fsp_buffer.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C69832BB32D0F003017F4 /* fsp_buffer.h */; };
+		A87C69942BB32D43003017F4 /* fsp_dsp.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C69842BB32D13003017F4 /* fsp_dsp.c */; };
+		A87C69952BB32D43003017F4 /* fsp_dsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C69852BB32D17003017F4 /* fsp_dsp.h */; };
+		A87C69962BB32D43003017F4 /* fsp_processor.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C69862BB32D1B003017F4 /* fsp_processor.c */; };
+		A87C69972BB32D43003017F4 /* fsp.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C69872BB32D1E003017F4 /* fsp.h */; };
+		A87C69982BB32D43003017F4 /* fsp_l200.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C69882BB32D22003017F4 /* fsp_l200.h */; };
+		A87C69992BB32D43003017F4 /* fsp_timestamps.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C69892BB32D25003017F4 /* fsp_timestamps.c */; };
+		A87C699A2BB32D43003017F4 /* fsp_timestamps.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C698A2BB32D28003017F4 /* fsp_timestamps.h */; };
+		A87C699B2BB32D43003017F4 /* fsp_stats.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C698B2BB32D2C003017F4 /* fsp_stats.c */; };
+		A87C699C2BB32D43003017F4 /* fsp_processor.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C698C2BB32D2F003017F4 /* fsp_processor.h */; };
+		A87C699D2BB32D43003017F4 /* fsp_l200.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C698D2BB32D32003017F4 /* fsp_l200.c */; };
+		A87C699E2BB32D43003017F4 /* fsp_state.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C698E2BB32D35003017F4 /* fsp_state.h */; };
+		A87C699F2BB32D43003017F4 /* fsp_channelmaps.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C698F2BB32D38003017F4 /* fsp_channelmaps.h */; };
+		A87C69A02BB32D43003017F4 /* fsp_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C69902BB32D3B003017F4 /* fsp_buffer.c */; };
+		A87C69A12BB32D43003017F4 /* fsp_stats.h in Headers */ = {isa = PBXBuildFile; fileRef = A87C69912BB32D3E003017F4 /* fsp_stats.h */; };
+		A87C69A22BB32D43003017F4 /* fsp.c in Sources */ = {isa = PBXBuildFile; fileRef = A87C69922BB32D42003017F4 /* fsp.c */; };
+		A8E562992BEE7A530035A419 /* fsp_serializers.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E562972BEE7A510035A419 /* fsp_serializers.c */; };
+		A8E5629A2BEE7A530035A419 /* fsp_serializers.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E562982BEE7A520035A419 /* fsp_serializers.h */; };
+		A8E6695B2A710BB200A9775A /* time_utils.c in Sources */ = {isa = PBXBuildFile; fileRef = A8E669592A710BB200A9775A /* time_utils.c */; };
+		A8E6695C2A710BB200A9775A /* time_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = A8E6695A2A710BB200A9775A /* time_utils.h */; };
 		B322A309146D64D000491347 /* ORTcpIpProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B322A308146D64D000491347 /* ORTcpIpProtocol.h */; };
 		B33FBC93146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist in Resources */ = {isa = PBXBuildFile; fileRef = B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */; };
 		B3805611172BE4A100B5B134 /* Changesfeed.tif in Resources */ = {isa = PBXBuildFile; fileRef = B3805610172BE4A100B5B134 /* Changesfeed.tif */; };
@@ -7450,6 +7470,26 @@
 		A8175F82220D8D06003AC7E5 /* ADEIControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ADEIControl.nib; sourceTree = "<group>"; };
 		A8175F83220D8D06003AC7E5 /* ORADEIControlController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlController.h; sourceTree = "<group>"; };
 		A86253F2221217E6005D26EC /* ORADEIControlDefs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORADEIControlDefs.h; sourceTree = "<group>"; };
+		A87C69832BB32D0F003017F4 /* fsp_buffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_buffer.h; sourceTree = "<group>"; };
+		A87C69842BB32D13003017F4 /* fsp_dsp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_dsp.c; sourceTree = "<group>"; };
+		A87C69852BB32D17003017F4 /* fsp_dsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_dsp.h; sourceTree = "<group>"; };
+		A87C69862BB32D1B003017F4 /* fsp_processor.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_processor.c; sourceTree = "<group>"; };
+		A87C69872BB32D1E003017F4 /* fsp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp.h; sourceTree = "<group>"; };
+		A87C69882BB32D22003017F4 /* fsp_l200.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_l200.h; sourceTree = "<group>"; };
+		A87C69892BB32D25003017F4 /* fsp_timestamps.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_timestamps.c; sourceTree = "<group>"; };
+		A87C698A2BB32D28003017F4 /* fsp_timestamps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_timestamps.h; sourceTree = "<group>"; };
+		A87C698B2BB32D2C003017F4 /* fsp_stats.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_stats.c; sourceTree = "<group>"; };
+		A87C698C2BB32D2F003017F4 /* fsp_processor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_processor.h; sourceTree = "<group>"; };
+		A87C698D2BB32D32003017F4 /* fsp_l200.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_l200.c; sourceTree = "<group>"; };
+		A87C698E2BB32D35003017F4 /* fsp_state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_state.h; sourceTree = "<group>"; };
+		A87C698F2BB32D38003017F4 /* fsp_channelmaps.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_channelmaps.h; sourceTree = "<group>"; };
+		A87C69902BB32D3B003017F4 /* fsp_buffer.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_buffer.c; sourceTree = "<group>"; };
+		A87C69912BB32D3E003017F4 /* fsp_stats.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_stats.h; sourceTree = "<group>"; };
+		A87C69922BB32D42003017F4 /* fsp.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp.c; sourceTree = "<group>"; };
+		A8E562972BEE7A510035A419 /* fsp_serializers.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = fsp_serializers.c; sourceTree = "<group>"; };
+		A8E562982BEE7A520035A419 /* fsp_serializers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fsp_serializers.h; sourceTree = "<group>"; };
+		A8E669592A710BB200A9775A /* time_utils.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = time_utils.c; sourceTree = "<group>"; };
+		A8E6695A2A710BB200A9775A /* time_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = time_utils.h; sourceTree = "<group>"; };
 		B322A308146D64D000491347 /* ORTcpIpProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTcpIpProtocol.h; sourceTree = "<group>"; };
 		B33FBC92146F2A6A0046A733 /* edu.washington.npl.orca.VXIHardware.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = edu.washington.npl.orca.VXIHardware.plist; sourceTree = "<group>"; };
 		B3805610172BE4A100B5B134 /* Changesfeed.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Changesfeed.tif; path = CouchDBListener/Changesfeed.tif; sourceTree = "<group>"; };
@@ -15206,6 +15246,46 @@
 			path = ADEIControl;
 			sourceTree = "<group>";
 		};
+		A87C695E2BB323A4003017F4 /* fsp */ = {
+			isa = PBXGroup;
+			children = (
+				A8E562972BEE7A510035A419 /* fsp_serializers.c */,
+				A8E562982BEE7A520035A419 /* fsp_serializers.h */,
+				A87C69902BB32D3B003017F4 /* fsp_buffer.c */,
+				A87C69832BB32D0F003017F4 /* fsp_buffer.h */,
+				A87C698F2BB32D38003017F4 /* fsp_channelmaps.h */,
+				A87C69842BB32D13003017F4 /* fsp_dsp.c */,
+				A87C69852BB32D17003017F4 /* fsp_dsp.h */,
+				A87C698D2BB32D32003017F4 /* fsp_l200.c */,
+				A87C69882BB32D22003017F4 /* fsp_l200.h */,
+				A87C69862BB32D1B003017F4 /* fsp_processor.c */,
+				A87C698C2BB32D2F003017F4 /* fsp_processor.h */,
+				A87C698E2BB32D35003017F4 /* fsp_state.h */,
+				A87C698B2BB32D2C003017F4 /* fsp_stats.c */,
+				A87C69912BB32D3E003017F4 /* fsp_stats.h */,
+				A87C69892BB32D25003017F4 /* fsp_timestamps.c */,
+				A87C698A2BB32D28003017F4 /* fsp_timestamps.h */,
+				A87C69922BB32D42003017F4 /* fsp.c */,
+				A87C69872BB32D1E003017F4 /* fsp.h */,
+			);
+			path = fsp;
+			sourceTree = "<group>";
+		};
+		A8E6693F2A702DD700A9775A /* fcio */ = {
+			isa = PBXGroup;
+			children = (
+				A8E669592A710BB200A9775A /* time_utils.c */,
+				A8E6695A2A710BB200A9775A /* time_utils.h */,
+				E63085CF2681057700687A6D /* bufio.h */,
+				E63085D32681057800687A6D /* bufio.c */,
+				E63085CE2681057700687A6D /* fcio.h */,
+				E63085D02681057700687A6D /* fcio.c */,
+				E63085C62681055800687A6D /* tmio.h */,
+				E63085CA2681056300687A6D /* tmio.c */,
+			);
+			path = fcio;
+			sourceTree = "<group>";
+		};
 		B3808A931700F85C0019C27D /* CouchDBListener */ = {
 			isa = PBXGroup;
 			children = (
@@ -15348,6 +15428,7 @@
 		E63085C52681036B00687A6D /* FlashCamIO */ = {
 			isa = PBXGroup;
 			children = (
+				A87C695E2BB323A4003017F4 /* fsp */,
 				E63085D12681057800687A6D /* ORFlashCamListenerModel.h */,
 				E63085D22681057800687A6D /* ORFlashCamListenerModel.m */,
 				E684347229AFB5E5009067E2 /* ORFlashCamListenerController.h */,
@@ -15358,12 +15439,7 @@
 				E6C9759C26FE3F3300D6F792 /* FlashCamUtils.m */,
 				E684347929AFB666009067E2 /* FlashCamListener.xib */,
 				84707A1D290AC228008D33C2 /* flashcam_listener.jpg */,
-				E63085CF2681057700687A6D /* bufio.h */,
-				E63085D32681057800687A6D /* bufio.c */,
-				E63085CE2681057700687A6D /* fcio.h */,
-				E63085D02681057700687A6D /* fcio.c */,
-				E63085C62681055800687A6D /* tmio.h */,
-				E63085CA2681056300687A6D /* tmio.c */,
+				A8E6693F2A702DD700A9775A /* fcio */,
 			);
 			path = FlashCamIO;
 			sourceTree = "<group>";
@@ -16126,6 +16202,7 @@
 				8434A1BF055B3287002D3102 /* ORIP408Model.h in Headers */,
 				8434A1C0055B3287002D3102 /* ORFifoController.h in Headers */,
 				8434A1C2055B3287002D3102 /* ORFifoModel.h in Headers */,
+				A87C69A12BB32D43003017F4 /* fsp_stats.h in Headers */,
 				8434A1C5055B3287002D3102 /* ORIPCarrierModel.h in Headers */,
 				848822A71D2413910030B398 /* ORDT5725Model.h in Headers */,
 				8434A1C7055B3287002D3102 /* ORGpibEnetController.h in Headers */,
@@ -16314,6 +16391,7 @@
 				8402797207397B8700972B07 /* ORBit3Controller.h in Headers */,
 				8402797407397B8700972B07 /* ORBit3Model.h in Headers */,
 				840BB584201BCA7500F37939 /* ORUDPConnection.h in Headers */,
+				A8E5629A2BEE7A530035A419 /* fsp_serializers.h in Headers */,
 				84028033073BF49D00972B07 /* ORLAMhosting.h in Headers */,
 				849F4C790768DA930087E9A8 /* ORDataExplorerModel.h in Headers */,
 				849F4C7B0768DA930087E9A8 /* ORHeaderItem.h in Headers */,
@@ -16364,6 +16442,7 @@
 				84749D1F07D6526F001553EC /* ORM321Model.h in Headers */,
 				84749D2407D6526F001553EC /* ORMCarrierController.h in Headers */,
 				84749D2607D6526F001553EC /* ORMCarrierModel.h in Headers */,
+				A87C699C2BB32D43003017F4 /* fsp_processor.h in Headers */,
 				84749D7107D663A2001553EC /* ORVmeMCard.h in Headers */,
 				84749DC607D66BDF001553EC /* ORVmeDaughterCard.h in Headers */,
 				84749DCF07D66EBC001553EC /* ORVmeCarrierCard.h in Headers */,
@@ -16665,6 +16744,7 @@
 				84CEDD1A0CDA7D9E002CFD3A /* ORGretina4Decoders.h in Headers */,
 				84CEDD1C0CDA7D9E002CFD3A /* ORGretina4Model.h in Headers */,
 				84CEDD1F0CDA7DB7002CFD3A /* VME_HW_Definitions.h in Headers */,
+				A87C69972BB32D43003017F4 /* fsp.h in Headers */,
 				84997E850CE37CBA002CFA70 /* ORVme64CrateController.h in Headers */,
 				84EB2DE11E32990D00C273AA /* ORLabJackU6Controller.h in Headers */,
 				84997E860CE37CBA002CFA70 /* ORVme64CrateModel.h in Headers */,
@@ -16774,6 +16854,7 @@
 				84CEA6E90EA623A50060076A /* ORFecDaughterCardController.h in Headers */,
 				84CEA6EB0EA623A50060076A /* ORFecDaughterCardModel.h in Headers */,
 				8473B9E40EA7BB6A00B89FF0 /* ORFecPmtsView.h in Headers */,
+				A87C69932BB32D43003017F4 /* fsp_buffer.h in Headers */,
 				8491E6CA0EB9E1900084BAD6 /* ORXL1Controller.h in Headers */,
 				8491F4760EC0CDEF0084BAD6 /* ORPmtImage.h in Headers */,
 				8491FE440EC1DD270084BAD6 /* NSImage+Extensions.h in Headers */,
@@ -16794,6 +16875,7 @@
 				84C37E250EF8408F00E77E09 /* ORPSUPTubePosition.h in Headers */,
 				5B5A404F1A79385C00543633 /* ORSIS3305Controller.h in Headers */,
 				84E18C3A0F0A5D3B0096F0F3 /* NSNotifications+Extensions.h in Headers */,
+				A8E6695C2A710BB200A9775A /* time_utils.h in Headers */,
 				84E18C560F0A640C0096F0F3 /* ORLineMarker.h in Headers */,
 				8419221F0F0BBE8000EF1C1C /* ORScriptIDEModel.h in Headers */,
 				8419227F0F0BC18800EF1C1C /* ORScriptIDEController.h in Headers */,
@@ -16861,6 +16943,7 @@
 				84B28E350F4C7FD400E2B056 /* ORLDA102Controller.h in Headers */,
 				84B28E370F4C7FD400E2B056 /* ORLDA102Model.h in Headers */,
 				84B28E540F4C835500E2B056 /* ORUnivVoltController.h in Headers */,
+				A87C69982BB32D43003017F4 /* fsp_l200.h in Headers */,
 				84B28E560F4C835500E2B056 /* ORUnivVoltDecoders.h in Headers */,
 				84B28E580F4C835500E2B056 /* ORUnivVoltModel.h in Headers */,
 				84B28E5E0F4C835500E2B056 /* ORUnivVoltHVCrateController.h in Headers */,
@@ -16897,6 +16980,7 @@
 				8408322B0FC3307F002B2394 /* ORLongTermView.h in Headers */,
 				84B194BD0FC44E1800775CF1 /* ORMotionNodeDecoders.h in Headers */,
 				146822430FC4799C0082BD70 /* ORCircularBufferUV.h in Headers */,
+				A87C699A2BB32D43003017F4 /* fsp_timestamps.h in Headers */,
 				8408A22A0FD85B3A00B0206D /* ORTemplates.h in Headers */,
 				84B74CE90FEBE9B90033E658 /* ORCaen965Controller.h in Headers */,
 				84B74CEB0FEBE9B90033E658 /* ORCaen965Model.h in Headers */,
@@ -16941,6 +17025,7 @@
 				43B50A3B1CE2610D003D0146 /* ORRunningAverage.h in Headers */,
 				43ADFE3F10B6DAF90044617C /* readout_code.h in Headers */,
 				43ADFE4010B6DAF90044617C /* ORVCard.hh in Headers */,
+				A87C699E2BB32D43003017F4 /* fsp_state.h in Headers */,
 				43ADFE7710B6DBCF0044617C /* ORCAEN419Readout.hh in Headers */,
 				43ADFE7910B6DBCF0044617C /* ORCAEN1720Readout.hh in Headers */,
 				362020241CBD390A0089296E /* WPXMLRPC.h in Headers */,
@@ -17169,6 +17254,7 @@
 				CE20A5C3145EE1CD00B8862D /* ORXYCom564Decoder.h in Headers */,
 				84CA8AFB14608A180072BB24 /* ObjWithHistoryController.h in Headers */,
 				84CA8AFD14608A180072BB24 /* ObjWithHistoryModel.h in Headers */,
+				A87C699F2BB32D43003017F4 /* fsp_channelmaps.h in Headers */,
 				84CA8B0614608A340072BB24 /* ORTimeRoi.h in Headers */,
 				84CA8B0814608A340072BB24 /* ORTimeRoiController.h in Headers */,
 				CE7328AE1466EEDE00A50AE9 /* ORVXI11HardwareFinder.h in Headers */,
@@ -17351,6 +17437,7 @@
 				B3808A8E1700F84B0019C27D /* ORCouchDBListenerController.h in Headers */,
 				B3808A901700F84B0019C27D /* ORCouchDBListenerModel.h in Headers */,
 				841DACF1175E2CB5002542BD /* OR3DScanPlatformView.h in Headers */,
+				A87C69952BB32D43003017F4 /* fsp_dsp.h in Headers */,
 				43D7CB89177C84AC00ED4736 /* OROpenGLObject.h in Headers */,
 				10E455911E283AC000FB37A5 /* ECARun.h in Headers */,
 				43D7CB8D177CBDF600ED4736 /* ORVertex.h in Headers */,
@@ -17477,7 +17564,8 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1230;
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					369E73371C7B5E6400A7F89E = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -18806,6 +18894,7 @@
 				8402797307397B8700972B07 /* ORBit3Controller.m in Sources */,
 				8402797507397B8700972B07 /* ORBit3Model.m in Sources */,
 				84D60BCB07428C7D0061F795 /* OrcaObjectController.m in Sources */,
+				A87C69A22BB32D43003017F4 /* fsp.c in Sources */,
 				849F4C780768DA930087E9A8 /* ORDataExplorerController.m in Sources */,
 				849F4C7A0768DA930087E9A8 /* ORDataExplorerModel.m in Sources */,
 				849F4C7C0768DA930087E9A8 /* ORHeaderItem.m in Sources */,
@@ -19043,6 +19132,7 @@
 				E63085CB2681056300687A6D /* tmio.c in Sources */,
 				84861D310ACD83F300C543D7 /* ORL4532Controller.m in Sources */,
 				84861D330ACD83F300C543D7 /* ORL4532Model.m in Sources */,
+				A87C69A02BB32D43003017F4 /* fsp_buffer.c in Sources */,
 				84861DAB0ACDA9B600C543D7 /* ORL4532Decoders.m in Sources */,
 				844BF49B0B1B85560047C9BF /* KatrinDetectorView.m in Sources */,
 				844384C40B273F9C00A94E26 /* ORAdcInfoProviding.m in Sources */,
@@ -19220,6 +19310,7 @@
 				5423A1B626A5A450009BA7CF /* ORKatrinHgfAmcDecoder.m in Sources */,
 				84BAA2A80E92A81A00E19946 /* ORSIS3300Model.m in Sources */,
 				84BAA72D0E964ED900E19946 /* ORSelectorSequence.m in Sources */,
+				A87C69962BB32D43003017F4 /* fsp_processor.c in Sources */,
 				84CEA3700EA4EB2E0060076A /* ORFec32Controller.m in Sources */,
 				84CEA3720EA4EB2E0060076A /* ORFec32Model.m in Sources */,
 				84CEA6EA0EA623A50060076A /* ORFecDaughterCardController.m in Sources */,
@@ -19258,10 +19349,13 @@
 				8472742B2A2BBBCC00916220 /* ORLNGSSlowControlsModel.m in Sources */,
 				8493D6C20F21315300BCD331 /* ORCMC203Model.m in Sources */,
 				9C880EDA0F2B5B2500394AEC /* ORVmeCrate.m in Sources */,
+				A87C69992BB32D43003017F4 /* fsp_timestamps.c in Sources */,
 				840D56E10F39E9BF00F9A274 /* ORPacController.m in Sources */,
+				A8E6695B2A710BB200A9775A /* time_utils.c in Sources */,
 				840D56E30F39E9BF00F9A274 /* ORPacDecoders.m in Sources */,
 				840D56E50F39E9BF00F9A274 /* ORPacModel.m in Sources */,
 				84B28CE10F4C597900E2B056 /* ORBocTIC3Controller.m in Sources */,
+				A8E562992BEE7A530035A419 /* fsp_serializers.c in Sources */,
 				84B28CE30F4C597900E2B056 /* ORBocTIC3Decoders.m in Sources */,
 				84B28CE50F4C597900E2B056 /* ORBocTIC3Model.m in Sources */,
 				84B28CFB0F4C5DBB00E2B056 /* ORAmi286Controller.m in Sources */,
@@ -19451,6 +19545,7 @@
 				8476201B118CD53D00016A8D /* OR2dRoi.m in Sources */,
 				8476201D118CD53D00016A8D /* OR2dRoiController.m in Sources */,
 				8476201F118CD53D00016A8D /* ORFFT.m in Sources */,
+				A87C699D2BB32D43003017F4 /* fsp_l200.c in Sources */,
 				84762021118CD53D00016A8D /* ORFFTController.m in Sources */,
 				84762023118CD53D00016A8D /* ORXYFit.m in Sources */,
 				84762025118CD53D00016A8D /* ORXYRoi.m in Sources */,
@@ -19637,6 +19732,7 @@
 				84DD78D32960EC4C00A85888 /* ORInFluxDBController.m in Sources */,
 				2D12EEB0150FEB6600EBD8A2 /* OREdelweissSLTController.m in Sources */,
 				2D12EEB2150FEB6600EBD8A2 /* OREdelweissSLTDecoder.m in Sources */,
+				A87C69942BB32D43003017F4 /* fsp_dsp.c in Sources */,
 				2D12EEB5150FEB6600EBD8A2 /* OREdelweissSLTModel.m in Sources */,
 				84716E3220D2BBD400649339 /* ORMultiplierController.m in Sources */,
 				CE0216BE1512139A00456EB7 /* ORnEDMCoilController.m in Sources */,
@@ -19685,6 +19781,7 @@
 				10279A791EBA6B5B00048814 /* ECAPatterns.m in Sources */,
 				84FEB88B15A31F42005D798C /* ORL2301Controller.m in Sources */,
 				84FEB88D15A31F42005D798C /* ORL2301Decoders.m in Sources */,
+				A87C699B2BB32D43003017F4 /* fsp_stats.c in Sources */,
 				84D5D0661C4564DF0057C1CA /* ORSIS3316Controller.m in Sources */,
 				84FEB88F15A31F42005D798C /* ORL2301Model.m in Sources */,
 				2D51C60D15B5A115000F0ACD /* OREdelweissFLTController.m in Sources */,
@@ -19968,8 +20065,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = OrcaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -20014,8 +20115,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = OrcaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -20059,8 +20164,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = OrcaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -20104,7 +20213,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = RelaunchOrca;
 				SDKROOT = "";
@@ -20143,7 +20252,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_NAME = RelaunchOrca;
 				SDKROOT = "";
 				VALID_ARCHS = x86_64;
@@ -20181,7 +20290,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
 				PRODUCT_NAME = RelaunchOrca;
 				SDKROOT = "";
 				VALID_ARCHS = x86_64;

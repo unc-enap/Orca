@@ -1,13 +1,19 @@
+/*
+ * fcio: I/O functions for FlashCam data
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Contact:
+ * - mailing list: fcio-maintainers@mpi-hd.mpg.de
+ * - upstream URL: https://www.mpi-hd.mpg.de/hinton/software
+ */
+
+
 /*==> FCIO FlashCam I/O system <========================//
 
-//--- Version ---------------------------------------------------//
-
-Version:  1.0
-Date:     2014
-
-//----------------------------------------------------------------*/
-
-/*=== General Information =======================================//
+//=== General Information =======================================//
 
 This Library is used to read and write messages with the FlashCam
 I/O system.
@@ -41,7 +47,7 @@ if you are reading FlashCam data only and skip the second part
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif // __cplusplus
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
@@ -55,6 +61,7 @@ extern "C" {
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "time_utils.h"
 #include "tmio.h"
 
 static int debug=2;
@@ -138,11 +145,15 @@ readers of the FCIO files/streams
 
 /*--- Structures  -----------------------------------------------*/
 
-#define FCIOMaxChannels 2400                     // the architectural limit for fc250b 12*8*24 adcch+ 12*8 trgch.  
-#define FCIOMaxSamples  10000                    // for firmware v2, max trace length is 8k samples ge 32K
-#define FCIOMaxPulses   (FCIOMaxChannels*11000)  // support up to 11,000 p.e. per channel
+#define FCIOMaxChannels 2400                    // the architectural limit for fc250b 12*8*24 adcch + 12*8 trgch.
+#define FCIOMaxSamples  32768                   // max trace length is 8K samples for PMT firmware version (250Mhz)
+                                                // while the Germanium version (62.5Mhz) suppports 32K samples.
+#define FCIOMaxPulses   (FCIOMaxChannels*11000) // support up to 11,000 p.e. per channel
 
-#define FCIOMaxDWords   (FCIOMaxChannels*(FCIOMaxSamples+2)) 
+#define FCIOTraceBufferLength   (672 * (FCIOMaxSamples+2)) // In GE version 4 channels are combined into one -> 6 channels per card instead of 24:
+                                                           // Reduces the channel limit to 12 * 8 * 6 adc channels + 12 * 6 trigger channels
+                                                           // This means, the maximum needed buffer size is either 2400 * 8192 = 19660800 samples or 672 * 32768 = 22020096.
+#define FCIOMaxDWords FCIOTraceBufferLength     // For backwards compatibility
 
 typedef struct {                 // Readout configuration (typically once at start of run)
 
@@ -157,7 +168,8 @@ typedef struct {                 // Readout configuration (typically once at sta
   int triggercards;              // Number of trigger cards
   int adccards;                  // Number of FADC cards
   int gps;                       // GPS mode flag (0: not used, 1: sync PPS and 10 MHz)
-  unsigned int tracemap[FCIOMaxChannels]; // trace map idetifiers 
+  unsigned int tracemap[FCIOMaxChannels]; // trace map identifiers - fadc/triggercard addresses and channels
+                                          // stores the FADC and Trigger card addresses as follows: (address << 16) + adc channel (channel number on the card)
 
 } fcio_config;
 
@@ -172,32 +184,46 @@ typedef struct {                  // Raw event
                                   // [2] the calculated sec which must be added to the master
                                   // [3] the delta time between master and unix in usec
                                   // [4] the abs(time) between master and unix in usec
-                                  // [5-9] reserved for future use
+                                  // [5] startsec
+                                  // [6] startusec
+                                  // [7-9] reserved for future use
 
   int deadregion[10];             // [0] start pps of the next dead window
                                   // [1] start ticks of the next dead window
                                   // [2] stop pps of the next dead window
                                   // [3] stop ticks of the next dead window
                                   // [4] maxticks of the dead window
+                                  // [5] sparse event adc channel block beginning (see below)
+                                  // [6] sparse event adc channel block end (see below)
                                   // the values are updated by each event but
                                   // stay at the previous value if no new dead region
                                   // has been detected. The dead region window
                                   // can define a window in the future
+                                  // channel block:
+                                  // Due to firmware implementation details, deadtime affects all
+                                  // channels on a triggered ADC module even in sparse readout mode.
+                                  // Fields 5 and 6 specify the index of the first trace that is affected
+                                  // by deadtime and the number of consecutive traces.
+                                  // In normal readout mode and in some sparse readout configurations this covers all traces.
 
   int timestamp[10];              // [0] Event no., [1] PPS, [2] ticks, [3] max. ticks
+                                  // [4] reserved for trigger mask in fc250b v2
                                   // [5-9] dummies reserved for future use
 
   int timeoffset_size;            // actual size of the timeoffset array
   int timestamp_size;             // actual size of the timestamp array
+
   int deadregion_size;            // actual size of the deadregion array
-  
-  int num_traces;                                // number of traces written on sparse data
-  unsigned short trace_list[FCIOMaxChannels+1];  // list of written traces on sparse data   
+
+  int num_traces;                              // used for sparse mode (FCIOSparseEvent); num_traces contains the length of the trace_list array.
+  unsigned short trace_list[FCIOMaxChannels];  // list of updated trace indices while writing/reading in sparse mode (FCIOSparseEvent)
+                                               // this index list contains the valid trace[] fields which are allowed to access.
+                                               // adc channels / traces which are not listed here contain the traces from the previous FCIOSparseEvent while reading!
 
   unsigned short *trace[FCIOMaxChannels];        // Accessors for trace samples
   unsigned short *theader[FCIOMaxChannels];      // Accessors for traces incl. header bytes
                                                  // (FPGA baseline, FPGA integrator)
-  unsigned short traces[FCIOMaxDWords];          // internal trace storage
+  unsigned short traces[FCIOTraceBufferLength];  // internal trace storage
 
 } fcio_event;
 
@@ -221,12 +247,21 @@ typedef struct {                  // Reconstructed event
                                   // [2] stop pps of the next dead window
                                   // [3] stop ticks of the next dead window
                                   // [4] maxticks of the dead window
+                                  // [5] sparse event adc channel block beginning (see below)
+                                  // [6] sparse event adc channel block end (see below)
                                   // the values are updated by each event but
                                   // stay at the previous value if no new dead region
                                   // has been detected. The dead region window
                                   // can define a window in the future
+                                  // channel block:
+                                  // Due to firmware implementation details, deadtime affects all
+                                  // channels on a triggered ADC module even in sparse readout mode.
+                                  // Fields 5 and 6 specify the index of the first trace that is affected
+                                  // by deadtime and the number of consecutive traces.
+                                  // In normal readout mode and in some sparse readout configurations this covers all traces.
 
   int timestamp[10];              // [0] Event no., [1] PPS, [2] ticks, [3] max. ticks
+                                  // [4] reserved for trigger mask in fc250b v2
                                   // [5-9] dummies reserved for future use
 
   int timeoffset_size;            // actual size of the timeoffset array
@@ -293,12 +328,14 @@ typedef struct {                   // FlashCam envelope structure
 
 // valid record tags ... all other tags are skipped
 
-#define FCIOConfig       1
-#define FCIOCalib        2  // not any longer supported 
-#define FCIOEvent        3
-#define FCIOStatus       4
-#define FCIORecEvent     5
-#define FCIOSparseEvent  6
+typedef enum {
+  FCIOConfig = 1,
+  FCIOCalib = 2, // deprecated
+  FCIOEvent = 3,
+  FCIOStatus = 4,
+  FCIORecEvent = 5,
+  FCIOSparseEvent = 6
+} FCIOTag;
 
 //----------------------------------------------------------------*/
 
@@ -498,6 +535,51 @@ Returns 1 on success or 0 on error.
 
 /*=== Function ===================================================*/
 
+int FCIOPutSparseEvent(FCIOStream output, FCIOData *input)
+
+/*--- Description ------------------------------------------------//
+
+Writes a sparse record of event data (struct fcio_event) to remote peer or file.
+A record consist of the message tag and all data members of the struct.
+
+The number of items in event.timeoffset, timestamp and deadregion sent
+to remote depends on their corresponding *_size items.
+
+The number of traces sent depends on the trace_list array (with actual size num_traces).
+Only those traces, whose index is stored in trace_list will be serialized.
+
+Returns 1 on success or 0 on error.
+
+
+
+//----------------------------------------------------------------*/
+{
+  if (!output){
+    fprintf(stderr, "FCIOPutSparseEvent/ERROR: Output not connected.\n");
+    return 0;
+  }
+
+  FCIOWriteMessage(output,FCIOSparseEvent);
+  FCIOWriteInt(output,input->event.type);
+  FCIOWriteFloat(output,input->event.pulser);
+  FCIOWriteInts(output, input->event.timeoffset_size, input->event.timeoffset);
+  FCIOWriteInts(output, input->event.timestamp_size, input->event.timestamp);
+  FCIOWriteInts(output, input->event.deadregion_size, input->event.deadregion);
+  FCIOWriteInts(output,1,&input->event.num_traces);
+  FCIOWriteUShorts(output,input->event.num_traces,input->event.trace_list);
+
+  int length = input->config.eventsamples+2;
+  int i; for (i = 0; i < input->event.num_traces; i++)  
+  {
+    int j = input->event.trace_list[i];
+    FCIOWriteUShorts(output,length,&input->event.traces[j * length]);
+  }
+
+  return FCIOFlush(output);
+}
+
+/*=== Function ===================================================*/
+
 int FCIOPutRecEvent(FCIOStream output, FCIOData *input)
 
 /*--- Description ------------------------------------------------//
@@ -549,7 +631,7 @@ this tag.
 
 valid record tags are described above
 
-This function wraps the family of FCIOPut<Event/RecEvent/Config/Status/Calib>
+This function wraps the family of FCIOPut<Event/RecEvent/Config/Status>
 functions. Refer to their documentation for more details.
 
 Returns the return value of the individual FICOPut functions or 0 on unknown tag.
@@ -559,6 +641,9 @@ Returns the return value of the individual FICOPut functions or 0 on unknown tag
   switch (tag) {
     case FCIOEvent:
       return FCIOPutEvent(output, input);
+
+    case FCIOSparseEvent:
+      return FCIOPutSparseEvent(output, input);
 
     case FCIORecEvent:
       return FCIOPutRecEvent(output, input);
@@ -634,10 +719,13 @@ static inline void fcio_get_event(FCIOStream stream, fcio_event *event, int trac
   event->timestamp_size = FCIOReadInts(stream,10,event->timestamp)/sizeof(int);
   FCIOReadUShorts(stream,FCIOMaxChannels*(FCIOMaxSamples + 2),event->traces);
   event->deadregion_size = FCIOReadInts(stream,10,event->deadregion)/sizeof(int);
+  // If a FCIOEvent is read, but there might have been a sparse event before in the datastream,
+  // num_traces and trace_list might not match the expected full event structure
   if(event->num_traces!=traces) 
   {
     event->num_traces=traces;
-    int i; for(i=0;i<traces;i++) event->trace_list[i]=i;   
+    int i; for(i=0;i<traces;i++)
+      event->trace_list[i]=i;   
   }
   event->deadregion[5]=0;
   event->deadregion[6]=traces;
@@ -662,7 +750,8 @@ static inline void fcio_get_sparseevent(FCIOStream stream, fcio_event *event, in
   FCIOReadInts(stream,1,&event->num_traces);
   FCIOReadUShorts(stream,event->num_traces,event->trace_list);
   int i; 
-  for(i=0; i<event->num_traces; i++) FCIOReadUShorts(stream,tracesamples,&event->traces[event->trace_list[i]*tracesamples]);
+  for(i=0; i<event->num_traces; i++)
+    FCIOReadUShorts(stream,tracesamples,&event->traces[event->trace_list[i]*tracesamples]);
 
   if (debug > 3) 
   {
@@ -792,10 +881,6 @@ while((iotag=FCIOGetRecord(x))>0)
     // do something here
     break;
 
-    case FCIOCalib:   // a calib record not any longer supported 
-    // do something here
-    break;
-
     case FCIOEvent:   // event record
     // show some info
     fprintf(stderr,"  adc       bl    isum-bl    tsum-bl   max-bl   pos\n");
@@ -816,6 +901,24 @@ while((iotag=FCIOGetRecord(x))>0)
          i,bl,intsum,tsum,max,imax);
     }
     break;
+
+    case FCIOSparseEvent:  // sparse event record, also compatible with FCIOEvent
+    for (j = 0; j < x->event.num_traces; j++)
+    {
+      i = x->event.trace_list[j];
+      double bl=1.0*x->event.theader[i][0]/x->config.blprecision;
+      double intsum=1.0*x->config.sumlength/x->config.blprecision*
+         (x->event.theader[i][1]-x->event.theader[i][0]);
+      double max=0; int imax=0; double tsum=0; int i1;
+      for(i1=0;i1<x->config.eventsamples;i1++)
+      {
+        double amp=x->event.trace[i][i1]-bl;
+        if(amp>max) max=amp, imax=i1;
+        tsum+=amp;
+      }
+      if(max>0) fprintf(stderr,"%5d %8.2f %10g %10.2f %8.2f %5d\n",
+         i,bl,intsum,tsum,max,imax);
+    }
 
     case FCIORecEvent:  // reconstructed event record
     // do something here
@@ -888,7 +991,8 @@ if(name==0)
   return 0;
 }
 
-tmio_stream *x=tmio_init(proto, timeout, buffer,0);
+int tmio_debug = debug-3;
+tmio_stream *x=tmio_init(proto, timeout, buffer, tmio_debug<0?0:tmio_debug);
 if(x==0)
 {
    if(debug) fprintf(stderr,"FCIOConnect: error init TMIO structure\n");
@@ -1091,6 +1195,7 @@ typedef struct {
   FCIOState *states;
 
   unsigned int selected_tags;
+  int timeout;
 
   int nconfigs;
   int nevents;
@@ -1125,8 +1230,6 @@ FCIOStateReader *FCIOCreateStateReader(
 
 /*--- Description ------------------------------------------------//
 
-experimental.... 
-
 //----------------------------------------------------------------*/
 {
   FCIOStateReader *reader = (FCIOStateReader *) calloc(1, sizeof(FCIOStateReader));
@@ -1137,6 +1240,7 @@ experimental....
     return (FCIOStateReader *) NULL;
   }
 
+  reader->timeout = io_timeout;
   reader->stream = (void *) FCIOConnect(peer, 'r', io_timeout, io_buffer_size);
   if (!reader->stream) {
     if (debug)
@@ -1181,8 +1285,6 @@ int FCIODestroyStateReader(FCIOStateReader *reader)
 
 /*--- Description ------------------------------------------------//
 
-experimental.... 
-
 //----------------------------------------------------------------*/
 {
   if (!reader)
@@ -1206,8 +1308,6 @@ int FCIOSelectStateTag(FCIOStateReader *reader, int tag)
 
 /*--- Description ------------------------------------------------//
 
-experimental.... 
-
 //----------------------------------------------------------------*/
 {
   if (!tag)
@@ -1226,8 +1326,6 @@ experimental....
 int FCIODeselectStateTag(FCIOStateReader *reader, int tag)
 
 /*--- Description ------------------------------------------------//
-
-experimental.... 
 
 //----------------------------------------------------------------*/
 {
@@ -1250,10 +1348,46 @@ static int tag_selected(FCIOStateReader *reader, int tag)
   return reader->selected_tags & (1 << tag);
 }
 
+/*=== Function ===============================================================*/
 
-static int get_next_record(FCIOStateReader *reader)
+int FCIOWaitMessage(FCIOStream x, int tmo)
+
+/*--- Description ------------------------------------------------------------//
+
+This function is useful in case the coarse timeout set for I/O operations is
+not sufficient for fine-grained waiting and polling.
+
+If timeout is greater than zero, it specifies a maximum interval (in
+milliseconds) to wait for data to arrive. If timeout is 0, then FCIOWaitMessage()
+will return without blocking -- use this to quickly check for data in the
+input buffers. If the value of timeout is -1, the poll blocks indefinitely.
+
+In the current implementation the timeout is restarted on the arrival of each
+frame.
+
+//--- Return values ----------------------------------------------------------//
+
+-1 an error occured or the connection is broken
+ 0 no input data is present after the given timeout
+ 1 message is present
+
+//----------------------------------------------------------------------------*/
+{
+  tmio_stream *xio=(tmio_stream *)x;
+  if(xio==0) return -1;
+  return tmio_wait(xio, tmo);
+}
+
+
+static int get_next_record(FCIOStateReader *reader, int timeout)
 {
   FCIOStream stream = reader->stream;
+
+  switch (FCIOWaitMessage(stream, timeout)) {
+    case 1: break;
+    case 0: return 0;
+    default: return -1;
+  }
 
   int tag = FCIOReadMessage(stream);
   if (debug > 4)
@@ -1289,21 +1423,21 @@ static int get_next_record(FCIOStateReader *reader)
     reader->cur_event = (reader->cur_event + 1) % reader->max_states;
     reader->nevents++;
     break;
-          
+
   case FCIOSparseEvent:
     event = &reader->events[reader->cur_event];
-    fcio_get_sparseevent(stream, event, config->eventsamples + 2);
-          
     if (config) {
-      int i; int j; for (i = 0; i < event->num_traces; i++) {
-        j = event->trace_list[i];
+      fcio_get_sparseevent(stream, event, config->eventsamples + 2);
+
+      for (int i = 0; i < event->num_traces; i++) {
+        int j = event->trace_list[i];
         event->trace[j] = &event->traces[2 + j * (config->eventsamples + 2)];
         event->theader[j] = &event->traces[j * (config->eventsamples + 2)];
       }
     } else {
-      fprintf(stderr, "[WARNING] Received event without known configuration. Unable to adjust trace pointers.\n");
+      fprintf(stderr, "[WARNING] Received sparse event without known configuration. Unable to adjust trace pointers.\n");
     }
-          
+
     reader->cur_event = (reader->cur_event + 1) % reader->max_states;
     reader->nevents++;
     break;
@@ -1324,6 +1458,9 @@ static int get_next_record(FCIOStateReader *reader)
     reader->nstatuses++;
     break;
 
+  case 0:
+    return 0;
+
   default:
     return -1;
   }
@@ -1339,6 +1476,7 @@ static int get_next_record(FCIOStateReader *reader)
   // Advance state buffer
   if (tag_selected(reader, tag)) {
     reader->cur_state = (reader->cur_state + 1) % reader->max_states;
+    reader->states[reader->cur_state].last_tag = 0;
     reader->nrecords++;
   }
 
@@ -1354,14 +1492,15 @@ static inline FCIOState *get_last_state(FCIOStateReader *reader)
 
 /*=== Function ===================================================*/
 
-FCIOState *FCIOGetState(FCIOStateReader *reader, int offset)
+FCIOState *FCIOGetState(FCIOStateReader *reader, int offset, int *timedout)
 
 /*--- Description ------------------------------------------------//
 
-experimental.... 
-
 //----------------------------------------------------------------*/
 {
+  if (timedout)
+    *timedout = 0;
+
   if (debug > 4)
     fprintf(stderr, "FCIOGetState(reader, %i): max_states=%i, cur_state=%i\n", offset, reader->max_states, reader->cur_state);
 
@@ -1389,20 +1528,46 @@ experimental....
     fprintf(stderr, "FCIOGetState: Trying to read %i records from stream...\n", offset);
 
   int tag = 0;
-  while ((tag = get_next_record(reader)) && tag >= 0) {
-    if (!tag_selected(reader, tag))
-      continue;
+  int timeout = reader->timeout;
+  double start_time = reader->timeout > 0 ? elapsed_time(0.0) : 0.0;  // track time only when a timeout is requested
+  while ((tag = get_next_record(reader, timeout)) && tag > 0) {
+    if (!tag_selected(reader, tag)) {
+      if (timedout)
+        *timedout = 2;  // deselected tags arrived
+
+      // Avoid infinitely waiting for a selected tag when there are other records in between
+      // that always arrive within the given timeout
+      if (reader->timeout > 0) {
+        double elapsed_msec = 1000.0 * elapsed_time(start_time);
+        timeout = reader->timeout - elapsed_msec + 0.5;
+        if (timeout < 0) {
+          tag = 0;
+          break;  // avoid passing -1 (wait indefinitely) to tmio_wait
+        }
+      }
+
+      continue;  // skip tag
+    }
 
     if (!--offset) {
+      if (timedout)
+        *timedout = 0;  // timedout may have been set to 2 from an interleaved deselected tag
+
       if (debug > 4)
         fprintf(stderr, "FCIOGetState: Found record [cur_state=%i, config=%p, event=%p, status=%p, recevent=%p].\n", reader->cur_state,
-          get_last_state(reader)->config,
-          get_last_state(reader)->event,
-          get_last_state(reader)->status,
-          get_last_state(reader)->recevent);
+          (void*)get_last_state(reader)->config,
+          (void*)get_last_state(reader)->event,
+          (void*)get_last_state(reader)->status,
+          (void*)get_last_state(reader)->recevent);
 
       return get_last_state(reader);
     }
+  }
+
+  if (tag == 0) {
+    if (timedout && !*timedout)
+      *timedout = 1;  // no deselected tags arrived before timeout was reached - otherwise timedout = 2
+    return NULL;
   }
 
   // End-of-stream has been reached
@@ -1413,15 +1578,13 @@ experimental....
 
 /*=== Function ===================================================*/
 
-FCIOState *FCIOGetNextState(FCIOStateReader *reader)
+FCIOState *FCIOGetNextState(FCIOStateReader *reader, int *timedout)
 
 /*--- Description ------------------------------------------------//
 
-experimental.... 
-
 //----------------------------------------------------------------*/
 {
-  return FCIOGetState(reader, 1);
+  return FCIOGetState(reader, 1, timedout);
 }
 
 
@@ -1492,6 +1655,6 @@ FCIOState *FCIOGetNextEvent(FCIOStateReader *reader)
 
 #ifdef __cplusplus
 }
-#endif
+#endif // __cplusplus
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/

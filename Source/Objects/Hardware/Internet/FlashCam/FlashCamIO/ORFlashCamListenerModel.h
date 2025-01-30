@@ -24,8 +24,8 @@
 #import "ORTimeRate.h"
 #import "ORDataFileModel.h"
 #import "fcio.h"
-#import "bufio.h"
 #import "ANSIEscapeHelper.h"
+#import "fsp.h"
 
 #define kFlashCamConfigBufferLength 64
 #define kFlashCamStatusBufferLength 256
@@ -44,6 +44,7 @@
     FCIOStateReader* reader;
     int readerRecordCount;
     int bufferedRecords;
+    StreamProcessor* processor;
     uint32_t  configId;
     uint32_t* configBuffer;
     uint32_t  configBufferIndex;
@@ -70,25 +71,62 @@
     ORTimeRate* dataRateHistory;
     ORTimeRate* eventRateHistory;
     ORTimeRate* deadTimeHistory;
+    ORTimeRate* swtBufferFillLevelHistory;
+    ORTimeRate* swtDiscardRateHistory;
+    ORTimeRate* swtOutputRateHistory;
     NSTask*     runTask;            //added. MAH 9/17/22
+    NSThread* readoutThread;
     ORReadOutList* readOutList;
     NSArray* dataTakers;
     NSMutableArray* readOutArgs;
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
-    NSLock* readStateLock; //MAH 9/18/22
-    bool timeToQuitReadoutThread;
-    bool readWait;
+    bool listenerRemoteIsFile;
+    int fcio_last_tag;
+    bool enableStreamProcessor;
     ORDataPacket* dataPacketForThread;
-    NSString* writeDataToFile;
+    NSString* dataFileName;
     NSUInteger fclogIndex;
     NSMutableArray* fclog;
     NSMutableArray* fcrunlog;
     ORDataFileModel* dataFileObject;
+
+    int currentStartupTime;
+
+    NSThread* listenerThread;
+    bool startFinished;
+    bool setupFinished;
+    bool stopRunning;
+    bool takingData;
+    bool runTaskCompleted;
     
     //new
     NSDateFormatter*  logDateFormatter;
     ANSIEscapeHelper* ansieHelper;
+
+//     FSP Internal Parser variables
+    int nfspHWChannels;
+    int* fspHWChannelMap;
+    unsigned short* fspHWPrescaleThresholds;
+
+    int nfspPSChannels;
+    int* fspPSChannelMap;
+    float* fspPSChannelGains;
+    float* fspPSChannelThresholds;
+    int* fspPSChannelShapings;
+    float* fspPSChannelLowPass;
+    
+    int nfspFlagChannels;
+    int* fspFlagChannelMap;
+    int* fspFlagChannelThresholds;
+    
+    int fspPulserChannel;
+    int fspPulserChannelThreshold;
+    int fspBaselineChannel;
+    int fspBaselineChannelThreshold;
+    int fspMuonChannel;
+    int fspMuonChannelThreshold;
+    bool debug;
 }
 
 #pragma mark •••Initialization
@@ -128,9 +166,18 @@
 - (double) deadTime;
 - (double) totDead;
 - (double) curDead;
+- (double) swtRunTime;
+- (int) swtEventCount;
+- (double) swtAvgInputRate;
+- (double) swtAvgOutputRate;
+- (double) swtAvgDiscardRate;
+- (int) swtFreeStates;
 - (ORTimeRate*) dataRateHistory;
 - (ORTimeRate*) eventRateHistory;
 - (ORTimeRate*) deadTimeHistory;
+- (ORTimeRate*) swtBufferFillLevelHistory;
+- (ORTimeRate*) swtDiscardRateHistory;
+- (ORTimeRate*) swtOutputRateHistory;
 - (ORReadOutList*) readOutList;
 - (NSMutableArray*) readOutArgs;
 - (NSMutableArray*) children;
@@ -176,28 +223,30 @@
 - (BOOL) sameIP:(NSString*)address andPort:(uint16_t)p;
 
 #pragma mark •••FCIO methods
-- (bool) connect;
-- (void) disconnect:(bool)destroy;
-- (void) read:(ORDataPacket*)aDataPacket;
+- (bool) fcioOpen;
+- (bool) fcioClose;
+- (bool) fcioRead:(ORDataPacket*)aDataPacket;
 - (void) runFailed;
 
 #pragma mark •••Task methods
 - (void) taskDataAvailable:(NSNotification*)note;
 - (void) taskData:(NSDictionary*)taskData;
 - (void) taskCompleted:(NSNotification*)note;
-
-#pragma mark •••Data taker methods
+- (void) setupReadoutTask;
+- (void) startReadoutTask;
+- (void) stopReadoutTask;
 - (void) readConfig:(fcio_config*)config;
 - (void) readStatus:(fcio_status*)fcstatus;
-- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+
+#pragma mark •••Data taker methods
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
+- (void) takeData:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runIsStopping:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;
 - (void) saveReadOutList:(NSFileHandle*)aFile;
 - (void) loadReadOutList:(NSFileHandle*)aFile;
 - (void) reset;
 - (NSDictionary*) dataRecordDescription;
-- (void) readThread:(ORDataPacket*)aDataPacket;
 
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder;
@@ -225,3 +274,5 @@ extern NSString* ORFlashCamListenerModelStatusBufferFull;
 extern NSString* ORFlashCamListenerModelFCLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogChanged;
 extern NSString* ORFlashCamListenerModelFCRunLogFlushed;
+extern NSString* ORFlashCamListenerModelSWTConfigChanged;
+extern NSString* ORFlashCamListenerModelSWTStatusChanged;

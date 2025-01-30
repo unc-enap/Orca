@@ -1,3 +1,16 @@
+/*
+ * tmio: tagged message I/O for Unix streams
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Contact:
+ * - main authors: felix.werner@mpi-hd.mpg.de
+ * - upstream URL: https://www.mpi-hd.mpg.de/hinton/software
+ */
+
+
 /*==> tmio: tagged message I/O ===============================================//
 
 Version: 0.93
@@ -139,7 +152,7 @@ typedef struct {
 
 // Backend abstraction layer: currently only bufio provides all functions
 // TODO: Remove this abstraction. (Otherwise: include bufio_status.)
-#include "bufio.h"
+#include <bufio.h>
 
 #define buftcpopen(n, o, t, b, d) bufio_open(n, o, t, b, d)
 #define buftcptimeout(x, t) bufio_timeout(x, t)
@@ -473,7 +486,7 @@ TMIO_EPROTO     Protocols do not match
   }
 
   // Copy protocol from peer
-  strncpy(stream->protocol, protocol, TMIO_PROTOCOL_SIZE); //  strlen(protocol));
+  strncpy(stream->protocol, protocol, TMIO_PROTOCOL_SIZE);
 
   if (stream->debug > 1)
     fprintf(stderr, "tmio_open: connected file/peer %s\n", name);
@@ -653,8 +666,8 @@ TMIO_ETIMEDOUT Flush operation timed out
 
 
 /*
-  Internal helper function to skip the next frame. If a frame   header has
-  been buffered, skips the associated frame and clears   the buffer.
+  Internal helper function to skip the next frame. If a frame header has
+  been buffered, skips the associated frame and clears the buffer.
 
   Returns 0 on success, -1 on error and sets stream status.
 */
