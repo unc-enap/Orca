@@ -1,0 +1,26 @@
+#!/usr/bin/expect --
+# Use the "/usr/bin/expect -d --" to enable debuging output
+#
+set timeout -1
+spawn rsync -av  <verbose> <sourcePath>/ <userName>@<host>:<destinationPath>
+
+expect {
+  "assword:" {
+     send "<password>\n"
+     exp_continue
+  }
+  "yes/no" {
+     send "yes\n"
+     exp_continue
+  }
+  "done" {
+     #send_user "starting file transfer\n"
+  }
+  timeout { send_user "\nrsync time out\n" }
+  eof
+}
+expect eof
+
+# Wait for the result of the command; is the third element in the list
+catch wait result
+exit [lindex $result 3]

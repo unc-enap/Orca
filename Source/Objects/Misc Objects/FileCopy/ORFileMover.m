@@ -326,6 +326,22 @@ NSString* ORFileMoverPercentDoneChanged = @"ORFileMoverPercentDoneChanged";
                     
                 case eUseCURL:
                     break;
+                    
+              case eUseRSYNC:
+ 				{
+					NSString* bp = [[NSBundle mainBundle ]resourcePath];
+					NSMutableString* theScript = [NSMutableString stringWithContentsOfFile:[bp stringByAppendingPathComponent:@"rsyncExpectScript"] encoding:NSASCIIStringEncoding error:nil];
+					[theScript replace:@"<isDir>" with:isDir?@"-r":@""];
+					[theScript replace:@"<verbose>" with:@""]; // High verbosity messes up the expect.
+					[theScript replace:@"<sourcePath>" with:[fullPath stringByReplacingOccurrencesOfString:@" " withString:@"\\ "]];
+					[theScript replace:@"<userName>" with:remoteUserName];
+					[theScript replace:@"<host>" with:remoteHost];
+					[theScript replace:@"<destinationPath>" with:tmpRemotePath];
+					[theScript replace:@"<password>" with:remotePassWord];
+					[theScript writeToFile:scriptPath atomically:YES encoding:NSASCIIStringEncoding error:nil];
+				}               
+                    break;                    
+                    
             }
 			
             //make the script executable
@@ -422,6 +438,14 @@ NSString* ORFileMoverPercentDoneChanged = @"ORFileMoverPercentDoneChanged";
                         NSLog(@"task return status: %d\n",[task terminationStatus]);
                     }
 					break;
+     
+                 case eUseRSYNC:
+					if([task terminationStatus] == 0)transferOK = YES;
+                    else {
+                        transferOK = NO;
+                        NSLog(@"task return status: %d\n",[task terminationStatus]);
+                    }
+					break;  
             }
         }
         

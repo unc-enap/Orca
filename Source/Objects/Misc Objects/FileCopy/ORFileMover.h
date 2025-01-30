@@ -25,7 +25,8 @@ typedef enum _eFileTransferType {
 	eUseCURL	= 0,
 	eUseSCP 	= 1,
 	eUseSFTP 	= 2,
-	eUseFTP 	= 3
+	eUseFTP 	= 3,
+	eUseRSYNC	= 4
 }eFileTransferType;
 
 @interface ORFileMover : NSObject {
