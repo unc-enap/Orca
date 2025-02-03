@@ -1,4 +1,4 @@
-#include "fsp_dsp.h"
+#include "dsp.h"
 
 #include <assert.h>
 #include <limits.h>
@@ -167,15 +167,15 @@ int centered_moving_average_u16(unsigned short *x, float *y, int start, int stop
   return q;
 }
 
-float max_windowed_sum(float *x, int start, int stop, int nsamples, int coincidence_window, float coincidence_threshold, int *largest_sum_offset, WPSTriggerList* trigger_list) {
+float max_windowed_sum(float *x, int start, int stop, int nsamples, int coincidence_window, float coincidence_threshold, int *largest_sum_offset, SubEventList* sub_event_list) {
   assert(start >= 0);
   assert(stop <= nsamples);
   assert(coincidence_window > 0);
-  assert(trigger_list);
+  assert(sub_event_list);
 
   int up = 0;
-  trigger_list->size = 0; // reset the trigger list
-  trigger_list->wps_max[0] = 0.0;
+  sub_event_list->size = 0; // reset the trigger list
+  sub_event_list->wps_max[0] = 0.0;
   float acc = 0;
   float largest_acc = 0;
 
@@ -185,8 +185,8 @@ float max_windowed_sum(float *x, int start, int stop, int nsamples, int coincide
   largest_acc = acc;
   int offset = start;
   if (acc >= coincidence_threshold) {
-    trigger_list->start[trigger_list->size] = start;
-    trigger_list->wps_max[trigger_list->size] = acc;
+    sub_event_list->start[sub_event_list->size] = start;
+    sub_event_list->wps_max[sub_event_list->size] = acc;
     up = 1;
   }
 
@@ -201,36 +201,36 @@ float max_windowed_sum(float *x, int start, int stop, int nsamples, int coincide
     //   // do nothing
     if (up && acc < coincidence_threshold) {
       // came down, end current trigger entry
-      trigger_list->stop[trigger_list->size] = i + 1 + coincidence_window;
-      trigger_list->size++;
-      trigger_list->wps_max[trigger_list->size] = 0.0; // reset the values when we use a new one
+      sub_event_list->stop[sub_event_list->size] = i + 1 + coincidence_window;
+      sub_event_list->size++;
+      sub_event_list->wps_max[sub_event_list->size] = 0.0; // reset the values when we use a new one
       up = 0;
     } else if (!up && acc >= coincidence_threshold) {
       // start new entry
-      
+
       // only if it's not the first one do we check if they are overlapping within the coincidence window
-      if (trigger_list->size && (i+1 < trigger_list->stop[trigger_list->size-1])) {// check if new start is within stop of old window
+      if (sub_event_list->size && (i+1 < sub_event_list->stop[sub_event_list->size-1])) {// check if new start is within stop of old window
         // it's inside, so we forget the previous stop and wait for the next one
-        trigger_list->size--;
+        sub_event_list->size--;
       } else {
         // either it's the first one, or it's outside, so we start a new region
-        trigger_list->start[trigger_list->size] = i + 1; // first sample of the new sum
+        sub_event_list->start[sub_event_list->size] = i + 1; // first sample of the new sum
       }
       up = 1;
-      
+
     }
-    if (acc > trigger_list->wps_max[trigger_list->size]) {
-      trigger_list->wps_max[trigger_list->size] = acc;
+    if (acc > sub_event_list->wps_max[sub_event_list->size]) {
+      sub_event_list->wps_max[sub_event_list->size] = acc;
     }
   }
 
   if (up) {
     // end the triggerlist if it's still up. last possible stop sample is `stop-coincidence_window`
-    // trigger_list->stop[trigger_list->size] = stop-coincidence_window;
-    trigger_list->stop[trigger_list->size] = stop;
-    trigger_list->size++;
+    // sub_event_list->stop[sub_event_list->size] = stop-coincidence_window;
+    sub_event_list->stop[sub_event_list->size] = stop;
+    sub_event_list->size++;
   }
-  
+
   if (largest_sum_offset)
     *largest_sum_offset = offset;  // round down if uneven window, close enough.
 
@@ -396,8 +396,8 @@ void fsp_dsp_diff_and_smooth(int nsamples, int *start, int *stop, unsigned int s
   }
 }
 
-void fsp_dsp_windowed_peak_sum(WindowedPeakSumConfig *cfg, int nsamples, int ntraces, unsigned short **traces) {
-  assert(cfg->ntraces <= ntraces);
+void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces) {
+
   int *npulses = NULL;
   float *pulse_times = NULL;
   float *pulse_amplitudes = NULL;
@@ -408,20 +408,25 @@ void fsp_dsp_windowed_peak_sum(WindowedPeakSumConfig *cfg, int nsamples, int ntr
     *(cfg->total_pulses) = 0;
   }
 
-  for (int i = 0; i < nsamples; i++) cfg->peak_trace[i] = 0;
+  for (int j = 0; j < nsamples; j++) cfg->peak_trace[j] = 0;
 
   int multiplicity = 0;
   float total_largest_peak = 0;
   int total_largest_peak_offset = -1;
-  for (int i = 0; i < cfg->ntraces; i++) {
-    assert(nsamples + (4 * (cfg->shaping_widths[i] + 1) <= 3 * FCIOMaxSamples));
+  for (int i = 0; i < num_traces; i++) {
+    int trace_idx = trace_list[i];
+    if (cfg->tracemap.enabled[trace_idx] < 0)
+      continue;
+    int map_idx = cfg->tracemap.enabled[trace_idx];
+    assert(trace_idx == cfg->tracemap.map[map_idx]);
 
-    int trace_idx = cfg->tracemap[i];
-    float gain = cfg->gains[i];
-    float threshold = cfg->thresholds[i];
-    float lowpass = cfg->lowpass[i];
-    int shaping_width_samples = cfg->shaping_widths[i];
     unsigned short *trace = traces[trace_idx];
+    assert(nsamples + (4 * (cfg->shaping_widths[map_idx] + 1) <= 3 * FCIOMaxSamples));
+
+    float gain = cfg->gains[map_idx];
+    float threshold = cfg->thresholds[map_idx];
+    float lowpass = cfg->lowpass[map_idx];
+    int shaping_width_samples = cfg->shaping_widths[map_idx];
 
     for (int j = 0; j < 4 * (shaping_width_samples + 1); j++) {
       cfg->work_trace[j] = 0;
@@ -437,8 +442,8 @@ void fsp_dsp_windowed_peak_sum(WindowedPeakSumConfig *cfg, int nsamples, int ntr
     float largest_peak = 0.0;
     int largest_peak_offset = -1;
     /* TODO pre-calculate from sum cfg */
-    int start = cfg->dsp_start_sample[i];
-    int stop = cfg->dsp_stop_sample[i];
+    int start = cfg->dsp_start_sample[map_idx];
+    int stop = cfg->dsp_stop_sample[map_idx];
 
     fsp_dsp_diff_and_smooth(nsamples, &start, &stop, shaping_width_samples, trace, cfg->diff_trace, cfg->peak_trace,
                              cfg->work_trace, cfg->work_trace2, gain, cfg->apply_gain_scaling, threshold, lowpass,
@@ -459,28 +464,31 @@ void fsp_dsp_windowed_peak_sum(WindowedPeakSumConfig *cfg, int nsamples, int ntr
   }
 
   cfg->max_peak_sum_value = max_windowed_sum(cfg->peak_trace, cfg->sum_window_start_sample, cfg->sum_window_stop_sample,
-                                         nsamples, cfg->coincidence_window, cfg->coincidence_threshold, &cfg->max_peak_sum_offset, cfg->trigger_list);
+                                         nsamples, cfg->coincidence_window, cfg->coincidence_threshold, &cfg->max_peak_sum_offset, cfg->sub_event_list);
   cfg->max_peak_sum_multiplicity = multiplicity;
   cfg->max_peak_value = total_largest_peak;
   cfg->max_peak_offset = total_largest_peak_offset;
 }
 
-void fsp_dsp_hardware_majority(HardwareMajorityConfig *cfg, int ntraces, unsigned short **trace_headers) {
-  assert(cfg->ntraces <= ntraces);
+void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers) {
 
   int multiplicity = 0;
   int mult_below_threshold = 0;
   unsigned short max = 0;
   unsigned short min = USHRT_MAX;
-  for (int i = 0; i < cfg->ntraces; i++) {
-    int trace_idx = cfg->tracemap[i];
+  for (int i = 0; i < num_traces; i++) {
+    int trace_idx = trace_list[i];
+    if (cfg->tracemap.enabled[trace_idx] < 0)
+      continue;
+    int map_idx = cfg->tracemap.enabled[trace_idx];
+    assert(trace_idx == cfg->tracemap.map[map_idx]);
 
     /* FCIO Trace Header 1 contains fpga_energy */
     unsigned short fpga_energy = trace_headers[trace_idx][1];
     if (fpga_energy) {
       multiplicity++;
 
-      if (fpga_energy < cfg->fpga_energy_threshold_adc[i])
+      if (fpga_energy < cfg->fpga_energy_threshold_adc[map_idx])
         mult_below_threshold++;
 
       if (fpga_energy < min) min = fpga_energy;
@@ -518,18 +526,21 @@ unsigned short fsp_dsp_trace_larger_than(unsigned short *trace, int start, int s
   return 0;
 }
 
-void fsp_dsp_channel_threshold(ChannelThresholdConfig* cfg, int nsamples, int ntraces, unsigned short **traces, unsigned short** theaders) {
-  assert(cfg->ntraces <= ntraces);
+void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces, unsigned short** theaders) {
 
   int nfound = 0;
-  for (int i = 0; i < cfg->ntraces; i++) {
-    int trace_idx = cfg->tracemap[i];
+  for (int i = 0; i < num_traces; i++) {
+    int trace_idx = trace_list[i];
+    if (cfg->tracemap.enabled[trace_idx] < 0)
+      continue;
+    int map_idx = cfg->tracemap.enabled[trace_idx];
+    assert(trace_idx == cfg->tracemap.map[map_idx]);
+
     unsigned short *trace = traces[trace_idx];
     unsigned short baseline = theaders[trace_idx][0];
 
-    cfg->max_values[nfound] = fsp_dsp_trace_larger_than(trace, 0, nsamples, nsamples, cfg->thresholds[i] + baseline);
-    if (cfg->max_values[nfound]) {
-      cfg->max_tracemap_idx[nfound] = i;
+    cfg->max_values[map_idx] = fsp_dsp_trace_larger_than(trace, 0, nsamples, nsamples, cfg->thresholds[map_idx] + baseline);
+    if (cfg->max_values[map_idx]) {
       nfound++;
     }
   }

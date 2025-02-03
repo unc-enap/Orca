@@ -401,6 +401,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     return wfCount[channel];
 }
 
+- (void) increaseWfCountForChannel:(int)channel
+{
+    wfCount[channel]++;
+}
+
 - (float) getWFrate:(short)channel
 {
     if(channel>=0 && channel<[self numberOfChannels]){
@@ -422,6 +427,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 - (uint32_t) trigCount:(int)channel
 {
     return trigCount[channel];
+}
+
+- (void) increaseTrigCountForChannel:(int)channel
+{
+    trigCount[channel]++;
 }
 
 - (uint32_t) getCounter:(int)counterTag forGroup:(int)groupTag
@@ -862,6 +872,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     //nothing to yet. A call from the Listener ships the data.
 }
 
+// unused, kept for reference
 - (void) shipEvent:(fcio_event*)event withIndex:(int)index andChannel:(unsigned int)channel use:(ORDataPacket*)aDataPacket includeWF:(bool)includeWF
 {
     if(channel >= [self numberOfChannels]){
@@ -876,7 +887,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
             [self shipToInflux:channel energy:fpgaEnergy baseline:event->theader[index][0]];
         }
     }
-    
+
     //ship the data
     uint32_t lengths = dataLengths;
     if(!includeWF) lengths &= 0xFFFC0003F;
@@ -919,10 +930,11 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
 {
     [startTime release];
     startTime = [[NSDate date]retain];
-    if([self fwType] == 0)
-        [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCStdModel"];
-    else
-        [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
+//  2025/01/06 - removed as it's not used anymore
+//    if([self fwType] == 0)
+//        [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCStdModel"];
+//    else
+//        [aDataPacket addDataDescriptionItem:[self dataRecordDescription] forKey:@"ORFlashCamADCModel"];
     location = (([self crateNumber] & 0x1f) << 27) | (([self slot] & 0x1f) << 22);
     location = location | ((([self cardAddress] & 0xff0) >> 4) << 14);
     [self startRates];
@@ -962,6 +974,7 @@ NSString* ORFlashCamADCModelBaselineSampleTimeChanged    = @"ORFlashCamADCModelB
     }
 }
 
+// INFO: unused, kept for reference and for decoding
 - (NSDictionary*) dataRecordDescription
 {
     NSMutableDictionary* dict = [NSMutableDictionary dictionary];

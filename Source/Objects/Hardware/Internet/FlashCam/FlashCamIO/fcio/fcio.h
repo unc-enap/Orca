@@ -5,9 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * Contact:
- * - mailing list: fcio-maintainers@mpi-hd.mpg.de
- * - upstream URL: https://www.mpi-hd.mpg.de/hinton/software
  */
 
 
@@ -31,7 +28,7 @@ int FCIODebug(int level)
 #define FCIOReadUShorts(x,s,i)  FCIORead(x,(s)*sizeof(short int),(void*)(i))
 
 #define FCIOWriteInt(x,i)       { int data=(int)(i); FCIOWrite(x,sizeof(int),&data); }
-#define FCIOWriteFloat(x,f)     { float data=(int)(f); FCIOWrite(x,sizeof(float),&data); }
+#define FCIOWriteFloat(x,f)     { float data=(float)(f); FCIOWrite(x,sizeof(float),&data); }
 #define FCIOWriteInts(x,s,i)    FCIOWrite(x,(s)*sizeof(int),(void*)(i))
 #define FCIOWriteFloats(x,s,f)  FCIOWrite(x,(s)*sizeof(float),(void*)(f))
 #define FCIOWriteUShorts(x,s,i) FCIOWrite(x,(s)*sizeof(short int),(void*)(i))
@@ -48,7 +45,7 @@ int FCIODebug(int level)
 
 typedef struct {                 // Readout configuration (typically once at start of run)
 
-  int telid;                     // trace event list id ;-) 
+  int streamid;                  // Identifier for this data stream
   int adcs;                      // Number of FADC channels
   int triggers;                  // Number of trigger channels
   int eventsamples;              // Number of FADC samples per trace
@@ -129,7 +126,7 @@ typedef struct {                  // Reconstructed event
                                   // [2] the calculated sec which must be added to the master
                                   // [3] the delta time between master and unix in usec
                                   // [4] the abs(time) between master and unix in usec
-                                  // [5] startsec 
+                                  // [5] startsec
                                   // [6] startusec
                                   // [7-9] reserved for future use
 
@@ -182,7 +179,7 @@ typedef struct {
 typedef struct {        // Readout status (~1 Hz, programmable)
 
   int status;           // 0: Errors occured, 1: no errors
-  int statustime[10];   // fc250 seconds, microseconds, CPU seconds, microseconds, dummy, startsec startusec 
+  int statustime[10];   // fc250 seconds, microseconds, CPU seconds, microseconds, dummy, startsec startusec
   int cards;            // Total number of cards (number of status data to follow)
   int size;             // Size of each status data
 
@@ -220,13 +217,31 @@ typedef struct {                   // FlashCam envelope structure
 
 } FCIOData;
 
+
+/*
+  List of records tags to identify known records.
+  FCIOGetRecord and FCIOGet(Next)State read known tags
+  into the corresponding data structures, and return
+  the tag only otherwise.
+
+  Exception: FCIOFSP<name> tags, are only reserved
+  to prevent future use, but are not read by
+  FCIOOpen / FCIOCreateStateReader.
+  libfsp provides the corresponding corresponding read functions.
+
+*/
+
 typedef enum {
   FCIOConfig = 1,
   FCIOCalib = 2, // deprecated
   FCIOEvent = 3,
   FCIOStatus = 4,
   FCIORecEvent = 5,
-  FCIOSparseEvent = 6
+  FCIOSparseEvent = 6,
+  FCIOEventHeader = 7,
+  FCIOFSPConfig = 8, // reserved for libfsp
+  FCIOFSPEvent = 9, // reserved for libfsp
+  FCIOFSPStatus = 10 // reserved for libfsp
 } FCIOTag;
 
 typedef void* FCIOStream;
@@ -242,6 +257,8 @@ int FCIOPutStatus(FCIOStream output, FCIOData *input)
 int FCIOPutEvent(FCIOStream output, FCIOData *input)
 ;
 int FCIOPutSparseEvent(FCIOStream output, FCIOData *input)
+;
+int FCIOPutEventHeader(FCIOStream output, FCIOData *input)
 ;
 int FCIOPutRecEvent(FCIOStream output, FCIOData *input)
 ;
@@ -266,6 +283,8 @@ int FCIOReadMessage(FCIOStream x)
 int FCIORead(FCIOStream x, int size, void *data)
 ;
 int FCIOWaitMessage(FCIOStream x, int tmo)
+;
+FCIOStream FCIOStreamHandle(FCIOData *x)
 ;
 
 typedef struct {
@@ -315,6 +334,8 @@ int FCIODeselectStateTag(FCIOStateReader *reader, int tag)
 FCIOState *FCIOGetState(FCIOStateReader *reader, int offset, int *timedout)
 ;
 FCIOState *FCIOGetNextState(FCIOStateReader *reader, int *timedout)
+;
+int FCIOPutState(FCIOStream output, FCIOState* state, int tag)
 ;
 #ifdef __cplusplus
 }

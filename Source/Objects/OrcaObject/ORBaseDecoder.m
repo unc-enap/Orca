@@ -110,7 +110,7 @@ static NSString* kCrateKey[16] = {
 
 - (NSString*) getCardKey:(unsigned short)aCard
 {
-	if(aCard<16) return kCardKey[aCard];
+	if(aCard<32) return kCardKey[aCard];
 	else return [NSString stringWithFormat:@"Card %2d",aCard];		
 	
 }

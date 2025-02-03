@@ -610,6 +610,17 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 {
     NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
     [dict setObject:[NSNumber numberWithInt:cardAddress] forKey:@"CardAddress"];
+    /* board revision and hardware ID were previously shipped by the Listener configuration, but they were
+       always 0 unless requested manually in the GUI. Best approach would be to request them once
+       and send them in the runheader instead. This requires implementation of the parsing of the both fields
+       from the firmware version string.
+    [dict setObject:[NSNumber numberWithUnsignedInteger:boardRevision] forKey:@"BoardRevision"];
+    [dict setObject:[NSNumber numberWithUnsignedInteger:hardwareID] forKey:@"HardwareID"];
+     optionally it would also be possible to send the firmware version string again, but it would
+     require to query for it at run start
+    [dict setObject:[firmwareVer componentsJoinedByString:@" / "] forKey:@"FirmwareVersion"];
+    */
+
     return dict;
 }
 

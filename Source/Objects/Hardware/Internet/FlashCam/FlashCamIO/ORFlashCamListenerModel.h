@@ -26,9 +26,7 @@
 #import "fcio.h"
 #import "ANSIEscapeHelper.h"
 #import "fsp.h"
-
-#define kFlashCamConfigBufferLength 64
-#define kFlashCamStatusBufferLength 256
+#import "fsp_l200.h"
 
 @interface ORFlashCamListenerModel : ORAuxHw <ORDataTaker>
 {
@@ -46,15 +44,11 @@
     int bufferedRecords;
     StreamProcessor* processor;
     uint32_t  configId;
-    uint32_t* configBuffer;
-    uint32_t  configBufferIndex;
-    uint32_t  takeDataConfigIndex;
-    uint32_t  bufferedConfigCount;
     uint32_t  statusId;
-    uint32_t* statusBuffer;
-    uint32_t  statusBufferIndex;
-    uint32_t  takeDataStatusIndex;
-    uint32_t  bufferedStatusCount;
+    uint32_t  eventId;
+    uint32_t  eventHeaderId;
+    uint32_t  listenerDataId;
+    uint32_t  readout_listener_uniqueID;
     NSString* status;
     ORAlarm* runFailedAlarm;
     bool unrecognizedPacket;
@@ -81,6 +75,7 @@
     NSMutableArray* readOutArgs;
     NSMutableArray* chanMap;
     NSMutableArray* cardMap;
+
     bool listenerRemoteIsFile;
     int fcio_last_tag;
     bool enableStreamProcessor;
@@ -126,7 +121,12 @@
     int fspBaselineChannelThreshold;
     int fspMuonChannel;
     int fspMuonChannelThreshold;
+    bool writeNonTriggered;
     bool debug;
+
+    // FCIOWriter internals
+    FCIOStream fcio_mem_writer;
+    FCIORecordSizes fcioSizes;
 }
 
 #pragma mark •••Initialization
@@ -156,6 +156,9 @@
 - (int) bufferedRecords;
 - (uint32_t) configId;
 - (uint32_t) statusId;
+- (uint32_t) eventId;
+- (uint32_t) eventHeaderId;
+- (uint32_t) listenerDataId;
 - (NSString*) status;
 - (NSUInteger) eventCount;
 - (double) runTime;
@@ -203,6 +206,8 @@
 - (void) setStateBuffer:(int)sb;
 - (void) setConfigId:(uint32_t)cId;
 - (void) setStatusId:(uint32_t)sId;
+- (void) setEventId:(uint32_t)eId;
+- (void) setListenerDataId:(uint32_t)lId;
 - (void) setDataIds:(id)assigner;
 - (void) syncDataIdsWith:(id)anotherListener;
 - (void) setReadOutList:(ORReadOutList*)newList;
@@ -226,6 +231,7 @@
 - (bool) fcioOpen;
 - (bool) fcioClose;
 - (bool) fcioRead:(ORDataPacket*)aDataPacket;
+- (bool) shipFCIO:(ORDataPacket*)aDataPacket state:(FCIOState*)state fspState: (FSPState*)fspstate;
 - (void) runFailed;
 
 #pragma mark •••Task methods
@@ -235,8 +241,6 @@
 - (void) setupReadoutTask;
 - (void) startReadoutTask;
 - (void) stopReadoutTask;
-- (void) readConfig:(fcio_config*)config;
-- (void) readStatus:(fcio_status*)fcstatus;
 
 #pragma mark •••Data taker methods
 - (void) runTaskStarted:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo;

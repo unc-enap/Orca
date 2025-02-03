@@ -32,7 +32,9 @@
 #define IsLongForm(x) !IsShortForm(x)
 
 #define ExtractDataId(x) (IsShortForm(x) ? ((x)&kShortFormDataIdMask) : ((x)&kLongFormDataIdMask))
-#define ExtractLength(x) (IsShortForm(x) ? 1 : ((x) & ~kLongFormDataIdMask))
+#define LengthFromNextField(x) ( *((&x)+1) )
+#define ApplyLengthMask(x) ((x) & ~kLongFormDataIdMask)
+#define ExtractLength(x) (IsShortForm(x) ? 1 : (ApplyLengthMask(x) ? ApplyLengthMask(x) : LengthFromNextField(x) ))
 
 @interface ORDataTypeAssigner : NSObject {
     uint32_t shortDeviceType;

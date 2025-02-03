@@ -2,18 +2,11 @@
 
 #include <fcio.h>
 
-typedef struct WPSTriggerList
-{
-  float threshold;
-  int start[FCIOMaxSamples];
-  int stop[FCIOMaxSamples]; // first sample after trigger up is gone
-  float wps_max[FCIOMaxSamples];
-  int size;
-} WPSTriggerList;
+#include "observables.h"
+#include "tracemap.h"
 
-typedef struct WindowedPeakSumConfig {
-  int tracemap_format;
-  int tracemap[FCIOMaxChannels];
+typedef struct DSPWindowedPeakSum {
+  FSPTraceMap tracemap;
   float gains[FCIOMaxChannels];
   float thresholds[FCIOMaxChannels];
   float lowpass[FCIOMaxChannels];
@@ -24,7 +17,6 @@ typedef struct WindowedPeakSumConfig {
   int dsp_stop_sample[FCIOMaxChannels];
   int dsp_pre_max_samples;
   int dsp_post_max_samples;
-  int ntraces;
 
   int apply_gain_scaling;
 
@@ -48,7 +40,7 @@ typedef struct WindowedPeakSumConfig {
   /* testing -> determine the above threshold snippets
       coincidence_window_trigger_list_threshold should be the same as the largest_sum_pe threshold in the calling
   */
-  WPSTriggerList* trigger_list;
+  SubEventList* sub_event_list;
 
   float max_peak_sum_value;
   int max_peak_sum_offset;
@@ -61,12 +53,12 @@ typedef struct WindowedPeakSumConfig {
   int *channel_pulses;
   int *total_pulses;
 
-} WindowedPeakSumConfig;
+  int enabled;
 
-typedef struct HardwareMajorityConfig {
-  int tracemap_format;
-  int ntraces;
-  int tracemap[FCIOMaxChannels];
+} DSPWindowedPeakSum;
+
+typedef struct DSPHardwareMajority {
+  FSPTraceMap tracemap;
   unsigned short fpga_energy_threshold_adc[FCIOMaxChannels];
 
   int fast;
@@ -76,19 +68,20 @@ typedef struct HardwareMajorityConfig {
   unsigned short max_value; // the largest channel hw value
   unsigned short min_value; // the smallest channel hw value, but > 0
 
-} HardwareMajorityConfig;
+  int enabled;
 
-typedef struct ChannelThresholdConfig {
-  int tracemap_format;
-  int ntraces;
-  int tracemap[FCIOMaxChannels];
+} DSPHardwareMajority;
+
+typedef struct DSPChannelThreshold {
+  FSPTraceMap tracemap;
   unsigned short thresholds[FCIOMaxChannels];
-  const char* labels[FCIOMaxChannels];
   /* result fields */
   unsigned short max_values[FCIOMaxChannels];
-  int max_tracemap_idx[FCIOMaxChannels];
   int multiplicity;
-} ChannelThresholdConfig;
+
+  int enabled;
+
+} DSPChannelThreshold;
 
 /* Differentiates trace, searches for gain adjusted peaks above threshold. Peaks are stored in peak_trace.*/
 float fsp_dsp_diff_and_find_peaks(float *input_trace, float *diff_trace, float *peak_trace, int start, int stop,
@@ -103,9 +96,13 @@ int fsp_dsp_diff_and_smooth_post_samples(unsigned int shaping_width_samples, flo
 
 unsigned short fsp_dsp_trace_larger_than(unsigned short *trace, int start, int stop, int nsamples, unsigned short threshold);
 
-void fsp_dsp_windowed_peak_sum(WindowedPeakSumConfig *cfg, int nsamples, int ntraces, unsigned short **traces);
-void fsp_dsp_hardware_majority(HardwareMajorityConfig *cfg, int ntraces, unsigned short **trace_headers);
-void fsp_dsp_channel_threshold(ChannelThresholdConfig* cfg, int nsamples, int ntraces, unsigned short **traces, unsigned short **theaders);
+float fsp_dsp_local_peaks_f32(float *input_trace, float *peak_trace, int start, int stop, int nsamples,
+                               const float gain_adc, const float threshold_pe, float *peak_times,
+                               float *peak_amplitudes, int *npeaks, int* largest_peak_offset);
+
+void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces);
+void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers);
+void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces, unsigned short **theaders);
 
 
 void tracewindow(int n, float *trace, int ss, double gain, float *out);

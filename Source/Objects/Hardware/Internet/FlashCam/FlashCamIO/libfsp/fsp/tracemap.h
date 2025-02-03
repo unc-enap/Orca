@@ -3,25 +3,35 @@
 #include <fcio.h>
 #include <string.h>
 
-typedef enum FSPChannelFormat {
+typedef struct {
+  int format; // contains the format of the channel map. For processors it must be converted to trace_idx
+
+  int map[FCIOMaxChannels]; // the list of mapped traces for this processor, up to n_mapped
+  int n_mapped; // the number of mapped traces, applies to trace_list
+
+  // reverse lookup for mapped channels:
+  int enabled[FCIOMaxChannels]; // a list of map_idx, index with trace_idx from fcio_event.trace_list
+  int n_enabled; // the total number of traces available, must equal fcio_config.adcs
+
+   // a human readable label, index similar to `map`.
+  char label[FCIOMaxChannels][8];
+
+} FSPTraceMap;
+
+typedef enum FSPTraceFormat {
   FCIO_TRACE_INDEX_FORMAT = 0,
   FCIO_TRACE_MAP_FORMAT = 1,
   L200_RAWID_FORMAT = 2,
-  FSPChannelFormatUnkown = 3
+  FSPTraceFormatUnkown = 3
 
-} FSPChannelFormat;
+} FSPTraceFormat;
 
-static inline int is_known_channelmap_format(FSPChannelFormat format)
+static inline int is_known_channelmap_format(FSPTraceFormat format)
 {
-  unsigned int form = format;
-  if (form < FSPChannelFormatUnkown) {
-    return 1;
-  } else {
-    return 0;
-  }
+  return (format < FSPTraceFormatUnkown) ? 1 : 0;
 }
 
-static inline const char* channelmap_fmt2str(FSPChannelFormat format)
+static inline const char* channelmap_fmt2str(FSPTraceFormat format)
 {
   switch (format) {
     case FCIO_TRACE_INDEX_FORMAT:
@@ -35,9 +45,9 @@ static inline const char* channelmap_fmt2str(FSPChannelFormat format)
   }
 }
 
-static inline FSPChannelFormat channelmap_str2fmt(const char* str)
+static inline FSPTraceFormat channelmap_str2fmt(const char* str)
 {
-  FSPChannelFormat ret = FSPChannelFormatUnkown;
+  FSPTraceFormat ret = FSPTraceFormatUnkown;
   if (strncmp(str, "fcio-trace-idx", 14) == 0)
     ret = FCIO_TRACE_INDEX_FORMAT;
   else if (strncmp(str, "fcio-trace-map", 14) == 0)
@@ -45,7 +55,7 @@ static inline FSPChannelFormat channelmap_str2fmt(const char* str)
   else if (strncmp(str, "l200-rawid", 10) == 0)
     ret = L200_RAWID_FORMAT;
   else
-    ret = FSPChannelFormatUnkown;
+    ret = FSPTraceFormatUnkown;
   return ret;
 }
 
@@ -60,7 +70,7 @@ static inline int tracemap2rawid(unsigned int input, int listener) {
   return listener * 1000000 + (input >> 16) * 100 + (input & 0xffff);
 }
 
-static inline int convert2rawid(int ninput, int *input, FSPChannelFormat format, unsigned int *tracemap, int listener) {
+static inline int convert2rawid(int ninput, int *input, FSPTraceFormat format, unsigned int *tracemap, int listener) {
   switch (format) {
     case FCIO_TRACE_MAP_FORMAT: {
       for (int i = 0; i < ninput; i++) {
@@ -84,7 +94,7 @@ static inline int convert2rawid(int ninput, int *input, FSPChannelFormat format,
   return 1;
 }
 
-static inline int convert2traceidx(int ninput, int *input, FSPChannelFormat format, unsigned int *tracemap) {
+static inline int convert2traceidx(FSPTraceMap* map, unsigned int *fcio_tracemap) {
   /*  quote from fcio.c to guide the reader:
       > unsigned int tracemap[FCIOMaxChannels]; // trace map identifiers - fadc/triggercard addresses and channels
       >                                         // stores the FADC and Trigger card addresses as follows: (address <<
@@ -92,15 +102,16 @@ static inline int convert2traceidx(int ninput, int *input, FSPChannelFormat form
      does not know about multiple flashcam streams, so fcid is discarded: > def get_key(fcid, board_id, fc_input: int)
      -> int: >   return fcid * 1000000 + board_id * 100 + fc_input
   */
-  switch (format) {
+  switch (map->format) {
     // fcio-tracemap
     case FCIO_TRACE_MAP_FORMAT: {
-      for (int i = 0; i < ninput; i++) {
-        unsigned int to_convert = input[i];
+      for (int i = 0; i < map->n_mapped; i++) {
+        unsigned int to_convert = map->map[i];
         int found = 0;
-        for (int j = 0; j < FCIOMaxChannels || tracemap[j]; j++) {
-          if (to_convert == tracemap[j]) {
-            input[i] = j;
+        for (int j = 0; j < FCIOMaxChannels && fcio_tracemap[j]; j++) {
+          if (to_convert == fcio_tracemap[j]) {
+            map->map[i] = j;
+            map->enabled[j] = i;
             found = 1;
             break;
           }
@@ -111,12 +122,13 @@ static inline int convert2traceidx(int ninput, int *input, FSPChannelFormat form
     }
     // rawid
     case L200_RAWID_FORMAT: {
-      for (int i = 0; i < ninput; i++) {
-        unsigned int to_convert = input[i];
+      for (int i = 0; i < map->n_mapped; i++) {
+        unsigned int to_convert = map->map[i];
         int found = 0;
-        for (int j = 0; j < FCIOMaxChannels || tracemap[j]; j++) {
-          if (rawid2tracemap(to_convert) == tracemap[j]) {
-            input[i] = j;
+        for (int j = 0; j < FCIOMaxChannels && fcio_tracemap[j]; j++) {
+          if (rawid2tracemap(to_convert) == fcio_tracemap[j]) {
+            map->map[i] = j;
+            map->enabled[j] = i;
             found = 1;
             break;
           }
@@ -125,8 +137,17 @@ static inline int convert2traceidx(int ninput, int *input, FSPChannelFormat form
       }
       break;
     }
-    case FCIO_TRACE_INDEX_FORMAT:
-      return 1;
+    case FCIO_TRACE_INDEX_FORMAT: {
+      for (int i = 0; i < map->n_mapped; i++) {
+        if (map->map[i] < FCIOMaxChannels && fcio_tracemap[map->map[i]]) {
+          map->map[i] = i;
+          map->enabled[i] = i;
+        } else {
+          return 0;
+        }
+      }
+      break;
+    }
 
     default:
       return 0;

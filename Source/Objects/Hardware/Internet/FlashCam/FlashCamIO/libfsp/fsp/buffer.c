@@ -1,4 +1,4 @@
-#include "fsp_buffer.h"
+#include "buffer.h"
 
 #include <assert.h>
 #include <math.h>
