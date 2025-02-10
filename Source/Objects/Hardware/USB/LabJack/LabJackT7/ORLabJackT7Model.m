@@ -90,6 +90,10 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
 }
 - (void) dealloc
 {
+    //release InfluxDB
+    // Manually release InFluxDB if using manual memory management (MRC)
+    [InFluxDB release];
+    //previous dealloc
     [NSObject cancelPreviousPerformRequestsWithTarget:self];
     int i;
     for(i=0;i<kNumT7AdcChannels;i++)  [channelName[i] release];
@@ -1212,13 +1216,16 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
 - (void) readAdcValues
 {
     // TODO: option to change settling time
-
+    // Initialize an array to store voltage values
+    double volt_channel[16] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    
+    // Check if the device handle is valid
     if(deviceHandle){
         double dblVoltage = 0.0, dblTemp = 0.0;
         int i;
         int diffMask = [self adcDiff];  // bit mask for ADCss
 
-        time_t	ut_Time;
+        time_t    ut_Time;
         time(&ut_Time);
         timeMeasured = (uint32_t)ut_Time;
 
@@ -1230,7 +1237,9 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
                 readAIN(deviceHandle, &caliInfo, chanP, chanP+1, &dblVoltage, NULL,
                         [self adcConvertedRange:i], [self adcConvertedRes:i], 0, 0);
                 [self setAdc:i withValue:dblVoltage];
-
+                // Store the voltage in the array
+                volt_channel[i] = dblVoltage;
+                
                 // adjacent channel not used
                 [self setAdc:i+1 withValue:0];
                 i++;
@@ -1241,22 +1250,72 @@ static NSString* ORLabJackI2CConnection         = @"ORLabJackI2CConnection";
                     readAIN(deviceHandle, &caliInfo, chanP, -1, &dblVoltage, NULL,
                             [self adcConvertedRange:i], [self adcConvertedRes:i], 0, 0);
                     [self setAdc:i withValue:dblVoltage];
+                    volt_channel[i] = dblVoltage;
                 }
                 else if (chanP==14) {
                     readAIN(deviceHandle, &caliInfo, chanP, -1, NULL, &dblTemp,
                             0, 0, 0, 0);  // using auto-range + auto-res
+                    volt_channel[i]=dblTemp;
                     [self setAdc:i withValue:dblTemp];  // temperature in K
                 }
                 else if (chanP==15) {
                     readAIN(deviceHandle, &caliInfo, chanP, -1, &dblVoltage, NULL,
                             0, 0, 0, 0);  // using auto-range + auro-res
                     [self setAdc:i withValue:dblVoltage];  // noise level
+                    volt_channel[i]=dblVoltage;
                 }
                 else [self setAdc:i withValue:0];
             }
         }
+        // Prepare the array for InfluxDB input
+        NSMutableArray *InFluxDBArry_Input = [NSMutableArray arrayWithCapacity:16];
+                for (i = 0; i < 16; i++) {
+                    [InFluxDBArry_Input addObject:[NSNumber numberWithDouble:volt_channel[i]]];
+                }
+        
+        //Send data to influxDB in the system
+        [self sendLabjackT7ToInflux:InFluxDBArry_Input];
     }
  }
+
+
+- (void)sendLabjackT7ToInflux:(NSArray *)arrayCh
+{
+    @autoreleasepool {
+        // Check if InFluxDB instance is already assigned
+        if (!InFluxDB) {
+            // Retrieve the InFluxDB model instance
+            InFluxDB = [[[(ORAppDelegate *)[NSApp delegate] document] findObjectWithFullID:@"ORInFluxDBModel,1"] retain];
+        }
+        
+        if (InFluxDB == nil) {
+            NSLog(@"Error: Unable to find the InfluxDB model.");
+            return;
+        }
+        
+        // Current timestamp
+        double currentTimeStamp = [[NSDate date] timeIntervalSince1970];
+        
+        // Create a new measurement object for the InfluxDB bucket
+        ORInFluxDBMeasurement *measurement = [ORInFluxDBMeasurement measurementForBucket:@"ENAP_SC_UNC" org:[InFluxDB org]];
+        
+        [measurement start:@"LabjackT7"];
+        [measurement addTag:@"Device" withString:@"Channels"];
+        
+        // Add fields for each channel
+        for (NSInteger i = 0; i < [arrayCh count]; i++) {
+            NSString *fieldName = [NSString stringWithFormat:@"Channel%ld", (long)i];
+            double fieldValue = [[arrayCh objectAtIndex:i] doubleValue];
+            [measurement addField:fieldName withDouble:fieldValue];
+        }
+        
+        // Set the timestamp
+        [measurement setTimeStamp:currentTimeStamp];
+        
+        // Execute the database command
+        [InFluxDB executeDBCmd:measurement];
+    }
+}
 
 - (void) writeDacs
 {

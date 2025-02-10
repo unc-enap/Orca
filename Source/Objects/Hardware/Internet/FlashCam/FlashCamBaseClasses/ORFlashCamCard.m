@@ -521,6 +521,37 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
     [[NSNotificationCenter defaultCenter] postNotificationName:ORFlashCamCardFirmwareVerChanged object:self];
 }
 
+- (void) tasksCompleted:(id)sender
+{
+    if(!ethConnector) return;
+    else if(![ethConnector isConnected]){
+        NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to reboot\n");
+        return;
+    }
+    id obj = [ethConnector connectedObject];
+    if(!obj){
+        NSLog(@"ORFlashCamCard - unable to get connected FlashCam object\n");
+        return;
+    }
+    if([[obj className] isEqualToString:@"ORFlashCamEthLinkModel"]){
+        NSMutableArray* arr = [obj connectedObjects:@"ORFlashCamReadoutModel"];
+        if([arr count] == 0){
+            NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to reboot\n");
+            return;
+        }
+        else if([arr count] > 1){
+            NSLog(@"ORFlashCamCard - error, multiple FlashCamReadout objects connected\n");
+            return;
+        }
+        obj = [arr objectAtIndex:0];
+    }
+    else if(![[obj className] isEqualToString:@"ORFlashCamReadoutModel"]){
+        NSLog(@"ORFlashCamCard - must connect to FlashCamReadout object to reboot\n");
+        return [self releaseFirmwareVer];
+    }
+    [obj tasksCompleted:sender];
+}
+
 #pragma mark •••Archival
 - (id) initWithCoder:(NSCoder*)decoder
 {
@@ -579,6 +610,17 @@ NSString* ORFlashCamCardSettingsLock            = @"ORFlashCamCardSettingsLock";
 {
     NSMutableDictionary* dict = [super addParametersToDictionary:dictionary];
     [dict setObject:[NSNumber numberWithInt:cardAddress] forKey:@"CardAddress"];
+    /* board revision and hardware ID were previously shipped by the Listener configuration, but they were
+       always 0 unless requested manually in the GUI. Best approach would be to request them once
+       and send them in the runheader instead. This requires implementation of the parsing of the both fields
+       from the firmware version string.
+    [dict setObject:[NSNumber numberWithUnsignedInteger:boardRevision] forKey:@"BoardRevision"];
+    [dict setObject:[NSNumber numberWithUnsignedInteger:hardwareID] forKey:@"HardwareID"];
+     optionally it would also be possible to send the firmware version string again, but it would
+     require to query for it at run start
+    [dict setObject:[firmwareVer componentsJoinedByString:@" / "] forKey:@"FirmwareVersion"];
+    */
+
     return dict;
 }
 

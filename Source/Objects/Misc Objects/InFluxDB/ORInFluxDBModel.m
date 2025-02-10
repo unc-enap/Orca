@@ -535,7 +535,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 - (void) sendCmd:(ORInFluxDBCmd*)aCmd
 {
     if(!processThread){
-        processThread = [[NSThread alloc] initWithTarget:self selector:@selector(sendMeasurments) object:nil];
+        processThread = [[NSThread alloc] initWithTarget:self selector:@selector(sendMeasurements) object:nil];
         [processThread start];
     }
     if(!messageQueue){
@@ -1032,7 +1032,7 @@ static NSString* ORInFluxDBModelInConnector = @"ORInFluxDBModelInConnector";
 // or we have >4000 lines in the buffer. A complication is
 // that we have to keep track for each bucket
 //-----------------------------------------------------
-- (void)sendMeasurments
+- (void)sendMeasurements
 {
     NSAutoreleasePool* outerPool = [[NSAutoreleasePool alloc] init];
     if(!messageQueue){

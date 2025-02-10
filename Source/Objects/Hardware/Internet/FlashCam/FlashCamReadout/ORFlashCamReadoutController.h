@@ -27,7 +27,7 @@
     IBOutlet NSTextField* usernameTextField;
     IBOutlet NSTableView* ethInterfaceView;
     IBOutlet NSButton* addEthInterfaceButton;
-    IBOutlet NSButton* removeEthInterfaeButton;
+    IBOutlet NSButton* removeEthInterfaceButton;
     IBOutlet NSButton* sendPingButton;
     IBOutlet NSTableView* listenerView;    
     IBOutlet NSTableView* listenerGPSView;
@@ -38,9 +38,14 @@
     IBOutlet NSTableView* listenerReadoutView;
     IBOutlet NSTableView* listenerExtraFlagsView;
     IBOutlet NSTableView* listenerExtraFilesView;
+    IBOutlet NSTableView* listenerSWTGeneralView;
+    IBOutlet NSTableView* listenerSWTHWMultiplicityView;
+    IBOutlet NSTableView* listenerSWTPeakSumTriggerView;
+    IBOutlet NSTableView* listenerSWTPeakSumParametersView;
     IBOutlet NSButton* updateIPButton;
     IBOutlet NSButton* listInterfaceButton;
     IBOutlet NSTableView* monitorView;
+    IBOutlet NSTableView* swtMonitorView;
     IBOutlet ORCardContainerView* listenerContainer;
     IBOutlet NSButton* addIfaceToListenerButton;
     IBOutlet NSPanel* addIfaceToListenerPanel;
@@ -61,6 +66,9 @@
     IBOutlet ORCompositeTimeLineView* dataRateView;
     IBOutlet ORCompositeTimeLineView* eventRateView;
     IBOutlet ORCompositeTimeLineView* deadTimeView;
+    IBOutlet ORCompositeTimeLineView* swtBufferFillLevelView;
+    IBOutlet ORCompositeTimeLineView* swtDiscardRateView;
+    IBOutlet ORCompositeTimeLineView* swtOutRateView;
     IBOutlet NSButton* settingsLockButton;
     BOOL     scheduledToUpdatePlot;
     BOOL     isLocked;
@@ -92,6 +100,7 @@
 - (void) listenerAdded:(NSNotification*)note;
 - (void) listenerRemoved:(NSNotification*)note;
 - (void) monitoringUpdated:(NSNotification*)note;
+- (void) swtMonitoringUpdated:(NSNotification*)note;
 - (void) groupObjectAdded:(NSNotification*)note;
 - (void) groupObjectRemoved:(NSNotification*)note;
 - (void) groupObjectMoved:(NSNotification*)note;

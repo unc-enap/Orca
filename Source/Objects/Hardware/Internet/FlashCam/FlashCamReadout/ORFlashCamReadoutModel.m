@@ -20,7 +20,6 @@
 #import "ORFlashCamReadoutModel.h"
 #import "ORFlashCamADCModel.h"
 #import "ORFlashCamTriggerModel.h"
-#import "bufio.h"
 
 NSString* ORFlashCamReadoutModelIPAddressChanged    = @"ORFlashCamReadoutModelIPAddressChanged";
 NSString* ORFlashCamReadoutModelUsernameChanged     = @"ORFlashCamReadoutModelUsernameChanged";
@@ -67,6 +66,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     rebootTasks = nil;
     rebootQueue = [[NSMutableArray array] retain];
     runFailedAlarm = nil;
+    readoutReady = NO;
     [[self undoManager] enableUndoRegistration];
     return self;
 }
@@ -135,6 +135,11 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 }
 
 #pragma mark •••Accessors
+
+- (bool) readoutReady
+{
+    return readoutReady;
+}
 
 - (NSString*) identifier
 {
@@ -737,6 +742,8 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     NSMutableArray* args = [NSMutableArray array];
     if(![self localMode]) [args addObjectsFromArray:@[username, ipAddress, @"readout-fc250b"]];
     for(int i=0; i<[self listenerCount]; i++) [[self getListenerAtIndex:i] setReadOutArgs:args];
+
+    readoutReady = YES;
 }
 
 - (void) runFailed
@@ -861,6 +868,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
 
 - (void) runTaskStopped:(ORDataPacket*)aDataPacket userInfo:(NSDictionary*)userInfo
 {
+    readoutReady = NO;
 }
 
 - (void) reset
@@ -884,6 +892,7 @@ static NSString* ORFlashCamReadoutModelEthConnectors[kFlashCamMaxEthInterfaces] 
     if(ipAddress) if(![ipAddress isEqualToString:@""]) [self checkFCSourcePath];
     pingTask = nil;
     pingSuccess = NO;
+    readoutReady = NO;
     remotePathTask = nil;
     firmwareTasks = nil;
     if(!firmwareQueue) firmwareQueue = [[NSMutableArray array] retain];

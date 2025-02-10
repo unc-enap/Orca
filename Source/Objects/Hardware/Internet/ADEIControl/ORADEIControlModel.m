@@ -1547,7 +1547,7 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 {
 	@synchronized (self){
 		[NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(timeout) object:nil];
-		NSLogError(@"command timeout",@"ADEIControl",nil);
+		NSLogError(@"command timeout", [@"ADEIControl - " stringByAppendingString:[self title]], nil);
 		[self setLastRequest:nil];
         [stringBuffer release];
         stringBuffer = nil;

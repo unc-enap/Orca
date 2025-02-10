@@ -1,8 +1,16 @@
+/*
+ * tmio: tagged message I/O for Unix streams
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * Contact:
+ * - main authors: felix.werner@mpi-hd.mpg.de
+ * - upstream URL: https://www.mpi-hd.mpg.de/hinton/software
+ */
 
-/*========================================================//
-date:    Fri Jul 23 16:41:43 CEST 2021
-sources: Libs-fc/tmio-0.93/tmio.c
-//========================================================*/
+
 #ifndef INCLUDED_tmio_h
 #define INCLUDED_tmio_h
 
@@ -54,6 +62,7 @@ typedef struct {
   tmio_stream_type type;  // Type of the stream
   int iobufsize;  // Size of the I/O buffer in Byte
   char protocol[TMIO_PROTOCOL_SIZE];  // Protocol identifier
+  char stream_protocol[TMIO_PROTOCOL_SIZE];  // Protocol identifier read from the stream
   char skipbuf[TMIO_SKIPBUF_SIZE];  // Scratch buffer used for skipping data frames
   // Statistics
   int flushes;
@@ -67,6 +76,9 @@ typedef struct {
   int datamissing;
   int dataskipped;
   int tagsskipped;
+  unsigned long byteswritten;
+  unsigned long bytesread;
+  unsigned long bytesskipped;
 } tmio_stream;
 
 tmio_stream *tmio_init(const char *protocol, int protocol_timeout, int bufkb,
@@ -102,9 +114,13 @@ int tmio_timeout(tmio_stream *stream, int protocol_timeout)
 ;
 const char *tmio_protocol(tmio_stream *stream)
 ;
+const char *tmio_stream_protocol(tmio_stream *stream)
+;
 int tmio_type(tmio_stream *stream)
 ;
 int tmio_monitor(tmio_stream *stream)
+;
+void* tmio_stream_handle(tmio_stream *stream)
 ;
 #ifdef __cplusplus
 }

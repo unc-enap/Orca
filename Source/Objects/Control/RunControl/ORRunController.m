@@ -279,31 +279,31 @@
 
 - (void) updateWindow
 {
-    [super updateWindow];
-	[self populatePopups];
-    [self runStatusChanged:nil];
-    [self timedRunChanged:nil];
-    [self repeatRunChanged:nil];
-    [self elapsedTimesChanged:nil];
-    [self startTimeChanged:nil];
-    [self runNumberChanged:nil];
-    [self runNumberDirChanged:nil];
-    [self runModeChanged:nil];
-    [self runTypeChanged:nil];
-    [self remoteControlChanged:nil];
-    [self runNumberLockChanged:nil];
-    [self runTypeLockChanged:nil];
-    [self quickStartChanged:nil];
-    [self definitionsFileChanged:nil];
-	[self startUpScriptStateChanged:nil];
-	[self shutDownScriptStateChanged:nil];
-	[self startUpScriptChanged:nil];
-	[self shutDownScriptChanged:nil];
-	[self vetosChanged:nil];
-	[self timeLimitChanged:nil];
-    [self numberOfWaitsChanged:nil];
-    [groupView setNeedsDisplay:YES];
-	[self selectedRunTypeScriptChanged:nil];
+        [super updateWindow];
+        [self populatePopups];
+        [self runStatusChanged:nil];
+        [self timedRunChanged:nil];
+        [self repeatRunChanged:nil];
+        [self elapsedTimesChanged:nil];
+        [self startTimeChanged:nil];
+        [self runNumberChanged:nil];
+        [self runNumberDirChanged:nil];
+        [self runModeChanged:nil];
+        [self runTypeChanged:nil];
+        [self remoteControlChanged:nil];
+        [self runNumberLockChanged:nil];
+        [self runTypeLockChanged:nil];
+        [self quickStartChanged:nil];
+        [self definitionsFileChanged:nil];
+        [self startUpScriptStateChanged:nil];
+        [self shutDownScriptStateChanged:nil];
+        [self startUpScriptChanged:nil];
+        [self shutDownScriptChanged:nil];
+        [self vetosChanged:nil];
+        [self timeLimitChanged:nil];
+        [self numberOfWaitsChanged:nil];
+        [groupView setNeedsDisplay:YES];
+        [self selectedRunTypeScriptChanged:nil];
 }
 
 
