@@ -339,13 +339,14 @@ NSString* ORRelinkSegments   = @"ORRelinkSegments";
                     NSDictionary* v_dict  = [NSDictionary dictionaryWithObjectsAndKeys:
                                              [params objectAtIndex:7], @"crate",
                                              [params objectAtIndex:8], @"board_slot",
-                                             [params objectAtIndex:9], @"board_chan",
-                                             [params objectAtIndex:10], @"board_B_pos",
-                                             [params objectAtIndex:11], @"board_string",nil];
+                                             [params objectAtIndex:9], @"board_chan",nil];
+                                             
                     if(type == kL200SiPMType)
                         ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
                                    @"spm", @"system",
                                    [params objectAtIndex:1], @"det_type",
+                                   [params objectAtIndex:10], @"board_B_pos",
+                                   [params objectAtIndex:11], @"board_string",
                                    daq_dict, @"daq", v_dict, @"low_voltage", nil];
                     else if(type == kL200PMTType)
                         ch_dict = [NSDictionary dictionaryWithObjectsAndKeys:
