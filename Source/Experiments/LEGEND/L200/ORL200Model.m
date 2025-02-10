@@ -1340,6 +1340,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [metaDataDict setObject:infoSet forKey:@"info"];
     }
 
+    //update infoSet
     [infoSet setObject:[self metaInfo] forKey:dataFileName];
 
     //handle cal souce positions
@@ -1384,7 +1385,6 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         }
         [keys addObject:dataFileName];
         [positionDict setObject:[NSNumber numberWithUnsignedLong:[keys count]] forKey:@"number_of_keys"];
-
         //--------------------------------
         //put in the source array
         NSMutableDictionary* sourcePositions = [positionDict objectForKey:@"positions_in_mm"];
