@@ -819,35 +819,39 @@
     
     int SIPMs_i_cha=kL200SiPMInnerChans;
     int SIPMs_o_cha=kL200SiPMOuterChans;
-    int aPosIn=0;
-    int aPosOut=0;
     
     for(int i=0; i<[group numSegments]; i++){
         ORDetectorSegment* segment = [group segment:i];
         const int sipm = [[segment objectForKey:@"kStringName"] intValue];
         const int sip_barrel_pos = [[segment objectForKey:@"lv_board_B_pos"] intValue];
+        int sip_barrel_loc = [[segment objectForKey:@"lv_board_string"] intValue];
         
         if (sipm<=0) continue;
         if (sip_barrel_pos > 1 && sip_barrel_pos < 4){
+            if (sip_barrel_pos==3){
+                sip_barrel_loc=sip_barrel_loc+SIPMs_i_cha/2;
+            }
             NSRect        segRect   = NSMakeRect(29,29,8,8);
             NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
             NSAffineTransform* transform = [NSAffineTransform transform];
             [transform translateXBy:xc yBy:yc];
-            [transform rotateByDegrees:360/SIPMs_i_cha*aPosIn];
+            [transform rotateByDegrees:80-360/SIPMs_i_cha*sip_barrel_loc];
             [segPath   transformUsingAffineTransform: transform];
             [segmentPaths addObject:segPath];
             
             NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
             [errorPaths   addObject:errPath];
             [detOutlines  addObject:errPath];
-            aPosIn++;
         }
         else{
+            if (sip_barrel_pos==4){
+                sip_barrel_loc=sip_barrel_loc+SIPMs_o_cha/2;
+            }
             NSRect        segRect   = NSMakeRect(103,103,20,10);
             NSBezierPath* segPath   = [NSBezierPath bezierPathWithRect:segRect];
             NSAffineTransform* transform = [NSAffineTransform transform];
             [transform translateXBy:xc yBy:yc];
-            [transform rotateByDegrees:360/SIPMs_o_cha*aPosOut];
+            [transform rotateByDegrees:80-360/SIPMs_o_cha*sip_barrel_loc];
             
             [segPath   transformUsingAffineTransform: transform];
             [segmentPaths addObject:segPath];
@@ -855,7 +859,6 @@
             NSBezierPath* errPath = [NSBezierPath bezierPathWithRect:NSInsetRect(segRect, -1, -1)];
             [errorPaths   addObject:errPath];
             [detOutlines  addObject:errPath];
-            aPosOut++;
         }
         int iring = [[segment objectForKey:@"kRing"] intValue];
         if ([sipmLabel[iring] isEqualToString:@""]) {
