@@ -26,6 +26,7 @@
 #import "ORDataTypeAssigner.h"
 #import "ORRunScriptModel.h"
 #import "ORDecoder.h"
+#import "Utilities.h"
 
 #pragma mark ¥¥¥Definitions
 
@@ -1386,13 +1387,15 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
         
 		if(!runFailedAlarm){
 			runFailedAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %u did NOT start",[self runNumber]] severity:kRunInhibitorAlarm];
+            
 			[runFailedAlarm setSticky:YES];
 		}
 		[runFailedAlarm setAcknowledged:NO];
 		[runFailedAlarm postAlarm];
         
-        //NSLogColor([NSColor redColor],@"Run Not Started because of exception: %@\n",[localException name]);
-        NSLogColor([NSColor redColor],@"Run Not Started because of exception: %@, reason: %@\n",[localException name],[localException reason]);//please show more info -tb-
+        // Log error information and stack trace
+        NSLogColor([NSColor redColor],@"Run Not Started because of exception: %@, reason: %@\n\n",[localException name],[localException reason]);
+        NSLog(@"Exception stack trace:\n%@\n",getStackTrace([localException callStackSymbols]));
         
     }
 }
