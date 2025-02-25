@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -3244,7 +3244,6 @@
 		84EA1FB120E28F810099F3DF /* RefClock.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84EA1FB020E28F800099F3DF /* RefClock.gif */; };
 		84EA6CAC0C73D15B00083319 /* ORAcqirisDC440Decoders.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA6CAA0C73D15B00083319 /* ORAcqirisDC440Decoders.h */; };
 		84EA6CAD0C73D15B00083319 /* ORAcqirisDC440Decoders.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EA6CAB0C73D15B00083319 /* ORAcqirisDC440Decoders.m */; };
-		84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
 		84EA916A20FE5A6200110B85 /* mysql.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916920FE5A6100110B85 /* mysql.h */; };
 		84EA917020FE5C5100110B85 /* my_list.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA916F20FE5C5100110B85 /* my_list.h */; };
 		84EA917220FE5C9000110B85 /* mysql_com.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917120FE5C9000110B85 /* mysql_com.h */; };
@@ -3253,11 +3252,6 @@
 		84EA917D20FE5D5800110B85 /* mysql_version.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917C20FE5D5700110B85 /* mysql_version.h */; };
 		84EA917F20FE5D8700110B85 /* mysql_time.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA917E20FE5D8700110B85 /* mysql_time.h */; };
 		84EA918120FE5DB000110B85 /* errmsg.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EA918020FE5DB000110B85 /* errmsg.h */; };
-		84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
-		84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (Required, ); }; };
-		84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */ = {isa = PBXBuildFile; fileRef = 84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		84EB2DDE1E32990D00C273AA /* LabJackU6.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84EB2DD51E32990D00C273AA /* LabJackU6.nib */; };
 		84EB2DE11E32990D00C273AA /* ORLabJackU6Controller.h in Headers */ = {isa = PBXBuildFile; fileRef = 84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */; };
 		84EB2DE21E32990D00C273AA /* ORLabJackU6Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */; };
@@ -3451,6 +3445,10 @@
 		84FFCAA90636D5B10069432F /* ORCaen792Controller.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFCAA30636D5B10069432F /* ORCaen792Controller.m */; };
 		84FFCAAA0636D5B10069432F /* ORCaen792Model.h in Headers */ = {isa = PBXBuildFile; fileRef = 84FFCAA40636D5B10069432F /* ORCaen792Model.h */; };
 		84FFCAAB0636D5B10069432F /* ORCaen792Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FFCAA50636D5B10069432F /* ORCaen792Model.m */; };
+		8610C7DB2D6E1E5D004A9874 /* libmysqlclient.24.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8610C7DA2D6E1E5D004A9874 /* libmysqlclient.24.dylib */; };
+		8610C9382D6E20C0004A9874 /* libcrypto.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8610C9362D6E20C0004A9874 /* libcrypto.3.dylib */; };
+		8610C9392D6E20C0004A9874 /* libssl.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8610C9372D6E20C0004A9874 /* libssl.3.dylib */; };
+		8610C93B2D6E2460004A9874 /* libpq.5.14.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8610C93A2D6E2460004A9874 /* libpq.5.14.dylib */; };
 		9C086CE90D10AB6200524F47 /* mainFocalPlaneDetector.tif in Resources */ = {isa = PBXBuildFile; fileRef = 9C086CE80D10AB6200524F47 /* mainFocalPlaneDetector.tif */; };
 		9C1363C70D0A7921006C550D /* Caen265.nib in Resources */ = {isa = PBXBuildFile; fileRef = 9C1363BF0D0A7921006C550D /* Caen265.nib */; };
 		9C1363C80D0A7921006C550D /* Caen265Card.tif in Resources */ = {isa = PBXBuildFile; fileRef = 9C1363C00D0A7921006C550D /* Caen265Card.tif */; };
@@ -3680,7 +3678,6 @@
 		E6653F9E23A8301C00A53678 /* ORFlashCamMiniCrateController.m in Sources */ = {isa = PBXBuildFile; fileRef = E6653F9D23A8301C00A53678 /* ORFlashCamMiniCrateController.m */; };
 		E66DB72F23B42E17005CDB2C /* FlashCamADC.xib in Resources */ = {isa = PBXBuildFile; fileRef = E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */; };
 		E67894D721E91CD500B66977 /* Messaging.tif in Resources */ = {isa = PBXBuildFile; fileRef = E67894D621E91CD400B66977 /* Messaging.tif */; };
-		E67BCDFA25998CF9007A7473 /* libpq.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = E67BCDF925998CF8007A7473 /* libpq.5.dylib */; };
 		E681A79E23BA765A00F76977 /* flashcam.png in Resources */ = {isa = PBXBuildFile; fileRef = E61D05892307313E00140549 /* flashcam.png */; };
 		E681A7A023BA771F00F76977 /* FlashCamMiniCrate.nib in Resources */ = {isa = PBXBuildFile; fileRef = E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */; };
 		E684347429AFB637009067E2 /* ORFlashCamListenerController.m in Sources */ = {isa = PBXBuildFile; fileRef = E684347329AFB637009067E2 /* ORFlashCamListenerController.m */; };
@@ -4090,9 +4087,6 @@
 			files = (
 				70CC889225756FDC004D7F81 /* libusb-1.0.0.dylib in Frameworks_Copy */,
 				70CC889325756FDC004D7F81 /* libLabJackM-1.20.0.dylib in Frameworks_Copy */,
-				84EA919420FF840F00110B85 /* libmysqlclient.21.dylib in Frameworks_Copy */,
-				84EA919520FF840F00110B85 /* libssl.1.0.0.dylib in Frameworks_Copy */,
-				84EA919620FF840F00110B85 /* libcrypto.1.0.0.dylib in Frameworks_Copy */,
 			);
 			name = Frameworks_Copy;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -7208,7 +7202,6 @@
 		84EA1FB020E28F800099F3DF /* RefClock.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = RefClock.gif; sourceTree = "<group>"; };
 		84EA6CAA0C73D15B00083319 /* ORAcqirisDC440Decoders.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORAcqirisDC440Decoders.h; path = Source/Objects/Hardware/CompactPCI/AcqirisDC440/ORAcqirisDC440Decoders.h; sourceTree = SOURCE_ROOT; };
 		84EA6CAB0C73D15B00083319 /* ORAcqirisDC440Decoders.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORAcqirisDC440Decoders.m; path = Source/Objects/Hardware/CompactPCI/AcqirisDC440/ORAcqirisDC440Decoders.m; sourceTree = SOURCE_ROOT; };
-		84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient.21.dylib; sourceTree = "<group>"; };
 		84EA916920FE5A6100110B85 /* mysql.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql.h; sourceTree = "<group>"; };
 		84EA916F20FE5C5100110B85 /* my_list.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_list.h; sourceTree = "<group>"; };
 		84EA917120FE5C9000110B85 /* mysql_com.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_com.h; sourceTree = "<group>"; };
@@ -7217,8 +7210,6 @@
 		84EA917C20FE5D5700110B85 /* mysql_version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_version.h; sourceTree = "<group>"; };
 		84EA917E20FE5D8700110B85 /* mysql_time.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mysql_time.h; sourceTree = "<group>"; };
 		84EA918020FE5DB000110B85 /* errmsg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = errmsg.h; sourceTree = "<group>"; };
-		84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.1.0.0.dylib; sourceTree = "<group>"; };
-		84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.1.0.0.dylib; sourceTree = "<group>"; };
 		84EB2DD51E32990D00C273AA /* LabJackU6.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LabJackU6.nib; sourceTree = "<group>"; };
 		84EB2DD81E32990D00C273AA /* ORLabJackU6Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLabJackU6Controller.h; sourceTree = "<group>"; };
 		84EB2DD91E32990D00C273AA /* ORLabJackU6Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORLabJackU6Controller.m; sourceTree = "<group>"; };
@@ -7417,6 +7408,10 @@
 		84FFCAA30636D5B10069432F /* ORCaen792Controller.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORCaen792Controller.m; sourceTree = "<group>"; };
 		84FFCAA40636D5B10069432F /* ORCaen792Model.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORCaen792Model.h; sourceTree = "<group>"; };
 		84FFCAA50636D5B10069432F /* ORCaen792Model.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORCaen792Model.m; sourceTree = "<group>"; };
+		8610C7DA2D6E1E5D004A9874 /* libmysqlclient.24.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient.24.dylib; sourceTree = "<group>"; };
+		8610C9362D6E20C0004A9874 /* libcrypto.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.3.dylib; sourceTree = "<group>"; };
+		8610C9372D6E20C0004A9874 /* libssl.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.3.dylib; sourceTree = "<group>"; };
+		8610C93A2D6E2460004A9874 /* libpq.5.14.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.5.14.dylib; sourceTree = "<group>"; };
 		9C086CE80D10AB6200524F47 /* mainFocalPlaneDetector.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = mainFocalPlaneDetector.tif; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/mainFocalPlaneDetector.tif"; sourceTree = SOURCE_ROOT; };
 		9C1363BF0D0A7921006C550D /* Caen265.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Caen265.nib; path = Source/Objects/Hardware/Vme/CAEN/CV265/Caen265.nib; sourceTree = SOURCE_ROOT; };
 		9C1363C00D0A7921006C550D /* Caen265Card.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Caen265Card.tif; path = Source/Objects/Hardware/Vme/CAEN/CV265/Caen265Card.tif; sourceTree = SOURCE_ROOT; };
@@ -7660,7 +7655,6 @@
 		E6653F9D23A8301C00A53678 /* ORFlashCamMiniCrateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamMiniCrateController.m; sourceTree = "<group>"; };
 		E66DB72E23B42E17005CDB2C /* FlashCamADC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FlashCamADC.xib; sourceTree = "<group>"; };
 		E67894D621E91CD400B66977 /* Messaging.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = Messaging.tif; sourceTree = "<group>"; };
-		E67BCDF925998CF8007A7473 /* libpq.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.5.dylib; sourceTree = "<group>"; };
 		E681A79F23BA771F00F76977 /* FlashCamMiniCrate.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = FlashCamMiniCrate.nib; sourceTree = "<group>"; };
 		E684347229AFB5E5009067E2 /* ORFlashCamListenerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORFlashCamListenerController.h; sourceTree = "<group>"; };
 		E684347329AFB637009067E2 /* ORFlashCamListenerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORFlashCamListenerController.m; sourceTree = "<group>"; };
@@ -7825,11 +7819,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				84E14BCB2AC1C72000614110 /* libiconv.tbd in Frameworks */,
-				84EA918520FE5DF800110B85 /* libcrypto.1.0.0.dylib in Frameworks */,
-				84EA918320FE5DDF00110B85 /* libssl.1.0.0.dylib in Frameworks */,
 				708077D524F435CB00F29EFE /* libLabJackM-1.20.0.dylib in Frameworks */,
 				8434A359055B3287002D3102 /* Cocoa.framework in Frameworks */,
-				84EA916820FE5A3700110B85 /* libmysqlclient.21.dylib in Frameworks */,
 				8470D01518241FEE0054F7D4 /* Accelerate.framework in Frameworks */,
 				8439D5EF05BEFF3A0077EFF2 /* Carbon.framework in Frameworks */,
 				840F377B08F322F800FC4408 /* IOKit.framework in Frameworks */,
@@ -7837,9 +7828,12 @@
 				708077D924F436EE00F29EFE /* libusb-1.0.0.dylib in Frameworks */,
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
+				8610C9382D6E20C0004A9874 /* libcrypto.3.dylib in Frameworks */,
+				8610C9392D6E20C0004A9874 /* libssl.3.dylib in Frameworks */,
+				8610C93B2D6E2460004A9874 /* libpq.5.14.dylib in Frameworks */,
+				8610C7DB2D6E1E5D004A9874 /* libmysqlclient.24.dylib in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
 				84E6CD001E4247BD004D6978 /* libusb-1.0.a in Frameworks */,
-				E67BCDFA25998CF9007A7473 /* libpq.5.dylib in Frameworks */,
 				8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */,
 				8481E67917653766001AB905 /* SystemConfiguration.framework in Frameworks */,
 				4322E9B217830004008E78A4 /* GLUT.framework in Frameworks */,
@@ -8153,10 +8147,10 @@
 		2AE87BDC0D6E486900A839FC /* libUniversal */ = {
 			isa = PBXGroup;
 			children = (
-				84EA916720FE5A3700110B85 /* libmysqlclient.21.dylib */,
-				84EA918220FE5DDE00110B85 /* libssl.1.0.0.dylib */,
-				84EA918420FE5DF800110B85 /* libcrypto.1.0.0.dylib */,
-				E67BCDF925998CF8007A7473 /* libpq.5.dylib */,
+				8610C93A2D6E2460004A9874 /* libpq.5.14.dylib */,
+				8610C7DA2D6E1E5D004A9874 /* libmysqlclient.24.dylib */,
+				8610C9362D6E20C0004A9874 /* libcrypto.3.dylib */,
+				8610C9372D6E20C0004A9874 /* libssl.3.dylib */,
 			);
 			path = libUniversal;
 			sourceTree = "<group>";
@@ -20401,6 +20395,8 @@
 					"$(PROJECT_DIR)/Libraries/libusb",
 					"$(PROJECT_DIR)/Libraries/libUniversal",
 					"$(PROJECT_DIR)/Libraries/labjack",
+					"$(PROJECT_DIR)/Libraries/libUniversal/lib/mysqlrouter",
+					"$(PROJECT_DIR)/Libraries/libUniversal/lib",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/Libraries\"";
@@ -20490,6 +20486,8 @@
 					"$(PROJECT_DIR)/Libraries/libusb",
 					"$(PROJECT_DIR)/Libraries/libUniversal",
 					"$(PROJECT_DIR)/Libraries/labjack",
+					"$(PROJECT_DIR)/Libraries/libUniversal/lib/mysqlrouter",
+					"$(PROJECT_DIR)/Libraries/libUniversal/lib",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
@@ -20575,6 +20573,8 @@
 					"$(PROJECT_DIR)/Libraries/libusb",
 					"$(PROJECT_DIR)/Libraries/libUniversal",
 					"$(PROJECT_DIR)/Libraries/labjack",
+					"$(PROJECT_DIR)/Libraries/libUniversal/lib/mysqlrouter",
+					"$(PROJECT_DIR)/Libraries/libUniversal/lib",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/Libraries\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/Libraries/libUniversal\"";
