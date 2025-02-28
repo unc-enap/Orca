@@ -374,9 +374,9 @@
 		43D7CB98177DD0C100ED4736 /* 3DScanPlatform.tiff in Resources */ = {isa = PBXBuildFile; fileRef = 43D7CB97177DD0C000ED4736 /* 3DScanPlatform.tiff */; };
 		43E9ED461339044100888F93 /* ORAuxHw.h in Headers */ = {isa = PBXBuildFile; fileRef = 43E9ED441339044100888F93 /* ORAuxHw.h */; };
 		43E9ED471339044100888F93 /* ORAuxHw.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E9ED451339044100888F93 /* ORAuxHw.m */; };
-		43FF59EA2D70FC5D00C8AE61 /* libcrypto.UNI.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59E92D70FC5D00C8AE61 /* libcrypto.UNI.3.dylib */; };
-		43FF59EC2D70FC6D00C8AE61 /* libmysqlclient.UNI.24.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59EB2D70FC6D00C8AE61 /* libmysqlclient.UNI.24.dylib */; };
-		43FF59F02D70FC9900C8AE61 /* libssl.UNI.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59EF2D70FC9800C8AE61 /* libssl.UNI.3.dylib */; };
+		43FF59EA2D70FC5D00C8AE61 /* libcrypto.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59E92D70FC5D00C8AE61 /* libcrypto.3.dylib */; };
+		43FF59EC2D70FC6D00C8AE61 /* libmysqlclient.24.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59EB2D70FC6D00C8AE61 /* libmysqlclient.24.dylib */; };
+		43FF59F02D70FC9900C8AE61 /* libssl.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59EF2D70FC9800C8AE61 /* libssl.3.dylib */; };
 		43FF59F42D70FF4E00C8AE61 /* libpq.5.14.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59F32D70FF4E00C8AE61 /* libpq.5.14.dylib */; };
 		43FF59F62D70FFA500C8AE61 /* libpq.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43FF59F52D70FFA500C8AE61 /* libpq.5.dylib */; };
 		4547F56C1CECB9B1006CA8E3 /* ORRunningAverageGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 4547F56A1CECB9B1006CA8E3 /* ORRunningAverageGroup.h */; };
@@ -4440,9 +4440,9 @@
 		43D7CB97177DD0C000ED4736 /* 3DScanPlatform.tiff */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = 3DScanPlatform.tiff; sourceTree = "<group>"; };
 		43E9ED441339044100888F93 /* ORAuxHw.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORAuxHw.h; path = "Source/Objects/Hardware/Hardware Base Classes/ORAuxHw.h"; sourceTree = SOURCE_ROOT; };
 		43E9ED451339044100888F93 /* ORAuxHw.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORAuxHw.m; path = "Source/Objects/Hardware/Hardware Base Classes/ORAuxHw.m"; sourceTree = SOURCE_ROOT; };
-		43FF59E92D70FC5D00C8AE61 /* libcrypto.UNI.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.UNI.3.dylib; sourceTree = "<group>"; };
-		43FF59EB2D70FC6D00C8AE61 /* libmysqlclient.UNI.24.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient.UNI.24.dylib; sourceTree = "<group>"; };
-		43FF59EF2D70FC9800C8AE61 /* libssl.UNI.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.UNI.3.dylib; sourceTree = "<group>"; };
+		43FF59E92D70FC5D00C8AE61 /* libcrypto.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libcrypto.3.dylib; sourceTree = "<group>"; };
+		43FF59EB2D70FC6D00C8AE61 /* libmysqlclient.24.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libmysqlclient.24.dylib; sourceTree = "<group>"; };
+		43FF59EF2D70FC9800C8AE61 /* libssl.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libssl.3.dylib; sourceTree = "<group>"; };
 		43FF59F32D70FF4E00C8AE61 /* libpq.5.14.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.5.14.dylib; sourceTree = "<group>"; };
 		43FF59F52D70FFA500C8AE61 /* libpq.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libpq.5.dylib; sourceTree = "<group>"; };
 		4547F56A1CECB9B1006CA8E3 /* ORRunningAverageGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORRunningAverageGroup.h; sourceTree = "<group>"; };
@@ -7830,13 +7830,13 @@
 				708077D924F436EE00F29EFE /* libusb-1.0.0.dylib in Frameworks */,
 				847599860B5FF26500123411 /* QuartzCore.framework in Frameworks */,
 				2DC1EE800F33724E00E93C75 /* WebKit.framework in Frameworks */,
-				43FF59EA2D70FC5D00C8AE61 /* libcrypto.UNI.3.dylib in Frameworks */,
+				43FF59EA2D70FC5D00C8AE61 /* libcrypto.3.dylib in Frameworks */,
 				840F5B191222C90000D49A75 /* QTKit.framework in Frameworks */,
 				84E6CD001E4247BD004D6978 /* libusb-1.0.a in Frameworks */,
 				43FF59F42D70FF4E00C8AE61 /* libpq.5.14.dylib in Frameworks */,
 				43FF59F62D70FFA500C8AE61 /* libpq.5.dylib in Frameworks */,
-				43FF59EC2D70FC6D00C8AE61 /* libmysqlclient.UNI.24.dylib in Frameworks */,
-				43FF59F02D70FC9900C8AE61 /* libssl.UNI.3.dylib in Frameworks */,
+				43FF59EC2D70FC6D00C8AE61 /* libmysqlclient.24.dylib in Frameworks */,
+				43FF59F02D70FC9900C8AE61 /* libssl.3.dylib in Frameworks */,
 				8458E91515DA8A2A005C43A9 /* ScriptingBridge.framework in Frameworks */,
 				8481E67917653766001AB905 /* SystemConfiguration.framework in Frameworks */,
 				4322E9B217830004008E78A4 /* GLUT.framework in Frameworks */,
@@ -8152,9 +8152,9 @@
 			children = (
 				43FF59F52D70FFA500C8AE61 /* libpq.5.dylib */,
 				43FF59F32D70FF4E00C8AE61 /* libpq.5.14.dylib */,
-				43FF59EF2D70FC9800C8AE61 /* libssl.UNI.3.dylib */,
-				43FF59EB2D70FC6D00C8AE61 /* libmysqlclient.UNI.24.dylib */,
-				43FF59E92D70FC5D00C8AE61 /* libcrypto.UNI.3.dylib */,
+				43FF59EF2D70FC9800C8AE61 /* libssl.3.dylib */,
+				43FF59EB2D70FC6D00C8AE61 /* libmysqlclient.24.dylib */,
+				43FF59E92D70FC5D00C8AE61 /* libcrypto.3.dylib */,
 			);
 			path = libUniversal;
 			sourceTree = "<group>";
