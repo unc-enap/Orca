@@ -167,45 +167,45 @@ int centered_moving_average_u16(unsigned short *x, float *y, int start, int stop
   return q;
 }
 
-float max_windowed_sum(float *x, int start, int stop, int nsamples, int coincidence_window, float coincidence_threshold, int *largest_sum_offset, SubEventList* sub_event_list) {
+float max_windowed_sum(float *x, int start, int stop, int nsamples, int sum_window, float sub_event_threshold, int *largest_sum_offset, SubEventList* sub_event_list) {
   assert(start >= 0);
   assert(stop <= nsamples);
-  assert(coincidence_window > 0);
+  assert(sum_window > 0);
   assert(sub_event_list);
 
   int up = 0;
   sub_event_list->size = 0; // reset the trigger list
   sub_event_list->wps_max[0] = 0.0;
   float acc = 0;
-  float largest_acc = 0;
+  float largest_sum = 0;
 
-  for (int i = start; i < start + coincidence_window && i < stop; i++)
+  for (int i = start; i < start + sum_window && i < stop; i++)
     acc += x[i];
 
-  largest_acc = acc;
+  largest_sum = acc;
   int offset = start;
-  if (acc >= coincidence_threshold) {
+  if (acc >= sub_event_threshold) {
     sub_event_list->start[sub_event_list->size] = start;
     sub_event_list->wps_max[sub_event_list->size] = acc;
     up = 1;
   }
 
-  for (int i = start; i < (stop-coincidence_window); i++) {
-    acc += x[i + coincidence_window] - x[i];
-    if (acc > largest_acc) {
-      largest_acc = acc;
+  for (int i = start; i < (stop-sum_window); i++) {
+    acc += x[i + sum_window] - x[i];
+    if (acc > largest_sum) {
+      largest_sum = acc;
       offset = i;
     }
 
-    // if (up && acc >= coincidence_threshold)
+    // if (up && acc >= sub_event_threshold)
     //   // do nothing
-    if (up && acc < coincidence_threshold) {
+    if (up && acc < sub_event_threshold) {
       // came down, end current trigger entry
-      sub_event_list->stop[sub_event_list->size] = i + 1 + coincidence_window;
+      sub_event_list->stop[sub_event_list->size] = i + 1 + sum_window;
       sub_event_list->size++;
       sub_event_list->wps_max[sub_event_list->size] = 0.0; // reset the values when we use a new one
       up = 0;
-    } else if (!up && acc >= coincidence_threshold) {
+    } else if (!up && acc >= sub_event_threshold) {
       // start new entry
 
       // only if it's not the first one do we check if they are overlapping within the coincidence window
@@ -225,8 +225,8 @@ float max_windowed_sum(float *x, int start, int stop, int nsamples, int coincide
   }
 
   if (up) {
-    // end the triggerlist if it's still up. last possible stop sample is `stop-coincidence_window`
-    // sub_event_list->stop[sub_event_list->size] = stop-coincidence_window;
+    // end the triggerlist if it's still up. last possible stop sample is `stop-sum_window`
+    // sub_event_list->stop[sub_event_list->size] = stop-sum_window;
     sub_event_list->stop[sub_event_list->size] = stop;
     sub_event_list->size++;
   }
@@ -234,7 +234,7 @@ float max_windowed_sum(float *x, int start, int stop, int nsamples, int coincide
   if (largest_sum_offset)
     *largest_sum_offset = offset;  // round down if uneven window, close enough.
 
-  return largest_acc;
+  return largest_sum;
 }
 
 float fsp_dsp_local_peaks_f32(float *input_trace, float *peak_trace, int start, int stop, int nsamples,
@@ -464,13 +464,13 @@ void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int num_tr
   }
 
   cfg->max_peak_sum_value = max_windowed_sum(cfg->peak_trace, cfg->sum_window_start_sample, cfg->sum_window_stop_sample,
-                                         nsamples, cfg->coincidence_window, cfg->coincidence_threshold, &cfg->max_peak_sum_offset, cfg->sub_event_list);
+                                         nsamples, cfg->sum_window_size, cfg->sub_event_sum_threshold, &cfg->max_peak_sum_offset, cfg->sub_event_list);
   cfg->max_peak_sum_multiplicity = multiplicity;
   cfg->max_peak_value = total_largest_peak;
   cfg->max_peak_offset = total_largest_peak_offset;
 }
 
-void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers) {
+void fsp_dsp_hardware_majority(DSPHardwareMultiplicity *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers) {
 
   int multiplicity = 0;
   int mult_below_threshold = 0;
@@ -499,7 +499,7 @@ void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int num_traces, unsigne
   }
 
   cfg->multiplicity = multiplicity;
-  cfg->mult_below_threshold = mult_below_threshold;
+  cfg->n_below_minimum_multiplicity = mult_below_threshold;
   cfg->max_value = max;
 
   if (!multiplicity) {

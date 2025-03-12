@@ -68,7 +68,7 @@ static inline int fcio_get_fspconfig_buffer(FCIOStream in, FSPBuffer* buffer) {
 }
 
 // DSPHardwareMajority
-static inline int fcio_put_fspconfig_hwm(FCIOStream stream, DSPHardwareMajority* dsp_hwm) {
+static inline int fcio_put_fspconfig_hwm(FCIOStream stream, DSPHardwareMultiplicity* dsp_hwm) {
   if (!stream || !dsp_hwm)
     return -1;
   fcio_put_fsp_tracemap(stream, &dsp_hwm->tracemap);
@@ -76,7 +76,7 @@ static inline int fcio_put_fspconfig_hwm(FCIOStream stream, DSPHardwareMajority*
 
   return 0;
 }
-static inline int fcio_get_fspconfig_hwm(FCIOStream in, DSPHardwareMajority* dsp_hwm) {
+static inline int fcio_get_fspconfig_hwm(FCIOStream in, DSPHardwareMultiplicity* dsp_hwm) {
   if (!dsp_hwm)
     return -1;
   fcio_get_fsp_tracemap(in, &dsp_hwm->tracemap);
@@ -111,20 +111,20 @@ static inline int fcio_put_fspconfig_wps(FCIOStream stream, DSPWindowedPeakSum* 
   fcio_put_fsp_tracemap(stream, &dsp_wps->tracemap);
 
   FCIOWriteInt(stream, dsp_wps->apply_gain_scaling);
-  FCIOWriteInt(stream, dsp_wps->coincidence_window);
+  FCIOWriteInt(stream, dsp_wps->sum_window_size);
   FCIOWriteInt(stream, dsp_wps->sum_window_start_sample);
   FCIOWriteInt(stream, dsp_wps->sum_window_stop_sample);
-  FCIOWriteFloat(stream, dsp_wps->coincidence_threshold);
+  FCIOWriteFloat(stream, dsp_wps->sub_event_sum_threshold);
 
   FCIOWriteFloats(stream, dsp_wps->tracemap.n_mapped, dsp_wps->gains);
   FCIOWriteFloats(stream, dsp_wps->tracemap.n_mapped, dsp_wps->thresholds);
   FCIOWriteFloats(stream, dsp_wps->tracemap.n_mapped, dsp_wps->lowpass);
   FCIOWriteFloats(stream, dsp_wps->tracemap.n_mapped, dsp_wps->shaping_widths);
 
-  FCIOWriteInt(stream, dsp_wps->dsp_pre_max_samples);
-  FCIOWriteInt(stream, dsp_wps->dsp_post_max_samples);
-  FCIOWriteInts(stream, dsp_wps->tracemap.n_mapped, dsp_wps->dsp_pre_samples);
-  FCIOWriteInts(stream, dsp_wps->tracemap.n_mapped, dsp_wps->dsp_post_samples);
+  FCIOWriteInt(stream, dsp_wps->dsp_max_margin_front);
+  FCIOWriteInt(stream, dsp_wps->dsp_max_margin_back);
+  FCIOWriteInts(stream, dsp_wps->tracemap.n_mapped, dsp_wps->dsp_margin_front);
+  FCIOWriteInts(stream, dsp_wps->tracemap.n_mapped, dsp_wps->dsp_margin_back);
   FCIOWriteInts(stream, dsp_wps->tracemap.n_mapped, dsp_wps->dsp_start_sample);
   FCIOWriteInts(stream, dsp_wps->tracemap.n_mapped, dsp_wps->dsp_stop_sample);
 
@@ -137,20 +137,20 @@ static inline int fcio_get_fspconfig_wps(FCIOStream in, DSPWindowedPeakSum* dsp_
   fcio_get_fsp_tracemap(in, &dsp_wps->tracemap);
 
   FCIOReadInt(in, dsp_wps->apply_gain_scaling);
-  FCIOReadInt(in, dsp_wps->coincidence_window);
+  FCIOReadInt(in, dsp_wps->sum_window_size);
   FCIOReadInt(in, dsp_wps->sum_window_start_sample);
   FCIOReadInt(in, dsp_wps->sum_window_stop_sample);
-  FCIOReadFloat(in, dsp_wps->coincidence_threshold);
+  FCIOReadFloat(in, dsp_wps->sub_event_sum_threshold);
 
   FCIOReadFloats(in, FCIOMaxChannels, dsp_wps->gains);
   FCIOReadFloats(in, FCIOMaxChannels, dsp_wps->thresholds);
   FCIOReadFloats(in, FCIOMaxChannels, dsp_wps->lowpass);
   FCIOReadFloats(in, FCIOMaxChannels, dsp_wps->shaping_widths);
 
-  FCIOReadInt(in, dsp_wps->dsp_pre_max_samples);
-  FCIOReadInt(in, dsp_wps->dsp_post_max_samples);
-  FCIOReadInts(in, FCIOMaxChannels, dsp_wps->dsp_pre_samples);
-  FCIOReadInts(in, FCIOMaxChannels, dsp_wps->dsp_post_samples);
+  FCIOReadInt(in, dsp_wps->dsp_max_margin_front);
+  FCIOReadInt(in, dsp_wps->dsp_max_margin_back);
+  FCIOReadInts(in, FCIOMaxChannels, dsp_wps->dsp_margin_front);
+  FCIOReadInts(in, FCIOMaxChannels, dsp_wps->dsp_margin_back);
   FCIOReadInts(in, FCIOMaxChannels, dsp_wps->dsp_start_sample);
   FCIOReadInts(in, FCIOMaxChannels, dsp_wps->dsp_stop_sample);
 
@@ -161,12 +161,12 @@ static inline int fcio_get_fspconfig_wps(FCIOStream in, DSPWindowedPeakSum* dsp_
 static inline int fcio_put_fspconfig_trigger(FCIOStream stream, FSPTriggerConfig* config) {
   if (!stream || !config)
     return -1;
-  FCIOWriteInt(stream, config->hwm_threshold);
+  FCIOWriteInt(stream, config->hwm_min_multiplicity);
   FCIOWriteInt(stream, config->hwm_prescale_ratio);
   FCIOWriteInt(stream, config->wps_prescale_ratio);
 
-  FCIOWriteFloat(stream, config->relative_wps_threshold);
-  FCIOWriteFloat(stream, config->absolute_wps_threshold);
+  FCIOWriteFloat(stream, config->wps_coincident_sum_threshold);
+  FCIOWriteFloat(stream, config->wps_sum_threshold);
   FCIOWriteFloat(stream, config->wps_prescale_rate);
   FCIOWriteFloat(stream, config->hwm_prescale_rate);
 
@@ -184,12 +184,12 @@ static inline int fcio_put_fspconfig_trigger(FCIOStream stream, FSPTriggerConfig
 static inline int fcio_get_fspconfig_trigger(FCIOStream stream, FSPTriggerConfig* config) {
   if (!stream || !config)
     return -1;
-  FCIOReadInt(stream, config->hwm_threshold);
+  FCIOReadInt(stream, config->hwm_min_multiplicity);
   FCIOReadInt(stream, config->hwm_prescale_ratio);
   FCIOReadInt(stream, config->wps_prescale_ratio);
 
-  FCIOReadFloat(stream, config->relative_wps_threshold);
-  FCIOReadFloat(stream, config->absolute_wps_threshold);
+  FCIOReadFloat(stream, config->wps_coincident_sum_threshold);
+  FCIOReadFloat(stream, config->wps_sum_threshold);
   FCIOReadFloat(stream, config->wps_prescale_rate);
   FCIOReadFloat(stream, config->hwm_prescale_rate);
 
@@ -389,11 +389,11 @@ static inline size_t fspconfig_size(StreamProcessor* processor) {
   size_t total_size = 0;
 
   total_size += frame_header; // tag_size
-  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).hwm_threshold);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).hwm_min_multiplicity);
   total_size += frame_header + sizeof(((FSPTriggerConfig){0}).hwm_prescale_ratio);
   total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_prescale_ratio);
-  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).relative_wps_threshold);
-  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).absolute_wps_threshold);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_coincident_sum_threshold);
+  total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_sum_threshold);
   total_size += frame_header + sizeof(((FSPTriggerConfig){0}).wps_prescale_rate);
   total_size += frame_header + sizeof(((FSPTriggerConfig){0}).hwm_prescale_rate);
 
@@ -411,7 +411,7 @@ static inline size_t fspconfig_size(StreamProcessor* processor) {
   total_size += fsptimestamp_size();
 
   total_size += fsptracemap_size(&processor->dsp_hwm.tracemap);
-  total_size += frame_header + sizeof(*((DSPHardwareMajority){0}).fpga_energy_threshold_adc) * processor->dsp_hwm.tracemap.n_mapped;
+  total_size += frame_header + sizeof(*((DSPHardwareMultiplicity){0}).fpga_energy_threshold_adc) * processor->dsp_hwm.tracemap.n_mapped;
 
   total_size += fsptracemap_size(&processor->dsp_ct.tracemap);
   total_size += frame_header + sizeof(*((DSPChannelThreshold){0}).thresholds) * processor->dsp_ct.tracemap.n_mapped;
@@ -419,20 +419,20 @@ static inline size_t fspconfig_size(StreamProcessor* processor) {
   total_size += fsptracemap_size(&processor->dsp_wps.tracemap);
 
   total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).apply_gain_scaling);
-  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).coincidence_window);
+  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).sum_window_size);
   total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).sum_window_start_sample);
   total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).sum_window_stop_sample);
-  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).coincidence_threshold);
+  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).sub_event_sum_threshold);
 
   total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).gains) * processor->dsp_wps.tracemap.n_mapped;
   total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).thresholds) * processor->dsp_wps.tracemap.n_mapped;
   total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).lowpass) * processor->dsp_wps.tracemap.n_mapped;
   total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).shaping_widths) * processor->dsp_wps.tracemap.n_mapped;
 
-  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).dsp_pre_max_samples);
-  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).dsp_post_max_samples);
-  total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).dsp_pre_samples) * processor->dsp_wps.tracemap.n_mapped;
-  total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).dsp_post_samples) * processor->dsp_wps.tracemap.n_mapped;
+  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).dsp_max_margin_front);
+  total_size += frame_header + sizeof(((DSPWindowedPeakSum){0}).dsp_max_margin_back);
+  total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).dsp_margin_front) * processor->dsp_wps.tracemap.n_mapped;
+  total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).dsp_margin_back) * processor->dsp_wps.tracemap.n_mapped;
   total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).dsp_start_sample) * processor->dsp_wps.tracemap.n_mapped;
   total_size += frame_header + sizeof(*((DSPWindowedPeakSum){0}).dsp_stop_sample) * processor->dsp_wps.tracemap.n_mapped;
   return total_size;
