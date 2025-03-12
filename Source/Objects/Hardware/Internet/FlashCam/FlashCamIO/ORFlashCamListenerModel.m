@@ -1872,7 +1872,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         NSLogColor([NSColor redColor], @"%@: setupReadoutTask guardian (ADCCard) not ready after %dms.\n", [self identifier], currentStartupTime);
 
     if (waitForFileName)
-        NSLogColor([NSColor redColor], @"%@: setupReadoutTask Filename not know after %dms.\n", [self identifier], currentStartupTime);
+        NSLogColor([NSColor redColor], @"%@: setupReadoutTask Listener peer is a file (File Stream Mode), however the filename is not known after %dms. Maybe Offline mode is enabled as well?\n", [self identifier], currentStartupTime);
 
     return NO;
 }
