@@ -1566,7 +1566,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             for (int i = 0; i < state->event->num_traces; i++) {
                 int trace_idx = state->event->trace_list[i];
                 uint16_t addr = (state->config->tracemap[trace_idx] & 0xFFFF0000) >> 16;
-                uint16_t channel = (state->config->tracemap[trace_idx	] & 0xffff);
+                uint16_t channel = (state->config->tracemap[trace_idx] & 0xffff);
                 // a lookup for cards per addr would prevent the second loop
                 for(id obj in [readOutList children]){
                     ORFlashCamADCModel* card = [obj object];
