@@ -1387,7 +1387,6 @@ static NSString *ORRunModelRunControlConnection = @"Run Control Connector";
         
 		if(!runFailedAlarm){
 			runFailedAlarm = [[ORAlarm alloc] initWithName:[NSString stringWithFormat:@"Run %u did NOT start",[self runNumber]] severity:kRunInhibitorAlarm];
-            
 			[runFailedAlarm setSticky:YES];
 		}
 		[runFailedAlarm setAcknowledged:NO];
