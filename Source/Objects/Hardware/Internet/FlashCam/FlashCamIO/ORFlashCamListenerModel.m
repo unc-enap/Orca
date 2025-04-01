@@ -982,7 +982,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1,[v intValue]),2304)] forKey:p];
     else if([p isEqualToString:@"fspHWMajThreshold"])
         [configParams setObject:[NSNumber numberWithInt:MIN(MAX(1,[v intValue]),2304)] forKey:p];
-    else if([p isEqualToString:@"fspHWPrescaleRatio"])
+    else if([p isEqualToString:@"fspHWPreScaleRatio"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0,[v intValue])] forKey:p];
     else if([p isEqualToString:@"fspHWPreScaleThreshold"])
         [configParams setObject:[NSNumber numberWithInt:MAX(0,[v intValue])] forKey:p];
