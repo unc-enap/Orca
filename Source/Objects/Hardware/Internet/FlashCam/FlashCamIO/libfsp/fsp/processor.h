@@ -1,5 +1,6 @@
 #pragma once
 
+#include "fcio.h"
 #include "timestamps.h"
 #include "flags.h"
 #include "stats.h"
@@ -11,13 +12,13 @@
 typedef struct {
 
   int hwm_min_multiplicity;
-  int hwm_prescale_ratio;
-  int wps_prescale_ratio;
+  int hwm_prescale_ratio[FCIOMaxChannels]; // the per channel prescale ratio
+  float hwm_prescale_rate[FCIOMaxChannels];
 
+  int wps_prescale_ratio;
   float wps_coincident_sum_threshold;
   float wps_sum_threshold;
   float wps_prescale_rate;
-  float hwm_prescale_rate;
 
   // the write flags which trigger the final `write` decision after
   // all processing
@@ -39,6 +40,19 @@ typedef struct {
 
 } FSPTriggerConfig;
 
+typedef struct {
+
+  int enabled;
+
+  int wps_prescale_ready_counter;
+  Timestamp wps_prescale_timestamp;
+  Timestamp hwm_prescale_timestamp[FCIOMaxChannels];
+
+  int n_hwm_prescaled; // counts the number of channels that were prescaled
+  int hwm_prescaled_trace_idx[FCIOMaxChannels]; // the list of trace_idx which were prescaled
+
+} FSPPrescaler;
+
 typedef struct StreamProcessor {
 
   // run-time configuration
@@ -59,12 +73,6 @@ typedef struct StreamProcessor {
   Timestamp post_trigger_timestamp;
   Timestamp pre_trigger_timestamp;
 
-  int wps_prescale_ready_counter;
-  Timestamp wps_prescale_timestamp;
-
-  int hwm_prescale_ready_counter;
-  Timestamp hwm_prescale_timestamp;
-
   // buffer configuration: written to FSPConfig
   Timestamp minimum_buffer_window;
   unsigned int minimum_buffer_depth;
@@ -75,6 +83,7 @@ typedef struct StreamProcessor {
   DSPWindowedPeakSum dsp_wps;
   DSPHardwareMultiplicity dsp_hwm;
   DSPChannelThreshold dsp_ct;
+  FSPPrescaler prescaler;
 
   // processor statistics: written to FSPStatus
   FSPStats stats;

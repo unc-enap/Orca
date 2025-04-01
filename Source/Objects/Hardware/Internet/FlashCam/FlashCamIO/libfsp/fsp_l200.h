@@ -47,7 +47,7 @@ int FSP_L200_SetAuxParameters(StreamProcessor *processor, FSPTraceFormat format,
                         int digital_muon_channel, int muon_level_adc);
 
 int FSP_L200_SetGeParameters(StreamProcessor *processor, int nchannels, int *channelmap, FSPTraceFormat format,
-                       int majority_threshold, int skip_full_counting, unsigned short *ge_prescaling_threshold_adc,
+                       int majority_threshold, unsigned short *ge_prescaling_threshold_adc,
                        int prescale_ratio);
 
 int FSP_L200_SetSiPMParameters(StreamProcessor *processor, int nchannels, int *channelmap, FSPTraceFormat format,

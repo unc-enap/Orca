@@ -15,14 +15,15 @@ typedef struct {
   // with entrys either -1 for traces not handled by this processor or the index into the `map` array
   // which allows a loopup of the correct trace_idx
 
-  int map[FCIOMaxChannels]; // the list of assigned traces for this processor, up to n_mapped
-  int n_mapped; // the number of assigned traces, applies to trace_list
+  int map[FCIOMaxChannels]; // list of assigned traces (trace_idx (trace_list)) for this processor, up to n_mapped
+  int n_mapped; // size of map
 
   // reverse lookup for mapped channels.
-  int enabled[FCIOMaxChannels]; // a list of map_idx, index with trace_idx from fcio_event.trace_list
-  int n_enabled; // the total number of traces available, is equal to fcio_config.adcs. If 0 the processer was not enabled.
+  int enabled[FCIOMaxChannels]; // list of map_idx (TraceMap.map), index with trace_idx from fcio_event.trace_list
+                                // contains trace_idx if enabled, or -1 if disabled
+  int n_enabled; // size of enabled, equal to fcio.event.num_traces; if 0 processor is not enabled.
 
-   // a human readable label, index similar to `map`.
+   // a human readable label, size is `n_mapped`, index is the same as `map`.
   char label[FCIOMaxChannels][8];
 
 } FSPTraceMap;
@@ -114,45 +115,42 @@ static inline int convert2traceidx(FSPTraceMap* map, unsigned int *fcio_tracemap
   switch (map->format) {
     // fcio-tracemap
     case FCIO_TRACE_MAP_FORMAT: {
+      int nfound = 0;
       for (int i = 0; i < map->n_mapped; i++) {
         unsigned int to_convert = map->map[i];
-        int found = 0;
         for (int j = 0; j < FCIOMaxChannels && fcio_tracemap[j]; j++) {
           if (to_convert == fcio_tracemap[j]) {
-            map->map[i] = j;
-            map->enabled[j] = i;
-            found = 1;
+            map->map[nfound] = j;
+            map->enabled[j] = nfound;
+            nfound++;
             break;
           }
         }
-        if (!found) return 0;
       }
-      break;
+      map->n_mapped = nfound;
+      return nfound;
     }
     // rawid
     case L200_RAWID_FORMAT: {
+      int nfound = 0;
       for (int i = 0; i < map->n_mapped; i++) {
         unsigned int to_convert = map->map[i];
-        int found = 0;
         for (int j = 0; j < FCIOMaxChannels && fcio_tracemap[j]; j++) {
           if (rawid2tracemap(to_convert) == fcio_tracemap[j]) {
-            map->map[i] = j;
-            map->enabled[j] = i;
-            found = 1;
+            map->map[nfound] = j;
+            map->enabled[j] = nfound;
+            nfound++;
             break;
           }
         }
-        if (!found) return 0;
       }
-      break;
+      map->n_mapped = nfound;
+      return nfound;
     }
     case FCIO_TRACE_INDEX_FORMAT: {
       for (int i = 0; i < map->n_mapped; i++) {
         if (map->map[i] < FCIOMaxChannels && fcio_tracemap[map->map[i]]) {
-          map->map[i] = i;
-          map->enabled[i] = i;
-        } else {
-          return 0;
+          map->enabled[map->map[i]] = i;
         }
       }
       break;

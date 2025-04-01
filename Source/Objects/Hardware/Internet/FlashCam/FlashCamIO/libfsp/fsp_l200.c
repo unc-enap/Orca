@@ -1,7 +1,6 @@
 #include "fsp_l200.h"
 
 #include <assert.h>
-#include <stdlib.h>
 #include <stdio.h>
 
 int FSP_L200_SetAuxParameters(StreamProcessor* processor, FSPTraceFormat format, int pulser_channel,
@@ -57,7 +56,7 @@ int FSP_L200_SetAuxParameters(StreamProcessor* processor, FSPTraceFormat format,
 }
 
 int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* channelmap, FSPTraceFormat format,
-                       int majority_threshold, int skip_full_counting, unsigned short* ge_prescale_threshold_adc,
+                       int majority_threshold, unsigned short* ge_prescale_threshold_adc,
                        int prescale_ratio) {
 
   DSPHardwareMultiplicity* hwm = &processor->dsp_hwm;
@@ -77,15 +76,16 @@ int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* cha
     hwm->tracemap.map[i] = channelmap[i];
     hwm->fpga_energy_threshold_adc[i] = ge_prescale_threshold_adc[i];
   }
-  hwm->fast = skip_full_counting;
   if (majority_threshold >= 0)
     processor->triggerconfig.hwm_min_multiplicity = majority_threshold;
   else {
     fprintf(stderr, "CRITICAL majority_threshold needs to be >= 0 is %d\n", majority_threshold);
     return 0;
   }
-  if (prescale_ratio >= 0)
-    processor->triggerconfig.hwm_prescale_ratio = prescale_ratio;
+  if (prescale_ratio >= 0) {
+    for (int i = 0; i < nchannels && i < FCIOMaxChannels; i++)
+      processor->triggerconfig.hwm_prescale_ratio[i] = prescale_ratio; // set the same preratio for all channels.
+  }
   else {
     fprintf(stderr, "CRITICAL Ge prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
@@ -97,13 +97,12 @@ int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* cha
     fprintf(stderr, "DEBUG FSP_L200_SetGeParameters\n");
     fprintf(stderr, "DEBUG majority_threshold %d\n", majority_threshold);
     fprintf(stderr, "DEBUG prescale_ratio     %d\n", prescale_ratio);
-    fprintf(stderr, "DEBUG skip_full_counting %d\n", hwm->fast);
     fprintf(stderr, "DEBUG channelmap_format  %d : %s\n", hwm->tracemap.format, channelmap_fmt2str(format));
     for (int i = 0; i < hwm->tracemap.n_mapped; i++) {
       if (hwm->tracemap.format == FCIO_TRACE_MAP_FORMAT) {
-        fprintf(stderr, "DEBUG channel 0x%x\n", hwm->tracemap.map[i]);
+        fprintf(stderr, "DEBUG mapped channel 0x%x\n", hwm->tracemap.map[i]);
       } else {
-        fprintf(stderr, "DEBUG channel %d\n", hwm->tracemap.map[i]);
+        fprintf(stderr, "DEBUG mapped channel %d\n", hwm->tracemap.map[i]);
       }
     }
   }
@@ -206,7 +205,7 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
   if (enable_muon_coincidence) {
     int ct_map_indices[1];
     ct_map_indices[0] = 2; // see Set Aux Channels, map idx 2 (trace_list[2]) should be muon channel
-    FSPSetWPSReferences(processor, (HWMFlags){.multiplicity_threshold = 1}, (CTFlags){0}, (WPSFlags){0}, ct_map_indices, 1);
+    FSPSetWPSReferences(processor, (HWMFlags){.sw_multiplicity = 1}, (CTFlags){0}, (WPSFlags){0}, ct_map_indices, 1);
   }
 
   if (processor->loglevel >= 4) {
