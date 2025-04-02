@@ -610,4 +610,30 @@ BOOL ORRunAlertPanel(NSString* mainMessage, NSString* msg, NSString* defaultButt
      va_end(ap);
     return result;
 }
-        
+
+NSString* getStackTrace(NSArray<NSString *> *callStackSymbols)
+{
+    // The following code is based on https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Exceptions/Tasks/ControllingAppResponse.html .
+    NSTask *ls = [[NSTask alloc] init];
+    NSString *pid = [[NSNumber numberWithInt:[[NSProcessInfo processInfo] processIdentifier]] stringValue];
+    NSMutableArray *args = [NSMutableArray arrayWithCapacity:20];
+
+    [args addObject:@"-p"];
+    [args addObject:pid];
+    [args addObjectsFromArray:callStackSymbols];
+    // Note: function addresses are separated by double spaces, not a single space.
+
+    NSPipe * out = [NSPipe pipe];
+    [ls setStandardOutput:out];
+    [ls setLaunchPath:@"/usr/bin/atos"];
+    [ls setArguments:args];
+    [ls launch];
+    [ls waitUntilExit];
+    [ls release];
+    
+    NSFileHandle * read = [out fileHandleForReading];
+    NSData * dataRead = [read readDataToEndOfFile];
+    NSString * stringRead = [[[NSString alloc] initWithData:dataRead encoding:NSUTF8StringEncoding] autorelease];
+    
+    return stringRead;
+}
