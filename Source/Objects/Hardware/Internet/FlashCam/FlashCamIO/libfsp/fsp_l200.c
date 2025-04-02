@@ -60,7 +60,7 @@ int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* cha
                        int majority_threshold, int skip_full_counting, unsigned short* ge_prescale_threshold_adc,
                        int prescale_ratio) {
 
-  DSPHardwareMajority* hwm = &processor->dsp_hwm;
+  DSPHardwareMultiplicity* hwm = &processor->dsp_hwm;
 
   if (!is_known_channelmap_format(format)) {
     if (processor->loglevel)
@@ -79,7 +79,7 @@ int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* cha
   }
   hwm->fast = skip_full_counting;
   if (majority_threshold >= 0)
-    processor->triggerconfig.hwm_threshold = majority_threshold;
+    processor->triggerconfig.hwm_min_multiplicity = majority_threshold;
   else {
     fprintf(stderr, "CRITICAL majority_threshold needs to be >= 0 is %d\n", majority_threshold);
     return 0;
@@ -129,14 +129,14 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
   wps->tracemap.format = format;
 
   if (coincidence_wps_threshold >= 0)
-    processor->triggerconfig.relative_wps_threshold = coincidence_wps_threshold;
+    processor->triggerconfig.wps_coincident_sum_threshold = coincidence_wps_threshold;
   else {
     fprintf(stderr, "CRICITAL coincidence_wps_threshold needs to be >= 0 is %f\n", coincidence_wps_threshold);
     return 0;
   }
 
   if (sum_threshold_pe >= 0)
-    processor->triggerconfig.absolute_wps_threshold = sum_threshold_pe;
+    processor->triggerconfig.wps_sum_threshold = sum_threshold_pe;
   else {
     fprintf(stderr, "CRICITAL sum_threshold_pe needs to be >= 0 is %f\n", sum_threshold_pe);
     return 0;
@@ -153,17 +153,17 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
     return 0;
   }
 
-  wps->coincidence_window = coincidence_window_samples;
+  wps->sum_window_size = coincidence_window_samples;
   wps->sum_window_start_sample = sum_window_start_sample;
   wps->sum_window_stop_sample = sum_window_stop_sample;
-  wps->coincidence_threshold = coincidence_wps_threshold;
+  wps->sub_event_sum_threshold = coincidence_wps_threshold;
 
   wps->apply_gain_scaling = 1;
 
   wps->tracemap.n_mapped = nchannels;
 
-  wps->dsp_pre_max_samples = 0;
-  wps->dsp_post_max_samples = 0;
+  wps->dsp_max_margin_front = 0;
+  wps->dsp_max_margin_back = 0;
   for (int i = 0; i < nchannels && i < FCIOMaxChannels; i++) {
     wps->tracemap.map[i] = channelmap[i];
 
@@ -195,10 +195,10 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
       return 0;
     }
 
-    wps->dsp_pre_samples[i] = fsp_dsp_diff_and_smooth_pre_samples(shaping_width_samples[i], wps->lowpass[i]);
-    if (wps->dsp_pre_samples[i] > wps->dsp_pre_max_samples) wps->dsp_pre_max_samples = wps->dsp_pre_samples[i];
-    wps->dsp_post_samples[i] = fsp_dsp_diff_and_smooth_post_samples(shaping_width_samples[i], wps->lowpass[i]);
-    if (wps->dsp_post_samples[i] > wps->dsp_post_max_samples) wps->dsp_post_max_samples = wps->dsp_post_samples[i];
+    wps->dsp_margin_front[i] = fsp_dsp_diff_and_smooth_pre_samples(shaping_width_samples[i], wps->lowpass[i]);
+    if (wps->dsp_margin_front[i] > wps->dsp_max_margin_front) wps->dsp_max_margin_front = wps->dsp_margin_front[i];
+    wps->dsp_margin_back[i] = fsp_dsp_diff_and_smooth_post_samples(shaping_width_samples[i], wps->lowpass[i]);
+    if (wps->dsp_margin_back[i] > wps->dsp_max_margin_back) wps->dsp_max_margin_back = wps->dsp_margin_back[i];
   }
 
   wps->enabled = 1;
@@ -216,13 +216,13 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
     fprintf(stderr, "DEBUG prescale_ratio               %d\n", processor->triggerconfig.wps_prescale_ratio);
     fprintf(stderr, "DEBUG sum_window_start_sample      %d\n", wps->sum_window_start_sample);
     fprintf(stderr, "DEBUG sum_window_stop_sample       %d\n", wps->sum_window_stop_sample);
-    fprintf(stderr, "DEBUG dsp_pre_max_samples          %d\n", wps->dsp_pre_max_samples);
-    fprintf(stderr, "DEBUG dsp_post_max_samples         %d\n", wps->dsp_post_max_samples);
+    fprintf(stderr, "DEBUG dsp_pre_max_samples          %d\n", wps->dsp_max_margin_front);
+    fprintf(stderr, "DEBUG dsp_post_max_samples         %d\n", wps->dsp_max_margin_back);
     fprintf(stderr, "DEBUG coincidence_pre_window_ns    %ld\n", processor->triggerconfig.pre_trigger_window.nanoseconds);
     fprintf(stderr, "DEBUG coincidence_post_window_ns   %ld\n", processor->triggerconfig.post_trigger_window.nanoseconds);
-    fprintf(stderr, "DEBUG coincidence_window_samples   %d\n", wps->coincidence_window);
-    fprintf(stderr, "DEBUG relative_wps_threshold       %f\n", processor->triggerconfig.relative_wps_threshold);
-    fprintf(stderr, "DEBUG absolute_sum_threshold       %f\n", processor->triggerconfig.absolute_wps_threshold);
+    fprintf(stderr, "DEBUG coincidence_window_samples   %d\n", wps->sum_window_size);
+    fprintf(stderr, "DEBUG coincident_sum_threshold     %f\n", processor->triggerconfig.wps_coincident_sum_threshold);
+    fprintf(stderr, "DEBUG sum_threshold                %f\n", processor->triggerconfig.wps_sum_threshold);
     fprintf(stderr, "DEBUG enable_muon_coincidence      %d\n", enable_muon_coincidence);
 
     for (int i = 0; i < wps->tracemap.n_mapped; i++) {
@@ -231,12 +231,12 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
             stderr,
             "DEBUG channel 0x%x gain %f threshold %f shaping %d lowpass %f dsp_pre_samples %d dsp_post_samples %d\n",
             wps->tracemap.map[i], wps->gains[i], wps->thresholds[i], wps->shaping_widths[i], wps->lowpass[i],
-            wps->dsp_pre_samples[i], wps->dsp_post_samples[i]);
+            wps->dsp_margin_front[i], wps->dsp_margin_back[i]);
       } else {
         fprintf(stderr,
                 "DEBUG channel %d gain %f threshold %f shaping %d lowpass %f dsp_pre_samples %d dsp_post_samples %d\n",
                 wps->tracemap.map[i], wps->gains[i], wps->thresholds[i], wps->shaping_widths[i], wps->lowpass[i],
-                wps->dsp_pre_samples[i], wps->dsp_post_samples[i]);
+                wps->dsp_margin_front[i], wps->dsp_margin_back[i]);
       }
     }
   }

@@ -14,9 +14,9 @@ static inline size_t event_flag_2char(char* string, size_t strlen, EventFlags ev
   int written = 0;
 
   string[written++] = ':';
-  if (event_flags.is_retrigger)
+  if (event_flags.consecutive)
     string[written] = 'R';
-  if (event_flags.is_extended)
+  if (event_flags.extended)
     string[written] = 'E';
 
   written++;
@@ -53,15 +53,15 @@ static inline size_t wps_flag_2char(char* string, size_t strlen, WPSFlags wps_fl
 
   int written = 0;
   string[written++] = ':';
-  if (wps_flags.rel_reference) string[written] = '!' ;
+  if (wps_flags.coincidence_ref) string[written] = '!' ;
   written++;
-  if (wps_flags.rel_post_window) string[written] = '<' ;
+  if (wps_flags.ref_post_window) string[written] = '<' ;
   written++;
-  if (wps_flags.rel_threshold) string[written] = '-' ;
+  if (wps_flags.coincidence_sum_threshold) string[written] = '-' ;
   written++;
-  if (wps_flags.rel_pre_window) string[written] = '>' ;
+  if (wps_flags.ref_pre_window) string[written] = '>' ;
   written++;
-  if (wps_flags.abs_threshold) string[written] = 'A';
+  if (wps_flags.sum_threshold) string[written] = 'A';
   written++;
   return written;
 }
@@ -77,9 +77,9 @@ static inline size_t st_flag_2char(char* string, size_t strlen, TriggerFlags st_
   written++;
   if (st_flags.hwm_prescaled) string[written] = 'G' ;
   written++;
-  if (st_flags.wps_abs) string[written] = 'A' ;
+  if (st_flags.wps_sum) string[written] = 'A' ;
   written++;
-  if (st_flags.wps_rel) string[written] = 'C' ;
+  if (st_flags.wps_coincident_sum) string[written] = 'C' ;
   written++;
   if (st_flags.wps_prescaled) string[written] = 'S' ;
   written++;
@@ -142,18 +142,18 @@ void FSPFlags2BitField(FSPState* fsp_state, uint32_t* trigger_field, uint32_t* e
 
   tfield |= ((fsp_state->write_flags.trigger.hwm_multiplicity & 0x1) << 0);
   tfield |= ((fsp_state->write_flags.trigger.hwm_prescaled & 0x1)    << 1);
-  tfield |= ((fsp_state->write_flags.trigger.wps_abs & 0x1)          << 2);
-  tfield |= ((fsp_state->write_flags.trigger.wps_rel & 0x1)          << 3);
+  tfield |= ((fsp_state->write_flags.trigger.wps_sum & 0x1)          << 2);
+  tfield |= ((fsp_state->write_flags.trigger.wps_coincident_sum & 0x1)          << 3);
   tfield |= ((fsp_state->write_flags.trigger.wps_prescaled & 0x1)    << 4);
   tfield |= ((fsp_state->write_flags.trigger.ct_multiplicity & 0x1)  << 5);
 
-  efield |= ((fsp_state->write_flags.event.is_extended & 0x1)          << 0);
-  efield |= ((fsp_state->write_flags.event.is_retrigger & 0x1)         << 1);
-  efield |= ((fsp_state->proc_flags.wps.abs_threshold & 0x1)          << 2);
-  efield |= ((fsp_state->proc_flags.wps.rel_threshold & 0x1)          << 3);
-  efield |= ((fsp_state->proc_flags.wps.rel_reference & 0x1)          << 4);
-  efield |= ((fsp_state->proc_flags.wps.rel_pre_window & 0x1)         << 5);
-  efield |= ((fsp_state->proc_flags.wps.rel_post_window & 0x1)        << 6);
+  efield |= ((fsp_state->write_flags.event.extended & 0x1)          << 0);
+  efield |= ((fsp_state->write_flags.event.consecutive & 0x1)         << 1);
+  efield |= ((fsp_state->proc_flags.wps.sum_threshold & 0x1)          << 2);
+  efield |= ((fsp_state->proc_flags.wps.coincidence_sum_threshold & 0x1)          << 3);
+  efield |= ((fsp_state->proc_flags.wps.coincidence_ref & 0x1)          << 4);
+  efield |= ((fsp_state->proc_flags.wps.ref_pre_window & 0x1)         << 5);
+  efield |= ((fsp_state->proc_flags.wps.ref_post_window & 0x1)        << 6);
   efield |= ((fsp_state->proc_flags.hwm.multiplicity_threshold & 0x1) << 7);
   efield |= ((fsp_state->proc_flags.hwm.multiplicity_below & 0x1)     << 8);
   efield |= ((fsp_state->proc_flags.ct.multiplicity & 0x1)            << 9);
@@ -166,18 +166,18 @@ void FSPBitField2Flags(FSPState* fsp_state, uint32_t trigger_field, uint32_t eve
 {
   fsp_state->write_flags.trigger.hwm_multiplicity =  trigger_field & (0x1 << 0);
   fsp_state->write_flags.trigger.hwm_prescaled =     trigger_field & (0x1 << 1);
-  fsp_state->write_flags.trigger.wps_abs =           trigger_field & (0x1 << 2);
-  fsp_state->write_flags.trigger.wps_rel =           trigger_field & (0x1 << 3);
+  fsp_state->write_flags.trigger.wps_sum =           trigger_field & (0x1 << 2);
+  fsp_state->write_flags.trigger.wps_coincident_sum =           trigger_field & (0x1 << 3);
   fsp_state->write_flags.trigger.wps_prescaled =     trigger_field & (0x1 << 4);
   fsp_state->write_flags.trigger.ct_multiplicity =   trigger_field & (0x1 << 5);
 
-  fsp_state->write_flags.event.is_extended =           event_field & (0x1 << 0);
-  fsp_state->write_flags.event.is_retrigger =          event_field & (0x1 << 1);
-  fsp_state->proc_flags.wps.abs_threshold =           event_field & (0x1 << 2);
-  fsp_state->proc_flags.wps.rel_threshold =           event_field & (0x1 << 3);
-  fsp_state->proc_flags.wps.rel_reference =           event_field & (0x1 << 4);
-  fsp_state->proc_flags.wps.rel_pre_window =          event_field & (0x1 << 5);
-  fsp_state->proc_flags.wps.rel_post_window =         event_field & (0x1 << 6);
+  fsp_state->write_flags.event.extended =           event_field & (0x1 << 0);
+  fsp_state->write_flags.event.consecutive =          event_field & (0x1 << 1);
+  fsp_state->proc_flags.wps.sum_threshold =           event_field & (0x1 << 2);
+  fsp_state->proc_flags.wps.coincidence_sum_threshold =           event_field & (0x1 << 3);
+  fsp_state->proc_flags.wps.coincidence_ref =           event_field & (0x1 << 4);
+  fsp_state->proc_flags.wps.ref_pre_window =          event_field & (0x1 << 5);
+  fsp_state->proc_flags.wps.ref_post_window =         event_field & (0x1 << 6);
   fsp_state->proc_flags.hwm.multiplicity_threshold =  event_field & (0x1 << 7);
   fsp_state->proc_flags.hwm.multiplicity_below =      event_field & (0x1 << 8);
   fsp_state->proc_flags.ct.multiplicity =             event_field & (0x1 << 9);
@@ -194,21 +194,21 @@ void FSPFlags2BitString(FSPState* fsp_state, size_t strlen, char* trigger_string
   *trgstring-- = 0;
   *trgstring-- = (fsp_state->write_flags.trigger.hwm_multiplicity & 0x1) ? '1' : '0';
   *trgstring-- = (fsp_state->write_flags.trigger.hwm_prescaled & 0x1) ? '1' : '0';
-  *trgstring-- = (fsp_state->write_flags.trigger.wps_abs & 0x1) ? '1' : '0';
-  *trgstring-- = (fsp_state->write_flags.trigger.wps_rel & 0x1) ? '1' : '0';
+  *trgstring-- = (fsp_state->write_flags.trigger.wps_sum & 0x1) ? '1' : '0';
+  *trgstring-- = (fsp_state->write_flags.trigger.wps_coincident_sum & 0x1) ? '1' : '0';
   *trgstring-- = (fsp_state->write_flags.trigger.wps_prescaled & 0x1) ? '1' : '0';
   *trgstring-- = (fsp_state->write_flags.trigger.ct_multiplicity & 0x1) ? '1' : '0';
   *trgstring-- = 'b';
   *trgstring = '0';
 
   *evtstring-- = 0;
-  *evtstring-- = (fsp_state->write_flags.event.is_extended & 0x1) ? '1' : '0';
-  *evtstring-- = (fsp_state->write_flags.event.is_retrigger & 0x1) ? '1' : '0';
-  *evtstring-- = (fsp_state->proc_flags.wps.abs_threshold & 0x1) ? '1' : '0';
-  *evtstring-- = (fsp_state->proc_flags.wps.rel_threshold & 0x1) ? '1' : '0';
-  *evtstring-- = (fsp_state->proc_flags.wps.rel_reference & 0x1) ? '1' : '0';
-  *evtstring-- = (fsp_state->proc_flags.wps.rel_pre_window & 0x1) ? '1' : '0';
-  *evtstring-- = (fsp_state->proc_flags.wps.rel_post_window & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->write_flags.event.extended & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->write_flags.event.consecutive & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->proc_flags.wps.sum_threshold & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->proc_flags.wps.coincidence_sum_threshold & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->proc_flags.wps.coincidence_ref & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->proc_flags.wps.ref_pre_window & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->proc_flags.wps.ref_post_window & 0x1) ? '1' : '0';
   *evtstring-- = (fsp_state->proc_flags.hwm.multiplicity_threshold & 0x1) ? '1' : '0';
   *evtstring-- = (fsp_state->proc_flags.hwm.multiplicity_below & 0x1) ? '1' : '0';
   *evtstring-- = (fsp_state->proc_flags.ct.multiplicity & 0x1) ? '1' : '0';

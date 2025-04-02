@@ -11,20 +11,20 @@ typedef struct DSPWindowedPeakSum {
   float thresholds[FCIOMaxChannels];
   float lowpass[FCIOMaxChannels];
   int shaping_widths[FCIOMaxChannels];
-  int dsp_pre_samples[FCIOMaxChannels];
-  int dsp_post_samples[FCIOMaxChannels];
+  int dsp_margin_front[FCIOMaxChannels];
+  int dsp_margin_back[FCIOMaxChannels];
   int dsp_start_sample[FCIOMaxChannels];
   int dsp_stop_sample[FCIOMaxChannels];
-  int dsp_pre_max_samples;
-  int dsp_post_max_samples;
+  int dsp_max_margin_front;
+  int dsp_max_margin_back;
 
   int apply_gain_scaling;
 
   // unsigned int repetition;
-  int coincidence_window;
+  int sum_window_size;
   int sum_window_start_sample;
   int sum_window_stop_sample;
-  float coincidence_threshold;
+  float sub_event_sum_threshold;
 
   float peak_trace[FCIOMaxSamples];
   float diff_trace[FCIOMaxSamples];
@@ -57,20 +57,20 @@ typedef struct DSPWindowedPeakSum {
 
 } DSPWindowedPeakSum;
 
-typedef struct DSPHardwareMajority {
+typedef struct DSPHardwareMultiplicity {
   FSPTraceMap tracemap;
   unsigned short fpga_energy_threshold_adc[FCIOMaxChannels];
 
   int fast;
   /* result fields */
   int multiplicity; // multiplicity of hardware energy values
-  int mult_below_threshold; // counts the number of channels below fpga_energy_threshold_adc but > 0
+  int n_below_minimum_multiplicity; // counts the number of channels below fpga_energy_threshold_adc but > 0
   unsigned short max_value; // the largest channel hw value
   unsigned short min_value; // the smallest channel hw value, but > 0
 
   int enabled;
 
-} DSPHardwareMajority;
+} DSPHardwareMultiplicity;
 
 typedef struct DSPChannelThreshold {
   FSPTraceMap tracemap;
@@ -101,7 +101,7 @@ float fsp_dsp_local_peaks_f32(float *input_trace, float *peak_trace, int start, 
                                float *peak_amplitudes, int *npeaks, int* largest_peak_offset);
 
 void fsp_dsp_windowed_peak_sum(DSPWindowedPeakSum *cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces);
-void fsp_dsp_hardware_majority(DSPHardwareMajority *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers);
+void fsp_dsp_hardware_majority(DSPHardwareMultiplicity *cfg, int num_traces, unsigned short* trace_list, unsigned short **trace_headers);
 void fsp_dsp_channel_threshold(DSPChannelThreshold* cfg, int nsamples, int num_traces, unsigned short* trace_list, unsigned short **traces, unsigned short **theaders);
 
 

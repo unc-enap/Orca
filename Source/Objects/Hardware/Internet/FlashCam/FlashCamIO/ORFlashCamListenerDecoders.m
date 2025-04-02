@@ -341,7 +341,7 @@
             if(lastTime == 0 || (fullDecode && someoneWatching)){
                 NSMutableData* tmpData = [NSMutableData dataWithCapacity:wfSamples*sizeof(unsigned short)];
                 [tmpData setLength:wfSamples*sizeof(unsigned short)];
-                memcpy((uint32_t*) [tmpData bytes], fcio->event.trace[i], wfSamples*sizeof(unsigned short));
+                memcpy((uint32_t*) [tmpData bytes], fcio->event.trace[trace_idx], wfSamples*sizeof(unsigned short));
                 [aDataSet loadWaveform:tmpData offset:0 unitSize:2 sender:self
                               withKeys:@"FlashCamADC", @"Waveforms", crateKey, cardKey, channelKey, nil];
             }
