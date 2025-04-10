@@ -6,12 +6,21 @@
 typedef struct {
   int format; // contains the format of the channel map. For processors it must be converted to trace_idx
 
-  int map[FCIOMaxChannels]; // the list of mapped traces for this processor, up to n_mapped
-  int n_mapped; // the number of mapped traces, applies to trace_list
+  // this struct provides back-and-forth lookups between the fcio_event trace_list array
+  // and the list of trace_idx handled by this processor.
+  // n_mapped is equal to the number of trace assigned to this processor
+  // and map contains a list of trace_idx's
+  //
+  // the enabled array has the same sizes as fcio_config.tracemap
+  // with entrys either -1 for traces not handled by this processor or the index into the `map` array
+  // which allows a loopup of the correct trace_idx
 
-  // reverse lookup for mapped channels:
+  int map[FCIOMaxChannels]; // the list of assigned traces for this processor, up to n_mapped
+  int n_mapped; // the number of assigned traces, applies to trace_list
+
+  // reverse lookup for mapped channels.
   int enabled[FCIOMaxChannels]; // a list of map_idx, index with trace_idx from fcio_event.trace_list
-  int n_enabled; // the total number of traces available, must equal fcio_config.adcs
+  int n_enabled; // the total number of traces available, is equal to fcio_config.adcs. If 0 the processer was not enabled.
 
    // a human readable label, index similar to `map`.
   char label[FCIOMaxChannels][8];
@@ -19,16 +28,16 @@ typedef struct {
 } FSPTraceMap;
 
 typedef enum FSPTraceFormat {
-  FCIO_TRACE_INDEX_FORMAT = 0,
-  FCIO_TRACE_MAP_FORMAT = 1,
-  L200_RAWID_FORMAT = 2,
-  FSPTraceFormatUnkown = 3
+  FSPTraceFormatUnkown = 0,
+  FCIO_TRACE_INDEX_FORMAT = 1,
+  FCIO_TRACE_MAP_FORMAT = 2,
+  L200_RAWID_FORMAT = 3
 
 } FSPTraceFormat;
 
 static inline int is_known_channelmap_format(FSPTraceFormat format)
 {
-  return (format < FSPTraceFormatUnkown) ? 1 : 0;
+  return (format != FSPTraceFormatUnkown) ? 1 : 0;
 }
 
 static inline const char* channelmap_fmt2str(FSPTraceFormat format)

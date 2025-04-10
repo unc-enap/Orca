@@ -93,8 +93,8 @@ StreamProcessor* FSPCreate(unsigned int buffer_depth)
   processor->wps_prescale_timestamp.seconds = -1; // will init when it's needed
 
   /* hardcoded defaults which should make sense. Used SetFunctions outside to overwrite */
-  FSPEnableEventFlags(processor, (EventFlags){ .is_retrigger = 1, .is_extended = 1});
-  FSPEnableTriggerFlags(processor, (TriggerFlags){ .hwm_multiplicity = 1, .hwm_prescaled = 1, .wps_abs = 1, .wps_rel = 1, .wps_prescaled = 1, .ct_multiplicity = 1} );
+  FSPEnableEventFlags(processor, (EventFlags){ .consecutive = 1, .extended = 1});
+  FSPEnableTriggerFlags(processor, (TriggerFlags){ .hwm_multiplicity = 1, .hwm_prescaled = 1, .wps_sum = 1, .wps_coincident_sum = 1, .wps_prescaled = 1, .ct_multiplicity = 1} );
 
   HWMFlags ref_hwm = {0};
   ref_hwm.multiplicity_threshold = 1;
@@ -155,12 +155,12 @@ static inline void fsp_derive_triggerflags(StreamProcessor* processor, FSPState*
   if (processor->triggerconfig.enabled_flags.trigger.ct_multiplicity && fsp_state->proc_flags.ct.multiplicity)
     fsp_state->write_flags.trigger.ct_multiplicity = 1;
 
-  if (processor->triggerconfig.enabled_flags.trigger.wps_abs && fsp_state->proc_flags.wps.abs_threshold)
-    fsp_state->write_flags.trigger.wps_abs = 1;
+  if (processor->triggerconfig.enabled_flags.trigger.wps_sum && fsp_state->proc_flags.wps.sum_threshold)
+    fsp_state->write_flags.trigger.wps_sum = 1;
 
-  if (processor->triggerconfig.enabled_flags.trigger.wps_rel && fsp_state->proc_flags.wps.rel_threshold)
-    if (fsp_state->proc_flags.wps.rel_pre_window || fsp_state->proc_flags.wps.rel_post_window) {
-      fsp_state->write_flags.trigger.wps_rel = 1;
+  if (processor->triggerconfig.enabled_flags.trigger.wps_coincident_sum && fsp_state->proc_flags.wps.coincidence_sum_threshold)
+    if (fsp_state->proc_flags.wps.ref_pre_window || fsp_state->proc_flags.wps.ref_post_window) {
+      fsp_state->write_flags.trigger.wps_coincident_sum = 1;
     }
 
   if (processor->triggerconfig.enabled_flags.trigger.hwm_prescaled && fsp_state->proc_flags.hwm.prescaled)

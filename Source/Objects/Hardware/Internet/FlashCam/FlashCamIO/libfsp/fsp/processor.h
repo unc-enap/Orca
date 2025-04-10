@@ -10,22 +10,30 @@
 
 typedef struct {
 
-  int hwm_threshold;
+  int hwm_min_multiplicity;
   int hwm_prescale_ratio;
   int wps_prescale_ratio;
 
-  float relative_wps_threshold;
-  float absolute_wps_threshold;
+  float wps_coincident_sum_threshold;
+  float wps_sum_threshold;
   float wps_prescale_rate;
   float hwm_prescale_rate;
 
+  // the write flags which trigger the final `write` decision after
+  // all processing
   FSPWriteFlags enabled_flags;
+  // the window before and after a reference event
+  // the WPS event above wps_coincident_sum_threshold will trigger a wps_coincident_sum flagging
   Timestamp pre_trigger_window;
   Timestamp post_trigger_window;
 
+  // the processor flags that determine which event
+  // is treated as  reference event for the coincidence
+  // trigger for WPS triggering.
   HWMFlags wps_ref_flags_hwm;
   CTFlags wps_ref_flags_ct;
   WPSFlags wps_ref_flags_wps;
+  // the reference channels if CT referencing was enabled
   int n_wps_ref_map_idx;
   int wps_ref_map_idx[FCIOMaxChannels];
 
@@ -65,7 +73,7 @@ typedef struct StreamProcessor {
   // dsp and trigger configuration: written to FSPConfig
   FSPTriggerConfig triggerconfig;
   DSPWindowedPeakSum dsp_wps;
-  DSPHardwareMajority dsp_hwm;
+  DSPHardwareMultiplicity dsp_hwm;
   DSPChannelThreshold dsp_ct;
 
   // processor statistics: written to FSPStatus

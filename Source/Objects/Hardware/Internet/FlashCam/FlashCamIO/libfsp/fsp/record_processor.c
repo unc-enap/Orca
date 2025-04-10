@@ -83,7 +83,7 @@ static inline EventFlags fsp_evt_flags(StreamProcessor* processor, FCIOState* st
   - pulser event
   - baseline event
   - muon event
-  - retrigger event
+  - consecutive event
   */
   EventFlags evtflags = {0};
   if (!state) {
@@ -103,7 +103,7 @@ static inline EventFlags fsp_evt_flags(StreamProcessor* processor, FCIOState* st
     if (!previous_fsp_state || !previous_fsp_state->in_buffer) break;
 
     FCIOState* previous_state = previous_fsp_state->state;
-    /* TODO Check if Sparseevents retrigger, and how to handle this case*/
+    /* TODO Check if Sparseevents consecutive, and how to handle this case*/
     if ((previous_state->last_tag != FCIOEvent) && (previous_state->last_tag != FCIOSparseEvent))
       continue;
 
@@ -122,9 +122,9 @@ static inline EventFlags fsp_evt_flags(StreamProcessor* processor, FCIOState* st
     }
     Timestamp event_delta = timestamp_sub(now_ts, previous_ts);
     if (timestamp_leq(event_delta, delta_ts)) {
-      evtflags.is_retrigger = 1;
+      evtflags.consecutive = 1;
       if (processor->loglevel >= 4)
-        fprintf(stderr, "DEBUG fsp_evt_flags: retrigger now=%ld.%09ld previous=%ld.%09ld delta=%ld.%09ld\n",
+        fprintf(stderr, "DEBUG fsp_evt_flags: consecutive now=%ld.%09ld previous=%ld.%09ld delta=%ld.%09ld\n",
                 now_ts.seconds, now_ts.nanoseconds, previous_ts.seconds, previous_ts.nanoseconds, delta_ts.seconds,
                 delta_ts.nanoseconds);
     }
@@ -170,14 +170,14 @@ static inline HWMFlags fsp_swt_hardware_majority(StreamProcessor* processor, FCI
 
   fsp_dsp_hardware_majority(&processor->dsp_hwm, event->num_traces, event->trace_list, event->theader);
 
-  if (processor->dsp_hwm.multiplicity >= processor->triggerconfig.hwm_threshold) {
+  if (processor->dsp_hwm.multiplicity >= processor->triggerconfig.hwm_min_multiplicity) {
     hwmflags.multiplicity_threshold = 1;
 
     /* if majority is >= 1, then the following check is safe, otherwise think about what happens when majority == 0
        if there is any channel with a majority above the threshold, it's a force trigger, if not, it should be
        prescaled and not affect the rest of the datastream.
     */
-    if (processor->dsp_hwm.mult_below_threshold == processor->dsp_hwm.multiplicity) {
+    if (processor->dsp_hwm.n_below_minimum_multiplicity == processor->dsp_hwm.multiplicity) {
       hwmflags.multiplicity_below = 1;
     }
   }
@@ -248,15 +248,15 @@ static inline WPSFlags fsp_swt_windowed_peak_sum(StreamProcessor* processor, FCI
     );
   }
 
-  if (processor->dsp_wps.max_peak_sum_value >= processor->triggerconfig.absolute_wps_threshold) {
-    wpsflags.abs_threshold = 1;
+  if (processor->dsp_wps.max_peak_sum_value >= processor->triggerconfig.wps_sum_threshold) {
+    wpsflags.sum_threshold = 1;
   }
 
-  if (processor->dsp_wps.max_peak_sum_value >= processor->triggerconfig.relative_wps_threshold) {
-    wpsflags.rel_threshold = 1;
+  if (processor->dsp_wps.max_peak_sum_value >= processor->triggerconfig.wps_coincident_sum_threshold) {
+    wpsflags.coincidence_sum_threshold = 1;
   }
 
-  if (!wpsflags.abs_threshold && !wpsflags.rel_threshold) {
+  if (!wpsflags.sum_threshold && !wpsflags.coincidence_sum_threshold) {
     processor->wps_prescale_ready_counter++;
     if (processor->triggerconfig.wps_prescale_ratio > 0) {
       if ((processor->wps_prescale_ready_counter % processor->triggerconfig.wps_prescale_ratio) == 0) {
@@ -287,7 +287,7 @@ static inline WPSFlags fsp_swt_windowed_peak_sum(StreamProcessor* processor, FCI
 
 int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIOState* state) {
   DSPWindowedPeakSum* wps_cfg = &processor->dsp_wps;
-  DSPHardwareMajority* hwm_cfg = &processor->dsp_hwm;
+  DSPHardwareMultiplicity* hwm_cfg = &processor->dsp_hwm;
   DSPChannelThreshold* ct_cfg = &processor->dsp_ct;
 
   /* need to zero init in case on of the processors is not enabled */
@@ -322,7 +322,7 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
         }
       }
       write_flags.event = fsp_evt_flags(processor, state);
-      fsp_state->obs.evt.nextension = 0; // it's the default, process_timings will increase the number if retriggers are following
+      fsp_state->obs.evt.nconsecutive = 0; // it's the default, process_timings will increase the number if consecutive events are following
 
       if (hwm_cfg->enabled) {
         proc_flags.hwm = fsp_swt_hardware_majority(processor, state, fsp_state->timestamp);
@@ -348,18 +348,18 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
       if (wps_cfg->enabled) {
         processor->dsp_wps.sub_event_list = &fsp_state->obs.sub_event_list; //load current trigger_list into config struct
         proc_flags.wps = fsp_swt_windowed_peak_sum(processor, state, fsp_state->timestamp);
-        fsp_state->obs.wps.max_value = wps_cfg->max_peak_sum_value;
-        fsp_state->obs.wps.max_offset = wps_cfg->max_peak_sum_offset;
+        fsp_state->obs.wps.sum_value = wps_cfg->max_peak_sum_value;
+        fsp_state->obs.wps.sum_offset = wps_cfg->max_peak_sum_offset;
         fsp_state->obs.wps.max_single_peak_value = wps_cfg->max_peak_value;
         fsp_state->obs.wps.max_single_peak_offset = wps_cfg->max_peak_offset;
-        fsp_state->obs.wps.max_multiplicity = wps_cfg->max_peak_sum_multiplicity;
+        fsp_state->obs.wps.sum_multiplicity = wps_cfg->max_peak_sum_multiplicity;
 
         // finally determine if one of the flags is a reference flag for the wps coincidence
         if (ct_cfg->enabled) {
           for (int i = 0; i < processor->triggerconfig.n_wps_ref_map_idx; i++) {
             int map_idx = processor->triggerconfig.wps_ref_map_idx[i];
             if (ct_cfg->max_values[map_idx]) {
-                proc_flags.wps.rel_reference = 1;
+                proc_flags.wps.coincidence_ref = 1;
                 break; // stop at first found, don't need to check for more
             }
           }
@@ -368,7 +368,7 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
           || processor->triggerconfig.wps_ref_flags_hwm.is_flagged & proc_flags.hwm.is_flagged
           || processor->triggerconfig.wps_ref_flags_wps.is_flagged & proc_flags.wps.is_flagged
         ) {
-          proc_flags.wps.rel_reference = 1;
+          proc_flags.wps.coincidence_ref = 1;
         }
       }
 
@@ -381,7 +381,7 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
     }
 
     /* Leave the following commented code in for reference on how a mixed stream could be used,
-       but that requires additional checks for the extension-retrigger detection.
+       but that requires additional checks for the extension-consecutive detection.
        For now, RecEvents are just glanced over.
     */
     // case FCIORecEvent: {
@@ -426,13 +426,13 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
         if (wps_cfg->sum_window_stop_sample < 0)
           wps_cfg->sum_window_stop_sample = state->config->eventsamples;
 
-        if (wps_cfg->sum_window_stop_sample + wps_cfg->dsp_post_max_samples >
+        if (wps_cfg->sum_window_stop_sample + wps_cfg->dsp_max_margin_back >
             state->config->eventsamples) {
           wps_cfg->sum_window_stop_sample =
-              state->config->eventsamples - wps_cfg->dsp_post_max_samples;
+              state->config->eventsamples - wps_cfg->dsp_max_margin_back;
         }
-        if (wps_cfg->sum_window_start_sample - wps_cfg->dsp_pre_max_samples < 0) {
-          wps_cfg->sum_window_start_sample = wps_cfg->dsp_pre_max_samples;
+        if (wps_cfg->sum_window_start_sample - wps_cfg->dsp_max_margin_front < 0) {
+          wps_cfg->sum_window_start_sample = wps_cfg->dsp_max_margin_front;
         }
         int valid_window = wps_cfg->sum_window_stop_sample - wps_cfg->sum_window_start_sample;
         if (valid_window <= 0) {
@@ -441,20 +441,20 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
                   "No samples will be checked.\n",
                   wps_cfg->sum_window_start_sample, wps_cfg->sum_window_stop_sample);
         }
-        if (valid_window < wps_cfg->coincidence_window) {
+        if (valid_window < wps_cfg->sum_window_size) {
           if (processor->loglevel)
             fprintf(stderr,
                     "ERROR fsp_process_fcio_state: not enough samples for these dsp settings to allow a peak sum "
                     "window of size %d samples, reduced to %d.\n",
-                    wps_cfg->coincidence_window, valid_window);
-          wps_cfg->coincidence_window = valid_window;
+                    wps_cfg->sum_window_size, valid_window);
+          wps_cfg->sum_window_size = valid_window;
         }
 
         for (int i = 0; i < wps_cfg->tracemap.n_mapped; i++) {
           wps_cfg->dsp_start_sample[i] =
-              wps_cfg->sum_window_start_sample - wps_cfg->dsp_pre_samples[i];
+              wps_cfg->sum_window_start_sample - wps_cfg->dsp_margin_front[i];
           wps_cfg->dsp_stop_sample[i] =
-              wps_cfg->sum_window_stop_sample + wps_cfg->dsp_post_samples[i];
+              wps_cfg->sum_window_stop_sample + wps_cfg->dsp_margin_back[i];
           if (processor->loglevel >= 4) {
             fprintf(stderr,
                     "DEBUG fsp_process_fcio_state: adjusting windows: channel %d sum start %d sum stop %d dsp start %d "
@@ -505,11 +505,11 @@ static inline void fsp_process_state_timings(StreamProcessor* processor, FSPStat
 
   if (timestamp_geq(processor->post_trigger_timestamp, fsp_state->timestamp)) {
     /* state timestamp is within the post trigger timestamp */
-    fsp_state->proc_flags.wps.rel_post_window = 1;
+    fsp_state->proc_flags.wps.ref_post_window = 1;
   }
 
-  if (fsp_state->proc_flags.wps.rel_reference) {
-    /* current state is reference for WPS relative trigger
+  if (fsp_state->proc_flags.wps.coincidence_ref) {
+    /* current state is reference for WPS coincidence trigger
       keep it and start checking all previous and future states against
       the trigger windows.
     */
@@ -522,7 +522,7 @@ static inline void fsp_process_state_timings(StreamProcessor* processor, FSPStat
     while ( (update_fsp_state = FSPBufferGetState(processor->buffer, previous_counter--)) )
     {
       if (processor->loglevel >= 4) {
-        fprintf(stderr, "DEBUG fsp_process_state_timings: rel_reference %ld.%09ld pre_window %ld.%09ld update %ld.%09ld tag %d evntno=%d\n",
+        fprintf(stderr, "DEBUG fsp_process_state_timings: coincidence_ref %ld.%09ld pre_window %ld.%09ld update %ld.%09ld tag %d evntno=%d\n",
           fsp_state->timestamp.seconds,fsp_state->timestamp.nanoseconds,
           processor->pre_trigger_timestamp.seconds,processor->pre_trigger_timestamp.nanoseconds,
           update_fsp_state->has_timestamp?update_fsp_state->timestamp.seconds:0,update_fsp_state->has_timestamp?update_fsp_state->timestamp.nanoseconds:0,
@@ -536,24 +536,24 @@ static inline void fsp_process_state_timings(StreamProcessor* processor, FSPStat
       if (!timestamp_geq(update_fsp_state->timestamp, processor->pre_trigger_timestamp))
         break;
 
-      update_fsp_state->proc_flags.wps.rel_pre_window = 1;
+      update_fsp_state->proc_flags.wps.ref_pre_window = 1;
     }
   }
 
-  if (fsp_state->write_flags.event.is_retrigger) {
+  if (fsp_state->write_flags.event.consecutive) {
     FSPState* update_fsp_state = NULL;
     int previous_counter = 0;
-    int nretrigger = 1;
+    int nconsectutive = 1;
     while ( (update_fsp_state = FSPBufferGetState(processor->buffer, previous_counter--)) ) {
       if (!update_fsp_state->has_timestamp)
         continue;
-      if (!update_fsp_state->write_flags.event.is_retrigger) {
-        update_fsp_state->write_flags.event.is_extended = 1;
-        update_fsp_state->obs.evt.nextension = nretrigger;
+      if (!update_fsp_state->write_flags.event.consecutive) {
+        update_fsp_state->write_flags.event.extended = 1;
+        update_fsp_state->obs.evt.nconsecutive = nconsectutive;
         break;
       } else {
-        update_fsp_state->obs.evt.nextension = nretrigger;
-        nretrigger++;
+        update_fsp_state->obs.evt.nconsecutive = nconsectutive;
+        nconsectutive++;
       }
     }
   }
