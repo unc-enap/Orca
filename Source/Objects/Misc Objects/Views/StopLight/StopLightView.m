@@ -27,10 +27,22 @@
 - (id)initWithFrame:(NSRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setGoLight:[ORDotImage bigDotWithColor:[NSColor greenColor]]];
-        [self setCautionLight:[ORDotImage bigDotWithColor:[NSColor yellowColor]]];
-        [self setStopLight:[ORDotImage bigDotWithColor:[NSColor redColor]]];
-        [self setOffLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+        vertical = (frame.size.height > frame.size.width);
+        if(MIN(frame.size.height,frame.size.width)>=30){
+            [self setGoLight:[ORDotImage bigDotWithColor:[NSColor greenColor]]];
+            [self setCautionLight:[ORDotImage bigDotWithColor:[NSColor yellowColor]]];
+            [self setStopLight:[ORDotImage bigDotWithColor:[NSColor redColor]]];
+            [self setOffLight:[ORDotImage bigDotWithColor:[NSColor lightGrayColor]]];
+            spacing = 35;
+        }
+        else {
+            [self setGoLight:[ORDotImage dotWithColor:[NSColor greenColor]]];
+            [self setCautionLight:[ORDotImage dotWithColor:[NSColor yellowColor]]];
+            [self setStopLight:[ORDotImage dotWithColor:[NSColor redColor]]];
+            [self setOffLight:[ORDotImage dotWithColor:[NSColor lightGrayColor]]];
+            spacing = 15;
+       }
+    
     }
     return self;
 }
@@ -123,7 +135,8 @@
     }
     
     if(!hideCautionLight){
-        frame.origin.y += 35;
+        if(vertical)frame.origin.y += spacing;
+        else        frame.origin.x += spacing;
         if(state == kCautionLight){
             [cautionLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
         }
@@ -132,7 +145,8 @@
         }
     }
     
-    frame.origin.y += 35;
+    if(vertical)frame.origin.y += spacing;
+    else        frame.origin.x += spacing;
     if(state == kGoLight){
         [goLight drawAtPoint:frame.origin fromRect:sourceRect operation:NSCompositingOperationSourceOver fraction:1];
     }

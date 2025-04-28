@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 53;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -702,6 +702,7 @@
 		840D56E50F39E9BF00F9A274 /* ORPacModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 840D56DD0F39E9BF00F9A274 /* ORPacModel.m */; };
 		840D56E60F39E9BF00F9A274 /* Pac.nib in Resources */ = {isa = PBXBuildFile; fileRef = 840D56DE0F39E9BF00F9A274 /* Pac.nib */; };
 		840D56E70F39E9BF00F9A274 /* Pac.tif in Resources */ = {isa = PBXBuildFile; fileRef = 840D56DF0F39E9BF00F9A274 /* Pac.tif */; };
+		840DC6EE2DBE6CF100635A9F /* RemoteRunItem.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840DC6ED2DBE6CF100635A9F /* RemoteRunItem.xib */; };
 		840DEA25115D7981006AF231 /* ORWindowSaveSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 840DEA22115D7981006AF231 /* ORWindowSaveSet.h */; };
 		840DEA26115D7981006AF231 /* ORWindowSaveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 840DEA23115D7981006AF231 /* ORWindowSaveSet.m */; };
 		840DEA27115D7981006AF231 /* WindowSaveSet.nib in Resources */ = {isa = PBXBuildFile; fileRef = 840DEA24115D7981006AF231 /* WindowSaveSet.nib */; };
@@ -793,6 +794,7 @@
 		841224DC132E6638001AC05B /* ORTPG262Model.m in Sources */ = {isa = PBXBuildFile; fileRef = 841224D4132E6638001AC05B /* ORTPG262Model.m */; };
 		841224DD132E6638001AC05B /* TPG262.nib in Resources */ = {isa = PBXBuildFile; fileRef = 841224D5132E6638001AC05B /* TPG262.nib */; };
 		841224DE132E6638001AC05B /* TPG262.tif in Resources */ = {isa = PBXBuildFile; fileRef = 841224D6132E6638001AC05B /* TPG262.tif */; };
+		8412C9462DBC1B3C00579936 /* RunControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = 8412C9452DBC1B3C00579936 /* RunControl.nib */; };
 		841491F21958AD03009F5E40 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 841491F11958AD03009F5E40 /* Cocoa.framework */; };
 		84150EDC1615FF9C0054FF08 /* Rad7Buttons.png in Resources */ = {isa = PBXBuildFile; fileRef = 84150EDB1615FF9C0054FF08 /* Rad7Buttons.png */; };
 		8415B6A9152223050092C975 /* ORMJDVacuumView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8415B6A7152223050092C975 /* ORMJDVacuumView.h */; };
@@ -1195,7 +1197,6 @@
 		8434A257055B3287002D3102 /* OrcaDoc.icns in Resources */ = {isa = PBXBuildFile; fileRef = F54577F303AFCD1C015F64B1 /* OrcaDoc.icns */; };
 		8434A258055B3287002D3102 /* ShaperCard.gif in Resources */ = {isa = PBXBuildFile; fileRef = F576B08303B12320015F64B1 /* ShaperCard.gif */; };
 		8434A259055B3287002D3102 /* Shaper.nib in Resources */ = {isa = PBXBuildFile; fileRef = F576B09403B154A7015F64B1 /* Shaper.nib */; };
-		8434A25A055B3287002D3102 /* RunControl.nib in Resources */ = {isa = PBXBuildFile; fileRef = 842F19AD03B8EAF3005F64B1 /* RunControl.nib */; };
 		8434A25B055B3287002D3102 /* ORPreferences.nib in Resources */ = {isa = PBXBuildFile; fileRef = 843CDEDC03BE307400C39F5F /* ORPreferences.nib */; };
 		8434A25D055B3287002D3102 /* Histo.nib in Resources */ = {isa = PBXBuildFile; fileRef = 844E6B6003C27544005F64B1 /* Histo.nib */; };
 		8434A25E055B3287002D3102 /* Histo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 844E6B7003C27B28005F64B1 /* Histo.gif */; };
@@ -1450,6 +1451,7 @@
 		843DCF35058E546A000C5219 /* DataGen.gif in Resources */ = {isa = PBXBuildFile; fileRef = 843DCF2E058E546A000C5219 /* DataGen.gif */; };
 		843DCF3A058E546A000C5219 /* ORDataGenModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 843DCF33058E546A000C5219 /* ORDataGenModel.h */; };
 		843DCF3B058E546A000C5219 /* ORDataGenModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 843DCF34058E546A000C5219 /* ORDataGenModel.m */; };
+		843E336E2DBC240C00C7A58A /* DistributedRunControl.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843E336D2DBC240C00C7A58A /* DistributedRunControl.xib */; };
 		844035B61EE452EB00E2A162 /* ORKatrinv4FLTRegisters.m in Sources */ = {isa = PBXBuildFile; fileRef = 844035B51EE452EB00E2A162 /* ORKatrinv4FLTRegisters.m */; };
 		844048AE08350BEE000D03DB /* MemoryWatcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 844048AC08350BEE000D03DB /* MemoryWatcher.h */; };
 		844048AF08350BEE000D03DB /* MemoryWatcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 844048AD08350BEE000D03DB /* MemoryWatcher.m */; };
@@ -1950,6 +1952,11 @@
 		84762044118CD53D00016A8D /* xAxisMarkerOpposite.gif in Resources */ = {isa = PBXBuildFile; fileRef = 84762009118CD53C00016A8D /* xAxisMarkerOpposite.gif */; };
 		84762045118CD53D00016A8D /* yAxisMarker.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8476200A118CD53C00016A8D /* yAxisMarker.gif */; };
 		84762046118CD53D00016A8D /* yAxisMarkerOpposite.gif in Resources */ = {isa = PBXBuildFile; fileRef = 8476200B118CD53C00016A8D /* yAxisMarkerOpposite.gif */; };
+		8476E1522DB81E71003534F7 /* DistributedRunControl.tif in Resources */ = {isa = PBXBuildFile; fileRef = 8476E14B2DB81E71003534F7 /* DistributedRunControl.tif */; };
+		8476E1542DB81E71003534F7 /* ORDistributedRunController.h in Headers */ = {isa = PBXBuildFile; fileRef = 8476E14D2DB81E71003534F7 /* ORDistributedRunController.h */; };
+		8476E1552DB81E71003534F7 /* ORDistributedRunModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 8476E14F2DB81E71003534F7 /* ORDistributedRunModel.h */; };
+		8476E1562DB81E71003534F7 /* ORDistributedRunModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8476E1502DB81E71003534F7 /* ORDistributedRunModel.m */; };
+		8476E1572DB81E71003534F7 /* ORDistributedRunController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8476E14E2DB81E71003534F7 /* ORDistributedRunController.m */; };
 		8477DF43166A4023000144BA /* HaloSentry.h in Headers */ = {isa = PBXBuildFile; fileRef = 8477DF41166A4023000144BA /* HaloSentry.h */; };
 		8477DF44166A4023000144BA /* HaloSentry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8477DF42166A4023000144BA /* HaloSentry.m */; };
 		847946CE07330E5300C5E1FA /* PciBit3.nib in Resources */ = {isa = PBXBuildFile; fileRef = 847946C407330E5200C5E1FA /* PciBit3.nib */; };
@@ -2934,6 +2941,10 @@
 		84C3B29217CCD1BF002916F5 /* MJD.h in Headers */ = {isa = PBXBuildFile; fileRef = 84C3B29017CCD1BC002916F5 /* MJD.h */; };
 		84C3B29317CCD356002916F5 /* MJD.cc in VME_Copy */ = {isa = PBXBuildFile; fileRef = 84C3B28F17CCD1B7002916F5 /* MJD.cc */; };
 		84C3B29417CCD358002916F5 /* MJD.h in VME_Copy */ = {isa = PBXBuildFile; fileRef = 84C3B29017CCD1BC002916F5 /* MJD.h */; };
+		84C446EE2DBA906F006BD4F9 /* ORRemoteRunItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 84C446E92DBA906F006BD4F9 /* ORRemoteRunItem.h */; };
+		84C446EF2DBA906F006BD4F9 /* ORRemoteRunItemController.h in Headers */ = {isa = PBXBuildFile; fileRef = 84C446EB2DBA906F006BD4F9 /* ORRemoteRunItemController.h */; };
+		84C446F02DBA906F006BD4F9 /* ORRemoteRunItemController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C446EC2DBA906F006BD4F9 /* ORRemoteRunItemController.m */; };
+		84C446F12DBA906F006BD4F9 /* ORRemoteRunItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C446EA2DBA906F006BD4F9 /* ORRemoteRunItem.m */; };
 		84C4CB6F0FB071BC00725AC3 /* M927.rbf in Resources */ = {isa = PBXBuildFile; fileRef = 84C4CB6E0FB071BC00725AC3 /* M927.rbf */; };
 		84C4CB830FB0725800725AC3 /* M927.rbf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 84C4CB6E0FB071BC00725AC3 /* M927.rbf */; };
 		84C5332A0652BA6B00E4731F /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 84C533280652BA6B00E4731F /* MainMenu.nib */; };
@@ -4773,6 +4784,7 @@
 		840D56DD0F39E9BF00F9A274 /* ORPacModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORPacModel.m; path = Source/Objects/Hardware/Serial/Pac/ORPacModel.m; sourceTree = SOURCE_ROOT; };
 		840D56DE0F39E9BF00F9A274 /* Pac.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Pac.nib; path = Source/Objects/Hardware/Serial/Pac/Pac.nib; sourceTree = SOURCE_ROOT; };
 		840D56DF0F39E9BF00F9A274 /* Pac.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Pac.tif; path = Source/Objects/Hardware/Serial/Pac/Pac.tif; sourceTree = SOURCE_ROOT; };
+		840DC6ED2DBE6CF100635A9F /* RemoteRunItem.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RemoteRunItem.xib; sourceTree = "<group>"; };
 		840DEA22115D7981006AF231 /* ORWindowSaveSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORWindowSaveSet.h; path = "Source/Main Dialogs/WindowSaveSet/ORWindowSaveSet.h"; sourceTree = SOURCE_ROOT; };
 		840DEA23115D7981006AF231 /* ORWindowSaveSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORWindowSaveSet.m; path = "Source/Main Dialogs/WindowSaveSet/ORWindowSaveSet.m"; sourceTree = SOURCE_ROOT; };
 		840DEA24115D7981006AF231 /* WindowSaveSet.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = WindowSaveSet.nib; path = "Source/Main Dialogs/WindowSaveSet/WindowSaveSet.nib"; sourceTree = SOURCE_ROOT; };
@@ -4868,6 +4880,7 @@
 		841224D4132E6638001AC05B /* ORTPG262Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORTPG262Model.m; path = Source/Objects/Hardware/Serial/TPG262/ORTPG262Model.m; sourceTree = SOURCE_ROOT; };
 		841224D5132E6638001AC05B /* TPG262.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = TPG262.nib; path = Source/Objects/Hardware/Serial/TPG262/TPG262.nib; sourceTree = SOURCE_ROOT; };
 		841224D6132E6638001AC05B /* TPG262.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TPG262.tif; path = Source/Objects/Hardware/Serial/TPG262/TPG262.tif; sourceTree = SOURCE_ROOT; };
+		8412C9452DBC1B3C00579936 /* RunControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = RunControl.nib; sourceTree = "<group>"; };
 		841491F11958AD03009F5E40 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		84150EDB1615FF9C0054FF08 /* Rad7Buttons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Rad7Buttons.png; path = Source/Objects/Hardware/Serial/Rad7/Rad7Buttons.png; sourceTree = SOURCE_ROOT; };
 		8415B6A7152223050092C975 /* ORMJDVacuumView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORMJDVacuumView.h; sourceTree = "<group>"; };
@@ -5107,7 +5120,6 @@
 		842E0A1016F3AD5E00E20389 /* FilterScriptEx.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilterScriptEx.h; sourceTree = "<group>"; };
 		842F19A903B8EAF3005F64B1 /* ORRunController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRunController.h; path = Source/Objects/Control/RunControl/ORRunController.h; sourceTree = SOURCE_ROOT; };
 		842F19AA03B8EAF3005F64B1 /* ORRunController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORRunController.m; sourceTree = "<group>"; };
-		842F19AD03B8EAF3005F64B1 /* RunControl.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = RunControl.nib; sourceTree = "<group>"; };
 		842F19B703B8F060005F64B1 /* ORRunModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORRunModel.m; path = Source/Objects/Control/RunControl/ORRunModel.m; sourceTree = SOURCE_ROOT; };
 		842F19B903B8F060005F64B1 /* ORRunModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRunModel.h; path = Source/Objects/Control/RunControl/ORRunModel.h; sourceTree = SOURCE_ROOT; };
 		842F2341047D3655005F64B1 /* ThreadWorker.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ThreadWorker.m; path = "Source/Objects/Misc Objects/Workers/ThreadWorker.m"; sourceTree = SOURCE_ROOT; };
@@ -5250,6 +5262,7 @@
 		843DCF2E058E546A000C5219 /* DataGen.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DataGen.gif; sourceTree = "<group>"; };
 		843DCF33058E546A000C5219 /* ORDataGenModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORDataGenModel.h; sourceTree = "<group>"; };
 		843DCF34058E546A000C5219 /* ORDataGenModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORDataGenModel.m; sourceTree = "<group>"; };
+		843E336D2DBC240C00C7A58A /* DistributedRunControl.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DistributedRunControl.xib; sourceTree = "<group>"; };
 		843F28F811ECFEED0077E55B /* ORDataGenReadout.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = ORDataGenReadout.hh; path = Source/Objects/Hardware/Vme/VMEcpu/VME_Readout_Code/ORDataGenReadout.hh; sourceTree = SOURCE_ROOT; };
 		844035B51EE452EB00E2A162 /* ORKatrinv4FLTRegisters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORKatrinv4FLTRegisters.m; sourceTree = "<group>"; };
 		844035B81EE4533100E2A162 /* ORKatrinV4FLTRegisters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORKatrinV4FLTRegisters.h; sourceTree = "<group>"; };
@@ -5785,6 +5798,11 @@
 		84762009118CD53C00016A8D /* xAxisMarkerOpposite.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = xAxisMarkerOpposite.gif; path = Source/Widgets/Plotting/xAxisMarkerOpposite.gif; sourceTree = SOURCE_ROOT; };
 		8476200A118CD53C00016A8D /* yAxisMarker.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = yAxisMarker.gif; path = Source/Widgets/Plotting/yAxisMarker.gif; sourceTree = SOURCE_ROOT; };
 		8476200B118CD53C00016A8D /* yAxisMarkerOpposite.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = yAxisMarkerOpposite.gif; path = Source/Widgets/Plotting/yAxisMarkerOpposite.gif; sourceTree = SOURCE_ROOT; };
+		8476E14B2DB81E71003534F7 /* DistributedRunControl.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = DistributedRunControl.tif; sourceTree = "<group>"; };
+		8476E14D2DB81E71003534F7 /* ORDistributedRunController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORDistributedRunController.h; sourceTree = "<group>"; };
+		8476E14E2DB81E71003534F7 /* ORDistributedRunController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORDistributedRunController.m; sourceTree = "<group>"; };
+		8476E14F2DB81E71003534F7 /* ORDistributedRunModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORDistributedRunModel.h; sourceTree = "<group>"; };
+		8476E1502DB81E71003534F7 /* ORDistributedRunModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORDistributedRunModel.m; sourceTree = "<group>"; };
 		8477DF41166A4023000144BA /* HaloSentry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HaloSentry.h; sourceTree = "<group>"; };
 		8477DF42166A4023000144BA /* HaloSentry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HaloSentry.m; sourceTree = "<group>"; };
 		84789FD70528A49E005F64B1 /* ORDataSetModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORDataSetModel.h; sourceTree = "<group>"; };
@@ -6817,6 +6835,10 @@
 		84C3B28C17CBBF26002916F5 /* MJDCmds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJDCmds.h; sourceTree = "<group>"; };
 		84C3B28F17CCD1B7002916F5 /* MJD.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MJD.cc; sourceTree = "<group>"; };
 		84C3B29017CCD1BC002916F5 /* MJD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MJD.h; sourceTree = "<group>"; };
+		84C446E92DBA906F006BD4F9 /* ORRemoteRunItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORRemoteRunItem.h; sourceTree = "<group>"; };
+		84C446EA2DBA906F006BD4F9 /* ORRemoteRunItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORRemoteRunItem.m; sourceTree = "<group>"; };
+		84C446EB2DBA906F006BD4F9 /* ORRemoteRunItemController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ORRemoteRunItemController.h; sourceTree = "<group>"; };
+		84C446EC2DBA906F006BD4F9 /* ORRemoteRunItemController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ORRemoteRunItemController.m; sourceTree = "<group>"; };
 		84C4939A04059AEA005F64B1 /* ORGpibEnetController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORGpibEnetController.h; sourceTree = "<group>"; };
 		84C4939B04059AEA005F64B1 /* ORGpibEnetController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORGpibEnetController.m; sourceTree = "<group>"; };
 		84C4939E04059AEA005F64B1 /* ORGpibEnetModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORGpibEnetModel.h; sourceTree = "<group>"; };
@@ -10035,6 +10057,7 @@
 				8494D85213393D8A00DD5F9E /* RunList */,
 				84B28DCE0F4C6FED00E2B056 /* Ramper */,
 				84693F6A1121BB4C008B5DB2 /* RunNotes */,
+				8476E1412DB81DD2003534F7 /* DistributedRunControl */,
 			);
 			name = Control;
 			path = Source/Objects/Control;
@@ -10044,12 +10067,12 @@
 			isa = PBXGroup;
 			children = (
 				842F19B703B8F060005F64B1 /* ORRunModel.m */,
+				8412C9452DBC1B3C00579936 /* RunControl.nib */,
 				842F19B903B8F060005F64B1 /* ORRunModel.h */,
 				842F19A903B8EAF3005F64B1 /* ORRunController.h */,
 				842F19AA03B8EAF3005F64B1 /* ORRunController.m */,
 				848625D708E4961400301049 /* RunControl.tif */,
 				846F4BE7098FFECC00BF0031 /* RunControlVetoed.tif */,
-				842F19AD03B8EAF3005F64B1 /* RunControl.nib */,
 				84E099600CC934CB00EFBC8F /* play.tiff */,
 				84E099610CC934CB00EFBC8F /* stop.tiff */,
 				84FD0DF9079462FB004A0E46 /* RunFailedHelp.plist */,
@@ -11420,6 +11443,24 @@
 			name = AnalysisSupport;
 			path = Source/Widgets/Plotting/AnalysisSupport;
 			sourceTree = SOURCE_ROOT;
+		};
+		8476E1412DB81DD2003534F7 /* DistributedRunControl */ = {
+			isa = PBXGroup;
+			children = (
+				8476E1502DB81E71003534F7 /* ORDistributedRunModel.m */,
+				8476E14F2DB81E71003534F7 /* ORDistributedRunModel.h */,
+				8476E14D2DB81E71003534F7 /* ORDistributedRunController.h */,
+				8476E14E2DB81E71003534F7 /* ORDistributedRunController.m */,
+				84C446E92DBA906F006BD4F9 /* ORRemoteRunItem.h */,
+				84C446EA2DBA906F006BD4F9 /* ORRemoteRunItem.m */,
+				84C446EB2DBA906F006BD4F9 /* ORRemoteRunItemController.h */,
+				84C446EC2DBA906F006BD4F9 /* ORRemoteRunItemController.m */,
+				843E336D2DBC240C00C7A58A /* DistributedRunControl.xib */,
+				840DC6ED2DBE6CF100635A9F /* RemoteRunItem.xib */,
+				8476E14B2DB81E71003534F7 /* DistributedRunControl.tif */,
+			);
+			path = DistributedRunControl;
+			sourceTree = "<group>";
 		};
 		84789FD50528A49E005F64B1 /* BaseClasses */ = {
 			isa = PBXGroup;
@@ -16992,6 +17033,8 @@
 				4AB9E52F1DE5D820007C75E0 /* ORPQController.h in Headers */,
 				2D2C84070F4EC6640005D69F /* ORIpeSlowControlDecoder.h in Headers */,
 				84EBBEE70F52D9A700F57BDD /* ORCaen419Controller.h in Headers */,
+				8476E1542DB81E71003534F7 /* ORDistributedRunController.h in Headers */,
+				8476E1552DB81E71003534F7 /* ORDistributedRunModel.h in Headers */,
 				84EBBEE90F52D9A700F57BDD /* ORCaen419Model.h in Headers */,
 				84EBC2140F530E4A00F57BDD /* ORCaen419Decoders.h in Headers */,
 				84BA5DE50F6E8C8900CF92D6 /* ORHVRampItem.h in Headers */,
@@ -17404,6 +17447,8 @@
 				2D51C60C15B5A115000F0ACD /* OREdelweissFLTController.h in Headers */,
 				2D51C60E15B5A115000F0ACD /* OREdelweissFLTDecoder.h in Headers */,
 				2D51C61015B5A115000F0ACD /* OREdelweissFLTDefs.h in Headers */,
+				84C446EE2DBA906F006BD4F9 /* ORRemoteRunItem.h in Headers */,
+				84C446EF2DBA906F006BD4F9 /* ORRemoteRunItemController.h in Headers */,
 				84D29FE31843EAC800D320DB /* ORRemoteSocketStep.h in Headers */,
 				2D51C61115B5A115000F0ACD /* OREdelweissFLTModel.h in Headers */,
 				848604C615C2CAFC00E3A209 /* ORSerialPortWithQueueModel.h in Headers */,
@@ -17669,7 +17714,7 @@
 				8427BF732941343300C1C70A /* InFlux.nib in Resources */,
 				8434A258055B3287002D3102 /* ShaperCard.gif in Resources */,
 				8434A259055B3287002D3102 /* Shaper.nib in Resources */,
-				8434A25A055B3287002D3102 /* RunControl.nib in Resources */,
+				8476E1522DB81E71003534F7 /* DistributedRunControl.tif in Resources */,
 				8434A25B055B3287002D3102 /* ORPreferences.nib in Resources */,
 				8434A25D055B3287002D3102 /* Histo.nib in Resources */,
 				8434A25E055B3287002D3102 /* Histo.gif in Resources */,
@@ -18284,11 +18329,13 @@
 				8408B2270FDD560200B0206D /* cPCI.png in Resources */,
 				8408B23D0FDD579800B0206D /* IPE.png in Resources */,
 				8408B2830FDD5A9D00B0206D /* IPEV4.png in Resources */,
+				843E336E2DBC240C00C7A58A /* DistributedRunControl.xib in Resources */,
 				8494F8D01C440E2C00A35F8B /* MJDDewarScale.nib in Resources */,
 				84B74AD00FEAAB460033E658 /* ftpExpectScript in Resources */,
 				84B74CE70FEBE9B90033E658 /* Caen965.gif in Resources */,
 				84B74CE80FEBE9B90033E658 /* Caen965.nib in Resources */,
 				84A1ACAC0FF3A4EE00D7F946 /* PlotPublisher.nib in Resources */,
+				8412C9462DBC1B3C00579936 /* RunControl.nib in Resources */,
 				84EB2DDE1E32990D00C273AA /* LabJackU6.nib in Resources */,
 				84D7913B0FFA4CD000DC81D2 /* Keithley6487.gif in Resources */,
 				84D7913C0FFA4CD000DC81D2 /* Keithley6487.nib in Resources */,
@@ -18373,6 +18420,7 @@
 				8490D2971177532C00D25B1F /* IpeV4MiniCrateBig.tif in Resources */,
 				844FD9DC1180E89B00FD5A46 /* KJL2200IonGauge.nib in Resources */,
 				844FD9DD1180E89B00FD5A46 /* KJL2200IonGauge.tif in Resources */,
+				840DC6EE2DBE6CF100635A9F /* RemoteRunItem.xib in Resources */,
 				84E966CF11848BEF008D9119 /* Majorana.nib in Resources */,
 				84E966D011848BEF008D9119 /* Majorana.tif in Resources */,
 				848822A11D2413910030B398 /* DT5725.nib in Resources */,
@@ -19619,6 +19667,8 @@
 				EFAC073211E9A6CB00336793 /* XL3_Link.m in Sources */,
 				EFAC074011E9A9DB00336793 /* XL3_LinkController.m in Sources */,
 				84EE03BF120AFA4400B804B3 /* ORInverterModel.m in Sources */,
+				8476E1562DB81E71003534F7 /* ORDistributedRunModel.m in Sources */,
+				8476E1572DB81E71003534F7 /* ORDistributedRunController.m in Sources */,
 				84AC14E11B70E2460071C4EF /* ORMjdFileReader.m in Sources */,
 				84065D971226B600004E8970 /* ORPxi8336MacController.m in Sources */,
 				84065D991226B600004E8970 /* ORPxi8336MacModel.m in Sources */,
@@ -19669,6 +19719,8 @@
 				EFB39FD1130BA1C5001220AC /* SNOPController.m in Sources */,
 				EFB39FD5130BA1C5001220AC /* SNOPModel.m in Sources */,
 				84052A2F13106B65007607A4 /* ORCouchDBController.m in Sources */,
+				84C446F02DBA906F006BD4F9 /* ORRemoteRunItemController.m in Sources */,
+				84C446F12DBA906F006BD4F9 /* ORRemoteRunItem.m in Sources */,
 				842FCCB2197849C700B89723 /* OREHS8260pController.m in Sources */,
 				84052A3113106B65007607A4 /* ORCouchDBModel.m in Sources */,
 				8494C0261316CEBA00151E7B /* ORBootBarController.m in Sources */,

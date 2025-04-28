@@ -35,6 +35,8 @@ enum {
     ORDotImage* cautionLight;
     ORDotImage* goLight;
     int state;
+    bool vertical;
+    int spacing;
     ORDotImage* offLight;
     BOOL hideCautionLight;
 }

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment version="1090" identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="ORRemoteRunItemController">
+            <connections>
+                <outlet property="connectButton" destination="bPb-cz-AZM" id="I9g-g0-Qiu"/>
+                <outlet property="connectedField" destination="8xF-cg-762" id="Evo-U5-k4p"/>
+                <outlet property="ignoreCB" destination="yoD-TQ-bF5" id="bbU-VS-IMT"/>
+                <outlet property="ipNumberField" destination="115" id="q2e-kQ-Y4w"/>
+                <outlet property="lightBoardView" destination="Ik5-zS-DeH" id="LIq-ra-IEa"/>
+                <outlet property="minusButton" destination="uR5-F2-8gZ" id="c1N-or-Y37"/>
+                <outlet property="plusButton" destination="rPP-Gg-wSb" id="qiK-uf-r38"/>
+                <outlet property="remotePortField" destination="lsj-Vb-smS" id="46r-o2-03V"/>
+                <outlet property="runNumberField" destination="Voi-0y-ske" id="Flr-FB-Sxy"/>
+                <outlet property="runStatusField" destination="N3y-hm-aQS" id="1S9-XD-nIC"/>
+                <outlet property="systemNameField" destination="K3I-m0-3n2" id="GXl-ef-zgh"/>
+                <outlet property="view" destination="129" id="130"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="5" userLabel="View">
+            <rect key="frame" x="0.0" y="0.0" width="563" height="129"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <subviews>
+                <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="129">
+                    <rect key="frame" x="0.0" y="1" width="551" height="122"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <box fixedFrame="YES" boxType="custom" borderType="line" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="xzx-Mf-MUF">
+                            <rect key="frame" x="3" y="9" width="548" height="103"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <view key="contentView" id="Ie6-fr-Qol">
+                                <rect key="frame" x="1" y="1" width="546" height="101"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="115">
+                                        <rect key="frame" x="57" y="38" width="93" height="19"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="174">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <connections>
+                                            <action selector="ipNumberAction:" target="-2" id="IDu-44-2xO"/>
+                                        </connections>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uR5-F2-8gZ">
+                                        <rect key="frame" x="470" y="58" width="41" height="32"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="push" title="-" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="O5I-vd-rGe">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="removeRemoteRunItem:" target="-2" id="G3l-CW-8m7"/>
+                                        </connections>
+                                    </button>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rPP-Gg-wSb">
+                                        <rect key="frame" x="504" y="58" width="43" height="32"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="push" title="+" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AaM-nI-64N">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="insertRemoteRunItem:" target="-2" id="s9s-BG-gXj"/>
+                                        </connections>
+                                    </button>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rrM-4r-drj">
+                                        <rect key="frame" x="31" y="41" width="20" height="14"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="IP:" id="xgr-Mn-ODQ">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bPb-cz-AZM">
+                                        <rect key="frame" x="155" y="32" width="101" height="27"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <buttonCell key="cell" type="push" title="Disconnected" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="8wD-rH-bEs">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="connectAction:" target="-2" id="iY7-fJ-E6s"/>
+                                        </connections>
+                                    </button>
+                                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ik5-zS-DeH" customClass="StopLightView">
+                                        <rect key="frame" x="359" y="71" width="68" height="18"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                    </customView>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8xF-cg-762">
+                                        <rect key="frame" x="105" y="15" width="68" height="14"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Connected" id="gm8-Ej-XcS">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lsj-Vb-smS">
+                                        <rect key="frame" x="57" y="13" width="42" height="19"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="4667" drawsBackground="YES" id="sKk-G2-FkJ">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <connections>
+                                            <action selector="remotePortAction:" target="-2" id="Tew-FE-IFc"/>
+                                        </connections>
+                                    </textField>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ga-hk-phM">
+                                        <rect key="frame" x="18" y="16" width="33" height="14"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Port:" id="abs-3T-BGX">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K3I-m0-3n2">
+                                        <rect key="frame" x="57" y="66" width="193" height="19"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="AoA-KL-SpV">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <connections>
+                                            <action selector="systemNameAction:" target="-2" id="jqv-kM-bBa"/>
+                                        </connections>
+                                    </textField>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mLj-uu-Ftp">
+                                        <rect key="frame" x="7" y="69" width="44" height="14"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Name:" id="x9m-MJ-5ZY">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N3y-hm-aQS">
+                                        <rect key="frame" x="282" y="69" width="71" height="14"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="-                          " id="7GF-Ah-nRz">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Voi-0y-ske">
+                                        <rect key="frame" x="307" y="46" width="92" height="14"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="-                          " id="a6n-Na-43B">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="eyn-XD-J03">
+                                        <rect key="frame" x="256" y="3" width="5" height="96"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </box>
+                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yoD-TQ-bF5">
+                                        <rect key="frame" x="175" y="13" width="55" height="16"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <buttonCell key="cell" type="check" title="Ignore" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="BpP-w2-AIu">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="smallSystem"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="ignoreAction:" target="-2" id="orc-Y5-mWC"/>
+                                        </connections>
+                                    </button>
+                                    <textField focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="THx-n0-4y4">
+                                        <rect key="frame" x="271" y="47" width="32" height="14"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Run:" id="Nut-Ip-Zbn">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <box horizontalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="e9y-Q3-bZ8">
+                                        <rect key="frame" x="466" y="3" width="5" height="96"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    </box>
+                                </subviews>
+                            </view>
+                            <color key="borderColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="fillColor" red="0.92209583520889282" green="0.95889550447463989" blue="0.97532123327255249" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </box>
+                    </subviews>
+                </customView>
+            </subviews>
+            <point key="canvasLocation" x="54.5" y="-97.5"/>
+        </customView>
+    </objects>
+</document>
