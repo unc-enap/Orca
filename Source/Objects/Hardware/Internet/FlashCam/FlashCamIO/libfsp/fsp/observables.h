@@ -61,7 +61,7 @@ typedef struct prescale_obs {
   // which channels were prescaled
   unsigned short hwm_prescaled_trace_idx[FCIOMaxChannels];
 
-} prescaler_obs;
+} prescale_obs;
 
 typedef struct FSPObervables {
 
@@ -69,7 +69,7 @@ typedef struct FSPObervables {
   hwm_obs hwm;
   ct_obs ct;
   evt_obs evt;
-  prescaler_obs ps;
+  prescale_obs ps;
 
   SubEventList sub_event_list;
 

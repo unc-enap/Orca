@@ -1,13 +1,14 @@
 #include "io_fcio.h"
 #include "dsp.h"
 #include "fcio.h"
-#include "fsp/observables.h"
+#include "observables.h"
 #include "processor.h"
 #include "state.h"
 #include "timestamps.h"
 
 #include <fcio_utils.h>
 #include <tmio.h>
+#include <unistd.h>
 
 /* internal helpers */
 
@@ -25,8 +26,11 @@ static inline int fcio_get_fsp_tracemap(FCIOStream stream, FSPTraceMap* map) {
   if (!stream || !map)
     return -1;
   FCIOReadInt(stream, map->format);
-  map->n_mapped = FCIOReadInts(stream, FCIOMaxChannels, map->map) / sizeof(*map->map);
-  map->n_enabled = FCIOReadInts(stream, FCIOMaxChannels, map->enabled) / sizeof(*map->enabled);
+  int readbytes = 0;
+  readbytes = FCIOReadInts(stream, FCIOMaxChannels, map->map);
+  map->n_mapped = (readbytes >= 0) ? readbytes/sizeof(*map->map) : 0;
+  readbytes = FCIOReadInts(stream, FCIOMaxChannels, map->enabled);
+  map->n_enabled = (readbytes >= 0) ? readbytes/sizeof(*map->enabled) : 0;
   int nlabels = FCIORead(stream, FCIOMaxChannels * sizeof(*map->label), map->label) / sizeof(*map->label);
 
   if (nlabels != map->n_mapped)
@@ -204,7 +208,9 @@ static inline int fcio_get_fspconfig_trigger(FCIOStream stream, FSPTriggerConfig
   FCIORead(stream, sizeof(HWMFlags), &config->wps_ref_flags_hwm);
   FCIORead(stream, sizeof(CTFlags), &config->wps_ref_flags_ct);
   FCIORead(stream, sizeof(WPSFlags), &config->wps_ref_flags_wps);
-  config->n_wps_ref_map_idx = FCIOReadInts(stream, FCIOMaxChannels, config->wps_ref_map_idx)/sizeof(int);
+
+  int readbytes = FCIOReadInts(stream, FCIOMaxChannels, config->wps_ref_map_idx);
+  config->n_wps_ref_map_idx = (readbytes >= 0) ? readbytes/sizeof(int) : 0;
 
   return 0;
 }
@@ -275,6 +281,7 @@ int FCIOGetFSPEvent(FCIOData* input, StreamProcessor* processor)
     return -1;
 
   FSPState* fsp_state = processor->fsp_state;
+  int readbytes = 0;
 
   FCIOStream in = FCIOStreamHandle(input);
   FCIORead(in, sizeof(fsp_state->write_flags), &fsp_state->write_flags);
@@ -284,14 +291,17 @@ int FCIOGetFSPEvent(FCIOData* input, StreamProcessor* processor)
   FCIORead(in, sizeof(fsp_state->obs.hwm), &fsp_state->obs.hwm);
   FCIORead(in, sizeof(fsp_state->obs.wps), &fsp_state->obs.wps);
 
-  fsp_state->obs.ct.multiplicity = FCIOReadInts(in, FCIOMaxChannels, fsp_state->obs.ct.trace_idx)/sizeof(int);
+  readbytes = FCIOReadInts(in, FCIOMaxChannels, fsp_state->obs.ct.trace_idx);
+  fsp_state->obs.ct.multiplicity = (readbytes >= 0) ? readbytes/sizeof(int) : 0;
   FCIOReadUShorts(in, FCIOMaxChannels, fsp_state->obs.ct.max);
 
-  fsp_state->obs.sub_event_list.size = FCIOReadInts(in, FCIOMaxSamples, fsp_state->obs.sub_event_list.start)/sizeof(int);
+  readbytes = FCIOReadInts(in, FCIOMaxSamples, fsp_state->obs.sub_event_list.start);
+  fsp_state->obs.sub_event_list.size = (readbytes >= 0) ? readbytes/sizeof(int) : 0;
   FCIOReadInts(in, FCIOMaxSamples, fsp_state->obs.sub_event_list.stop);
   FCIOReadFloats(in, FCIOMaxSamples, fsp_state->obs.sub_event_list.wps_max);
 
-  fsp_state->obs.ps.n_hwm_prescaled = FCIOWriteInts(in, FCIOMaxChannels, fsp_state->obs.ps.hwm_prescaled_trace_idx);
+  readbytes = FCIOReadInts(in, FCIOMaxChannels, fsp_state->obs.ps.hwm_prescaled_trace_idx);
+  fsp_state->obs.ps.n_hwm_prescaled = (readbytes >= 0) ? readbytes/sizeof(int) : 0;
 
   return 0;
 }
@@ -462,7 +472,7 @@ static inline size_t fspevent_size(FSPState* fspstate) {
   total_size += frame_header + sizeof(*((SubEventList){0}).start) * fspstate->obs.sub_event_list.size;
   total_size += frame_header + sizeof(*((SubEventList){0}).stop) * fspstate->obs.sub_event_list.size;
   total_size += frame_header + sizeof(*((SubEventList){0}).wps_max) * fspstate->obs.sub_event_list.size;
-  total_size += frame_header + sizeof(*((prescaler_obs){0}).hwm_prescaled_trace_idx) * fspstate->obs.ps.n_hwm_prescaled;
+  total_size += frame_header + sizeof(*((prescale_obs){0}).hwm_prescaled_trace_idx) * fspstate->obs.ps.n_hwm_prescaled;
 
   return total_size;
 }
