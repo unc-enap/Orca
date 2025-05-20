@@ -1348,7 +1348,6 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     if ([self configParam:@"fspHWEnabled"] && nfspHWChannels) {
         if (!FSP_L200_SetGeParameters(processor, nfspHWChannels, fspHWChannelMap, FCIO_TRACE_MAP_FORMAT,
                                 [[self configParam:@"fspHWMajThreshold"] intValue],
-                                0, // do not skip any channels to check
                                 fspHWPrescaleThresholds,
                                 [[self configParam:@"fspHWPreScaleRatio"] intValue])) {
             NSLogColor([NSColor redColor], @"%@: setupSoftwareTrigger: Error parsing HW Multiplicity parameters.\n", [self identifier]);
