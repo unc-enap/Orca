@@ -936,7 +936,7 @@
         ORDetectorSegment* segment = [group segment:i];
         const int aux = [[segment objectForKey:@"kStringName"] intValue];
         if([delegate validateAuxChan:i]){
-            float y = yoff + dy + (kL200MaxAuxChans-aux-1)*(cy+dy);
+            float y = yoff + dy + (kL200MaxAuxChans-aux-1)*(cy+dy)-i*10;
             NSRect r = NSMakeRect(xoff+kL200DetViewWidth, y, cx, cy);
             [segmentPaths addObject:[NSBezierPath bezierPathWithRect:r]];
             [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(r, -inset, -inset)]];
