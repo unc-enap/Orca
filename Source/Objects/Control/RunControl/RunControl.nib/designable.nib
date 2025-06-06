@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="23727" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment version="1060" identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="23727"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -77,19 +76,19 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="89" y="354" width="557" height="397"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1728" height="1079"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="557" height="397"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box boxType="secondary" borderType="bezel" title="Run Status" titlePosition="noTitle" id="29">
+                    <box fixedFrame="YES" boxType="secondary" borderType="bezel" title="Run Status" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="29">
                         <rect key="frame" x="17" y="77" width="258" height="214"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="27g-em-tj3">
-                            <rect key="frame" x="3" y="3" width="252" height="208"/>
+                            <rect key="frame" x="4" y="5" width="250" height="206"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="19">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="19">
                                     <rect key="frame" x="2" y="164" width="79" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Status:" id="2567">
@@ -98,7 +97,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="20">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="20">
                                     <rect key="frame" x="1" y="116" width="79" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Elapsed Time:" id="2568">
@@ -107,7 +106,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="24">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="24">
                                     <rect key="frame" x="84" y="116" width="61" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2570">
@@ -116,7 +115,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="23">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23">
                                     <rect key="frame" x="89" y="151" width="156" height="26"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="Not Running" id="2569">
@@ -125,7 +124,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="55">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="55">
                                     <rect key="frame" x="1" y="98" width="79" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Time Left :" id="2573">
@@ -134,7 +133,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2250">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2250">
                                     <rect key="frame" x="140" y="98" width="84" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="2586">
@@ -143,7 +142,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="56">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="56">
                                     <rect key="frame" x="84" y="98" width="52" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2574">
@@ -152,7 +151,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="27">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="27">
                                     <rect key="frame" x="84" y="134" width="155" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2572">
@@ -161,7 +160,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="26">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="26">
                                     <rect key="frame" x="1" y="134" width="79" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Time Started:" id="2571">
@@ -170,7 +169,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="1768">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1768">
                                     <rect key="frame" x="88" y="188" width="74" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="0000000" id="2575">
@@ -179,7 +178,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="1769">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1769">
                                     <rect key="frame" x="9" y="185" width="85" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Run Number:" id="2576">
@@ -188,7 +187,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2051">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2051">
                                     <rect key="frame" x="1" y="62" width="79" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Vetos:" id="2577">
@@ -197,7 +196,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2052">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2052">
                                     <rect key="frame" x="83" y="62" width="32" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2578">
@@ -206,7 +205,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2168">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2168">
                                     <rect key="frame" x="1" y="39" width="79" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Start Script:" id="2580">
@@ -215,7 +214,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2169">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2169">
                                     <rect key="frame" x="84" y="41" width="61" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2581">
@@ -224,7 +223,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2172">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2172">
                                     <rect key="frame" x="1" y="18" width="79" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Stop Script:" id="2582">
@@ -233,7 +232,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2173">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2173">
                                     <rect key="frame" x="84" y="20" width="61" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2583">
@@ -242,7 +241,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button verticalHuggingPriority="750" id="2054">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2054">
                                     <rect key="frame" x="163" y="59" width="82" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="push" title="List Vetos" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="2579">
@@ -253,7 +252,7 @@
                                         <action selector="listVetoAction:" target="-2" id="2057"/>
                                     </connections>
                                 </button>
-                                <textField verticalHuggingPriority="750" id="2624">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2624">
                                     <rect key="frame" x="1" y="81" width="79" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Waits:" id="2629">
@@ -262,7 +261,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2625">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2625">
                                     <rect key="frame" x="83" y="81" width="32" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2628">
@@ -271,7 +270,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button verticalHuggingPriority="750" id="2626">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2626">
                                     <rect key="frame" x="163" y="79" width="82" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="push" title="Show Waits..." bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="2627">
@@ -282,7 +281,7 @@
                                         <action selector="toggle:" target="2633" id="2654"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" id="2176">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2176">
                                     <rect key="frame" x="163" y="39" width="82" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="push" title="Open..." bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="2584">
@@ -293,7 +292,7 @@
                                         <action selector="openStartScript:" target="-2" id="2186"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" id="2178">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2178">
                                     <rect key="frame" x="163" y="18" width="82" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="push" title="Open..." bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" inset="2" id="2585">
@@ -304,34 +303,34 @@
                                         <action selector="openShutDownScript:" target="-2" id="2187"/>
                                     </connections>
                                 </button>
-                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" minValue="16" maxValue="100" doubleValue="16" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="2101">
-                                    <rect key="frame" x="164" y="186" width="16" height="16"/>
+                                <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" minValue="16" maxValue="100" doubleValue="16" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="2101">
+                                    <rect key="frame" x="164" y="184" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </progressIndicator>
                             </subviews>
                         </view>
                         <font key="titleFont" metaFont="label"/>
                     </box>
-                    <box boxType="secondary" borderType="bezel" title="Run Options" id="83">
+                    <box fixedFrame="YES" boxType="secondary" borderType="bezel" title="Run Options" translatesAutoresizingMaskIntoConstraints="NO" id="83">
                         <rect key="frame" x="277" y="16" width="258" height="194"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <view key="contentView" id="1ad-hO-dDC">
-                            <rect key="frame" x="3" y="3" width="252" height="177"/>
+                            <rect key="frame" x="4" y="5" width="250" height="175"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="9">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9">
                                     <rect key="frame" x="60" y="92" width="47" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="999999" drawsBackground="YES" id="2587">
                                         <font key="font" metaFont="label"/>
-                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                     <connections>
                                         <action selector="timeLimitTextAction:" target="-2" id="68"/>
                                     </connections>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="32">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="32">
                                     <rect key="frame" x="112" y="93" width="29" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Secs" id="2588">
@@ -340,7 +339,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2164">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2164">
                                     <rect key="frame" x="9" y="147" width="51" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="At Start:" id="2596">
@@ -349,7 +348,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2166">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2166">
                                     <rect key="frame" x="9" y="122" width="51" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="At Stop:" id="2597">
@@ -358,11 +357,11 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <progressIndicator verticalHuggingPriority="750" maxValue="100" bezeled="NO" controlSize="small" style="bar" id="73">
+                                <progressIndicator verticalHuggingPriority="750" fixedFrame="YES" maxValue="100" bezeled="NO" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="73">
                                     <rect key="frame" x="15" y="73" width="215" height="12"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </progressIndicator>
-                                <button id="80">
+                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="80">
                                     <rect key="frame" x="143" y="92" width="89" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Then Repeat" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="2590">
@@ -373,7 +372,7 @@
                                         <action selector="repeatRunCBAction:" target="-2" id="85"/>
                                     </connections>
                                 </button>
-                                <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="185">
+                                <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="185">
                                     <rect key="frame" x="14" y="12" width="166" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -401,7 +400,7 @@
                                         <action selector="runModeAction:" target="-2" id="194"/>
                                     </connections>
                                 </matrix>
-                                <button id="1747">
+                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1747">
                                     <rect key="frame" x="143" y="45" width="73" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Remote" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="2591">
@@ -412,7 +411,7 @@
                                         <action selector="remoteControlAction:" target="-2" id="1765"/>
                                     </connections>
                                 </button>
-                                <tabView drawsBackground="NO" type="noTabsNoBorder" id="1748">
+                                <tabView fixedFrame="YES" drawsBackground="NO" type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="1748">
                                     <rect key="frame" x="227" y="8" width="37" height="26"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <font key="font" metaFont="system"/>
@@ -431,7 +430,7 @@
                                         </tabViewItem>
                                     </tabViewItems>
                                 </tabView>
-                                <button toolTip="Lengthy inits are skipped." id="2032">
+                                <button toolTip="Lengthy inits are skipped." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2032">
                                     <rect key="frame" x="13" y="45" width="86" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Quick Start" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="2593">
@@ -442,8 +441,8 @@
                                         <action selector="quickStartCBAction:" target="-2" id="2035"/>
                                     </connections>
                                 </button>
-                                <popUpButton verticalHuggingPriority="750" id="2152">
-                                    <rect key="frame" x="65" y="145" width="168" height="22"/>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2152">
+                                    <rect key="frame" x="65" y="143" width="168" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="2155" id="2594">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -460,8 +459,8 @@
                                         <action selector="selectStartUpScript:" target="-2" id="2183"/>
                                     </connections>
                                 </popUpButton>
-                                <popUpButton verticalHuggingPriority="750" id="2158">
-                                    <rect key="frame" x="65" y="120" width="168" height="22"/>
+                                <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2158">
+                                    <rect key="frame" x="65" y="118" width="168" height="22"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="2163" id="2595">
                                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -478,16 +477,16 @@
                                         <action selector="selectShutDownScript:" target="-2" id="2182"/>
                                     </connections>
                                 </popUpButton>
-                                <box verticalHuggingPriority="750" boxType="separator" id="2249">
-                                    <rect key="frame" x="16" y="36" width="214" height="5"/>
+                                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="2249">
+                                    <rect key="frame" x="16" y="34" width="214" height="5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </box>
-                                <imageView id="1749">
+                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1749">
                                     <rect key="frame" x="193" y="12" width="45" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <imageCell key="cell" enabled="NO" refusesFirstResponder="YES" alignment="left" image="notice" id="2592"/>
                                 </imageView>
-                                <button id="64">
+                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="64">
                                     <rect key="frame" x="8" y="92" width="51" height="18"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="check" title="Run:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="2589">
@@ -502,18 +501,18 @@
                         </view>
                         <font key="titleFont" metaFont="label"/>
                     </box>
-                    <customView id="2049" customClass="StopLightView">
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2049" customClass="StopLightView">
                         <rect key="frame" x="287" y="252" width="30" height="98"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </customView>
-                    <box borderType="line" title="Sub Run Timers" id="2510">
+                    <box fixedFrame="YES" borderType="line" title="Sub Run Timers" translatesAutoresizingMaskIntoConstraints="NO" id="2510">
                         <rect key="frame" x="332" y="224" width="203" height="79"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <view key="contentView" id="a6r-ot-TJX">
-                            <rect key="frame" x="1" y="1" width="201" height="63"/>
+                            <rect key="frame" x="4" y="5" width="195" height="59"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <textField verticalHuggingPriority="750" id="2536">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2536">
                                     <rect key="frame" x="9" y="35" width="121" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sub Run Elapsed Time:" id="2605">
@@ -522,7 +521,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2537">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2537">
                                     <rect key="frame" x="132" y="39" width="61" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2606">
@@ -531,7 +530,7 @@
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2546">
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2546">
                                     <rect key="frame" x="13" y="14" width="117" height="17"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Since End of Sub Run:" id="2607">
@@ -540,7 +539,7 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField verticalHuggingPriority="750" id="2547">
+                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2547">
                                     <rect key="frame" x="132" y="18" width="61" height="13"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" enabled="NO" sendsActionOnEndEditing="YES" state="on" alignment="left" title="---" id="2608">
@@ -552,14 +551,14 @@
                             </subviews>
                         </view>
                     </box>
-                    <box borderType="line" title="Setup Drawers" id="2501">
+                    <box fixedFrame="YES" borderType="line" title="Setup Drawers" translatesAutoresizingMaskIntoConstraints="NO" id="2501">
                         <rect key="frame" x="17" y="16" width="258" height="57"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <view key="contentView" id="Fo5-R5-ZX1">
-                            <rect key="frame" x="1" y="1" width="256" height="41"/>
+                            <rect key="frame" x="4" y="5" width="250" height="37"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button verticalHuggingPriority="750" id="195">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="195">
                                     <rect key="frame" x="102" y="7" width="87" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="push" title="Run Type..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="2604">
@@ -570,7 +569,7 @@
                                         <action selector="toggle:" target="197" id="201"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" id="2739">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2739">
                                     <rect key="frame" x="182" y="7" width="73" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="push" title="Scripts..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="2740">
@@ -581,7 +580,7 @@
                                         <action selector="toggle:" target="2745" id="2752"/>
                                     </connections>
                                 </button>
-                                <button verticalHuggingPriority="750" id="161">
+                                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="161">
                                     <rect key="frame" x="3" y="7" width="104" height="28"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <buttonCell key="cell" type="push" title="Run Number..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="2603">
@@ -595,7 +594,7 @@
                             </subviews>
                         </view>
                     </box>
-                    <textField verticalHuggingPriority="750" id="2528">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2528">
                         <rect key="frame" x="79" y="289" width="40" height="13"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Vetoed" id="2609">
@@ -604,7 +603,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="2665">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2665">
                         <rect key="frame" x="123" y="289" width="139" height="17"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="2666">
@@ -613,7 +612,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button id="2495">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2495">
                         <rect key="frame" x="20" y="318" width="77" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="square" title="Start Run" bezelStyle="shadowlessSquare" alignment="center" state="on" borderStyle="border" inset="2" id="2598">
@@ -624,7 +623,7 @@
                             <action selector="startRunAction:" target="-2" id="2520"/>
                         </connections>
                     </button>
-                    <button toolTip="Stops the current run and starts a new one" id="2497">
+                    <button toolTip="Stops the current run and starts a new one" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2497">
                         <rect key="frame" x="108" y="318" width="77" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="square" title="New Run" bezelStyle="shadowlessSquare" alignment="center" state="on" borderStyle="border" inset="2" id="2599">
@@ -635,7 +634,7 @@
                             <action selector="newRunAction:" target="-2" id="2519"/>
                         </connections>
                     </button>
-                    <button id="2499">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2499">
                         <rect key="frame" x="195" y="318" width="77" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="square" title="Stop Run" bezelStyle="shadowlessSquare" alignment="center" state="on" borderStyle="border" inset="2" id="2600">
@@ -646,12 +645,12 @@
                             <action selector="stopRunAction:" target="-2" id="2521"/>
                         </connections>
                     </button>
-                    <popUpButton verticalHuggingPriority="750" id="2759">
+                    <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2759">
                         <rect key="frame" x="18" y="360" width="251" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" title="Item 1" bezelStyle="rounded" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="2762" id="2760">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu"/>
+                            <font key="font" metaFont="message"/>
                             <menu key="menu" title="OtherViews" id="2761">
                                 <items>
                                     <menuItem title="Item 1" state="on" id="2762"/>
@@ -664,7 +663,7 @@
                             <action selector="selectedRunTypeScriptPUAction:" target="-2" id="2766"/>
                         </connections>
                     </popUpButton>
-                    <button id="2504">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2504">
                         <rect key="frame" x="335" y="318" width="93" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="square" title="End Sub Run" bezelStyle="shadowlessSquare" alignment="center" state="on" borderStyle="border" inset="2" id="2601">
@@ -675,7 +674,7 @@
                             <action selector="prepareForSubRunAction:" target="-2" id="2534"/>
                         </connections>
                     </button>
-                    <button id="2506">
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2506">
                         <rect key="frame" x="436" y="318" width="100" height="32"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <buttonCell key="cell" type="square" title="New Sub Run " bezelStyle="shadowlessSquare" alignment="center" borderStyle="border" inset="2" id="2602">
@@ -686,7 +685,7 @@
                             <action selector="startNewSubRunAction:" target="-2" id="2533"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" id="2769">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2769">
                         <rect key="frame" x="17" y="286" width="67" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Run Status" id="2770">
@@ -695,7 +694,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="2771">
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2771">
                         <rect key="frame" x="332" y="364" width="203" height="18"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="Sub Run Control" id="2772">
@@ -704,7 +703,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" boxType="separator" id="2773">
+                    <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="2773">
                         <rect key="frame" x="335" y="361" width="197" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     </box>
@@ -713,6 +712,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="70"/>
             </connections>
+            <point key="canvasLocation" x="59" y="-102"/>
         </window>
         <drawer preferredEdge="minY" leadingOffset="25" trailingOffset="25" id="145" userLabel="RunNumberDrawer">
             <size key="contentSize" width="475" height="100"/>
@@ -728,7 +728,7 @@
             <rect key="frame" x="0.0" y="0.0" width="456" height="100"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button id="1783">
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1783">
                     <rect key="frame" x="13" y="16" width="36" height="47"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="only" alignment="center" alternateImage="Locked" inset="2" id="2617">
@@ -739,23 +739,23 @@
                         <action selector="runNumberLockAction:" target="-2" id="1784"/>
                     </connections>
                 </button>
-                <box boxType="secondary" borderType="bezel" title="Run Number" id="157">
+                <box fixedFrame="YES" boxType="secondary" borderType="bezel" title="Run Number" translatesAutoresizingMaskIntoConstraints="NO" id="157">
                     <rect key="frame" x="279" y="6" width="160" height="84"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <view key="contentView" id="du1-v2-ly3">
-                        <rect key="frame" x="3" y="3" width="154" height="67"/>
+                        <rect key="frame" x="4" y="5" width="152" height="65"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField verticalHuggingPriority="750" id="152">
+                            <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="152">
                                 <rect key="frame" x="13" y="33" width="136" height="18"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="2615">
                                     <font key="font" metaFont="label"/>
-                                    <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" id="2776">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2776">
                                 <rect key="frame" x="87" y="1" width="67" height="28"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <buttonCell key="cell" type="push" title="Apply..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="2777">
@@ -770,14 +770,14 @@
                     </view>
                     <font key="titleFont" metaFont="label"/>
                 </box>
-                <box boxType="secondary" borderType="bezel" title="Run Number Folder" id="147">
+                <box fixedFrame="YES" boxType="secondary" borderType="bezel" title="Run Number Folder" translatesAutoresizingMaskIntoConstraints="NO" id="147">
                     <rect key="frame" x="54" y="6" width="223" height="84"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <view key="contentView" id="U0M-7W-hSr">
-                        <rect key="frame" x="3" y="3" width="217" height="67"/>
+                        <rect key="frame" x="4" y="5" width="215" height="65"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField verticalHuggingPriority="750" id="154">
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="154">
                                 <rect key="frame" x="13" y="28" width="197" height="29"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" id="2611">
@@ -786,7 +786,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <button verticalHuggingPriority="750" id="155">
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="155">
                                 <rect key="frame" x="97" y="1" width="115" height="28"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <buttonCell key="cell" type="push" title="Specify Folder..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="2612">
@@ -803,11 +803,11 @@
                 </box>
             </subviews>
         </customView>
-        <customView misplaced="YES" id="196" userLabel="RunType">
+        <customView id="196" userLabel="RunType">
             <rect key="frame" x="0.0" y="0.0" width="513" height="181"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button id="2042">
+                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2042">
                     <rect key="frame" x="4" y="9" width="44" height="36"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="Unlocked" imagePosition="only" alignment="center" alternateImage="Locked" inset="2" id="2621">
@@ -818,7 +818,7 @@
                         <action selector="runTypeLockAction:" target="-2" id="2044"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" id="2039">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2039">
                     <rect key="frame" x="147" y="17" width="223" height="17"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="---" id="2620">
@@ -827,11 +827,11 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <box verticalHuggingPriority="750" boxType="separator" id="2038">
+                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="2038">
                     <rect key="frame" x="10" y="41" width="432" height="5"/>
                     <autoresizingMask key="autoresizingMask"/>
                 </box>
-                <button verticalHuggingPriority="750" id="2036">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2036">
                     <rect key="frame" x="49" y="13" width="98" height="28"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <buttonCell key="cell" type="push" title="Set Def File..." bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="2619">
@@ -842,7 +842,7 @@
                         <action selector="definitionsFileAction:" target="-2" id="2040"/>
                     </connections>
                 </button>
-                <button verticalHuggingPriority="750" id="1722">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1722">
                     <rect key="frame" x="370" y="13" width="84" height="28"/>
                     <autoresizingMask key="autoresizingMask"/>
                     <buttonCell key="cell" type="push" title="Clear All" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="2618">
@@ -853,7 +853,7 @@
                         <action selector="clearRunTypeAction:" target="-2" id="1723"/>
                     </connections>
                 </button>
-                <matrix verticalHuggingPriority="750" misplaced="YES" mode="highlight" allowsEmptySelection="NO" autosizesCells="NO" id="1926">
+                <matrix verticalHuggingPriority="750" fixedFrame="YES" mode="highlight" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1926">
                     <rect key="frame" x="10" y="52" width="496" height="123"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1022,23 +1022,22 @@
             <rect key="frame" x="0.0" y="0.0" width="400" height="252"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="2637">
+                <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2637">
                     <rect key="frame" x="0.0" y="39" width="400" height="151"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" copiesOnScroll="NO" id="M9Y-ig-KZ8">
-                        <rect key="frame" x="1" y="0.0" width="398" height="150"/>
+                        <rect key="frame" x="1" y="1" width="398" height="149"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" headerView="2640" id="2638">
-                                <rect key="frame" x="0.0" y="0.0" width="398" height="133"/>
-                                <autoresizingMask key="autoresizingMask"/>
+                                <rect key="frame" x="0.0" y="0.0" width="398" height="132"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" red="0.82194808519999996" green="1" blue="0.83289847829999997" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="Requester" editable="NO" width="124.4609375" minWidth="40" maxWidth="1000" id="2642">
+                                    <tableColumn identifier="Requester" editable="NO" width="124.5" minWidth="40" maxWidth="1000" id="2642">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Requester">
-                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                         </tableHeaderCell>
@@ -1049,9 +1048,8 @@
                                         </textFieldCell>
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                     </tableColumn>
-                                    <tableColumn identifier="Reason" editable="NO" width="267.36328125" minWidth="40" maxWidth="1000" id="2643">
+                                    <tableColumn identifier="Reason" editable="NO" width="229.5" minWidth="40" maxWidth="1000" id="2643">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Reason ">
-                                            <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                         </tableHeaderCell>
@@ -1071,11 +1069,11 @@
                         </subviews>
                         <color key="backgroundColor" red="0.73579093139999996" green="1" blue="0.76840030429999995" alpha="1" colorSpace="calibratedRGB"/>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="2639">
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2639">
                         <rect key="frame" x="1" y="135" width="398" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="2641">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2641">
                         <rect key="frame" x="224" y="17" width="15" height="102"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
@@ -1084,7 +1082,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
-                <textField verticalHuggingPriority="750" id="2646">
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2646">
                     <rect key="frame" x="-3" y="11" width="113" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Number of waits:" id="2647">
@@ -1093,7 +1091,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" id="2648">
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2648">
                     <rect key="frame" x="112" y="11" width="37" height="17"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="0" id="2649">
@@ -1102,7 +1100,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" id="2650">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2650">
                     <rect key="frame" x="138" y="7" width="124" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" title="Force Clear All Waits" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2651">
@@ -1113,7 +1111,7 @@
                         <action selector="forceClearWaitsAction:" target="-2" id="2664"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" id="2668">
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2668">
                     <rect key="frame" x="9" y="197" width="374" height="45"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Objects Requesting Waits" id="2669">
@@ -1122,7 +1120,7 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button verticalHuggingPriority="750" id="ecS-N3-w0Z">
+                <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ecS-N3-w0Z">
                     <rect key="frame" x="278" y="7" width="103" height="25"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="square" title="Abort Run" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" controlSize="small" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="FBz-sq-1zi">
@@ -1149,7 +1147,7 @@
             <rect key="frame" x="0.0" y="0.0" width="207" height="383"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField verticalHuggingPriority="750" id="2713">
+                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2713">
                     <rect key="frame" x="-3" y="332" width="213" height="45"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Run Scripts" id="2729">
@@ -1158,29 +1156,29 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="2754">
+                <scrollView fixedFrame="YES" borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2754">
                     <rect key="frame" x="24" y="47" width="159" height="285"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <clipView key="contentView" id="EDo-Ay-y08">
-                        <rect key="frame" x="0.0" y="0.0" width="144" height="285"/>
+                        <rect key="frame" x="0.0" y="0.0" width="159" height="285"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <customView id="2733" customClass="ORCardContainerView">
+                            <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2733" customClass="ORCardContainerView">
                                 <rect key="frame" x="0.0" y="-259" width="147" height="801"/>
                                 <autoresizingMask key="autoresizingMask"/>
                             </customView>
                         </subviews>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="2756">
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2756">
                         <rect key="frame" x="-100" y="-100" width="169" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="2757">
-                        <rect key="frame" x="144" y="0.0" width="15" height="285"/>
+                    <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="2757">
+                        <rect key="frame" x="143" y="0.0" width="16" height="285"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
-                <textField verticalHuggingPriority="750" id="2774">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2774">
                     <rect key="frame" x="25" y="18" width="165" height="21"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Drag RunScripts into above area" id="2775">

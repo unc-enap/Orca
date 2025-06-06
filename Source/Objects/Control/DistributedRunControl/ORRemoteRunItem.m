@@ -312,6 +312,8 @@ NSString* ORRemoteRunItemRunNumberChanged   = @"ORRemoteRunItemRunNumberChanged"
 - (void) setRunNumber:(uint32_t)aValue
 {
     runNumber = aValue;
+    NSString* runNumberCmd = [NSString stringWithFormat:@"[RunControl setRunNumber:%d];",aValue];
+    [self sendCmd:runNumberCmd];
     [[NSNotificationCenter defaultCenter]
         postNotificationName:ORRemoteRunItemRunNumberChanged
         object: self];

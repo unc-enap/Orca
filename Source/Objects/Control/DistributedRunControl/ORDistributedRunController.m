@@ -79,8 +79,8 @@
     [super registerNotificationObservers];
     NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
     [notifyCenter addObserver : self
-                     selector : @selector(lockChanged:)
-                         name : ORDistributedRunLock
+                     selector : @selector(runNumberLockChanged:)
+                         name : ORDistributedRunNumberLock
                        object : nil];
                        
     [notifyCenter addObserver: self
@@ -137,6 +137,16 @@
                      selector : @selector(numberRunningChanged:)
                          name : ORDistributedRunNumberRunningChanged
                        object : model];
+ 
+    [notifyCenter addObserver : self
+                     selector : @selector(runNumberChanged:)
+                         name : ORDistributedRunNumberChanged
+                       object : model];
+ 
+    [notifyCenter addObserver : self
+                     selector : @selector(runNumberDirChanged:)
+                         name : ORDistributedRunNumberDirChanged
+                       object : model];
     
     [notifyCenter addObserver : self
                      selector : @selector(scanAndUpdate:)
@@ -162,6 +172,9 @@
     [self numberRunningChanged:nil];
     [self scanAndUpdate:nil];
     [self runTimeLimitChanged:nil];
+    [self runNumberChanged:nil];
+    [self runNumberDirChanged:nil];
+    [self runNumberLockChanged:nil];
 }
 
 - (void) setModel:(id)aModel
@@ -173,6 +186,13 @@
 - (void) scanAndUpdate:(NSNotification*)aNote
 {
     [model scanAndUpdate];
+}
+
+- (void) runNumberChanged:(NSNotification*)aNotification
+{
+    uint32_t aNumber = [model runNumber];
+    [runNumberText  setIntegerValue:aNumber]; //in drawer
+    [runNumberField setIntegerValue:aNumber]; //in main dialog
 }
 
 - (void) numberConnectedChanged:(NSNotification*)aNote
@@ -232,14 +252,6 @@
         [timeLimitField   setEnabled:NO];
         [repeatRunCB      setEnabled:NO];
     }
-}
-
-- (void) lockChanged:(NSNotification*)aNotification
-{
-    //BOOL locked = [gSecurity isLocked:ORDistributedRunLock];
-//    [lockButton setState: locked];
-    
-//    [connectAtStartButton setEnabled:!locked];
 }
 
 - (void) remoteRunItemAdded:(NSNotification*)aNote
@@ -325,18 +337,47 @@
     [timeStartedField setObjectValue:[[model startTime] descriptionFromTemplate:@"MM/dd/yy HH:mm:ss"]];
     
 }
+//----------------------------------------------------
+//drawer delegate methods
+- (void) drawerWillOpen:(NSNotification *)notification
+{
+    [self updateWindow];
+}
+
+- (void) drawerDidOpen:(NSNotification *)notification
+{
+    if([notification object] == runNumberDrawer){
+        [runNumberButton setTitle:@"Close"];
+    }
+}
+- (void) drawerDidClose:(NSNotification *)notification
+{
+    if([notification object] == runNumberDrawer){
+        [runNumberButton setTitle:@"Run Number..."];
+    }
+}
+//----------------------------------------------------
+
+- (void) runNumberLockChanged:(NSNotification*)aNotification
+{
+    BOOL locked = [gSecurity isLocked:ORDistributedRunNumberLock];
+    [runNumberLockButton  setState: locked];
+    [runNumberText        setEnabled: !locked];
+    [runNumberDirButton   setEnabled: !locked];
+    [runNumberApplyButton setEnabled: !locked];
+}
+
+- (void) runNumberDirChanged:(NSNotification*)aNotification
+{
+    if([model dirName]!=nil)[runNumberDirField setStringValue: [model dirName]];
+}
 
 #pragma  mark ¥¥¥Actions
 - (void) checkGlobalSecurity
 {
- //   BOOL secure = [gSecurity globalSecurityEnabled];
-//    [gSecurity setLock:ORDistributedRunLock to:secure];
-//    [lockButton setEnabled:secure];
-}
-
-- (IBAction) lockAction:(id)sender
-{
-//    [gSecurity tryToSetLock:ORDistributedRunLock to:[sender intValue] forWindow:[self window]];
+    BOOL secure = [gSecurity globalSecurityEnabled];
+    [gSecurity setLock:ORDistributedRunNumberLock to:secure];
+    [lockButton setEnabled:secure];
 }
 
 - (IBAction) startRunAction:(id)sender
@@ -347,27 +388,27 @@
     [model performSelector:@selector(startRun)withObject:nil afterDelay:.1];
 }
 
--(IBAction)stopRunAction:(id)sender
+- (IBAction)stopRunAction:(id)sender
 {
     [self endEditing];
     [model performSelector:@selector(haltRun)withObject:nil afterDelay:.1];
 }
 
--(IBAction)timeLimitTextAction:(id)sender
+- (IBAction)timeLimitTextAction:(id)sender
 {
     if([model timeLimit] != [sender intValue]){
         [model setTimeLimit:[sender intValue]];
     }
 }
 
--(IBAction)timedRunCBAction:(id)sender
+- (IBAction)timedRunCBAction:(id)sender
 {
     if([model timedRun] != [sender intValue]){
         [model setTimedRun:[sender intValue]];
     }
 }
 
--(IBAction)repeatRunCBAction:(id)sender
+- (IBAction)repeatRunCBAction:(id)sender
 {
     if([model repeatRun] != [sender intValue]){
         [model setRepeatRun:[sender intValue]];
@@ -412,9 +453,88 @@
     [model disConnectAll];
 }
 
+- (IBAction) runNumberAction:(id)sender
+{
+    [self endEditing];
+    if([runNumberText intValue] != [model runNumber]){
+        NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+        [alert setMessageText:    @"Do you REALLY want to change the Run Number?"];
+        [alert setInformativeText:@"Having a unique run number is important for most experiments. If you change it you may end up with data with duplicate run numbers."];
+        [alert addButtonWithTitle:@"Yes/Change It"];
+        [alert addButtonWithTitle:@"Cancel"];
+        [alert setAlertStyle:NSAlertStyleWarning];
+        
+        [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+            if(result == NSAlertFirstButtonReturn){
+                //have to do this after the alert actually closes, hence the delay to the next cycle of the event loop
+                [self performSelector:@selector(deferredRunNumberChange) withObject:nil afterDelay:0];
+            }
+            else {
+                [model setRunNumber:[runNumberText intValue]];
+                [runNumberText setIntegerValue:[model runNumber]];
+                [runNumberField setIntegerValue:[model runNumber]];
+            }
+        }];
+
+    }
+}
+
+- (IBAction) chooseDir:(id)sender
+{
+    NSAlert *alert = [[[NSAlert alloc] init] autorelease];
+    [alert setMessageText:@"Do you REALLY want to change the Run Number Folder?"];
+    [alert setInformativeText:@"Having a unique run number is important for most experiments. If you change the run number folder you may end up with duplicate run numbers."];
+    [alert addButtonWithTitle:@"Yes/Select New Location"];
+    [alert addButtonWithTitle:@"Cancel"];
+    [alert setAlertStyle:NSAlertStyleWarning];
+    
+    [alert beginSheetModalForWindow:[self window] completionHandler:^(NSModalResponse result){
+        if(result == NSAlertFirstButtonReturn){
+            //have to do this after the alert actually closes, hence the delay to the next cycle of the event loop
+            [self performSelector:@selector(deferredChooseDir) withObject:nil afterDelay:0];
+        }
+    }];
+}
+
+- (IBAction) runNumberLockAction:(id)sender
+{
+    [gSecurity tryToSetLock:ORDistributedRunNumberLock to:[sender intValue] forWindow:[runNumberDrawer parentWindow]];
+}
+
+- (void) deferredChooseDir
+{
+    NSString* startDir = NSHomeDirectory(); //default to home
+    if([model definitionsFilePath]){
+        startDir = [[model definitionsFilePath]stringByDeletingLastPathComponent];
+        if([startDir length] == 0){
+            startDir = NSHomeDirectory();
+        }
+    }
+    NSOpenPanel *openPanel = [NSOpenPanel openPanel];
+    [openPanel setCanChooseDirectories:YES];
+    [openPanel setCanChooseFiles:NO];
+    [openPanel setAllowsMultipleSelection:NO];
+    [openPanel setPrompt:@"Choose"];
+    
+    [openPanel setDirectoryURL:[NSURL fileURLWithPath:startDir]];
+    [openPanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
+        if (result == NSFileHandlingPanelOKButton){
+            NSString* dirName = [[[openPanel URL]path] stringByAbbreviatingWithTildeInPath];
+            [model setDirName:dirName];
+        }
+    }];
+}
+
+- (void) deferredRunNumberChange
+{
+    [model setRunNumber:[runNumberText intValue]];
+}
+
 - (NSUndoManager*)windowWillReturnUndoManager:(NSWindow*)window
 {
     return [self  undoManager];
 }
+
 @end
+
 

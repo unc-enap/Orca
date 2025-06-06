@@ -38,7 +38,9 @@ NSString* ORDistributedRunNumberRunningChanged   = @"ORDistributedRunNumberRunni
 NSString* ORDistributedRunSystemListChanged      = @"ORDistributedRunSystemListChanged";
 NSString* ORRemoteRunItemAdded                   = @"ORRemoteRunItemAdded";
 NSString* ORRemoteRunItemRemoved                 = @"ORRemoteRunItemRemoved";
-NSString* ORDistributedRunLock                    = @"ORDistributedRunLock";
+NSString* ORDistributedRunNumberChanged          = @"ORDistributedRunNumberChanged";
+NSString* ORDistributedRunNumberDirChanged       = @"ORDistributedRunNumberDirChanged";
+NSString* ORDistributedRunNumberLock             = @"ORDistributedRunNumberLock";
 
 
 @interface ORDistributedRunModel (private)
@@ -66,6 +68,9 @@ NSString* ORDistributedRunLock                    = @"ORDistributedRunLock";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [startTime release];
     [remoteRunItems release];
+    [dirName release];
+    [definitionsFilePath release];
+
     [super dealloc];
 }
 
@@ -242,11 +247,30 @@ NSString* ORDistributedRunLock                    = @"ORDistributedRunLock";
 		 userInfo: userInfo];
     }
 }
+- (NSString *)definitionsFilePath
+{
+    return definitionsFilePath;
+}
 
+- (void) setDefinitionsFilePath:(NSString *)aDefinitionsFilePath
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setDefinitionsFilePath:definitionsFilePath];
+    
+    [definitionsFilePath autorelease];
+    definitionsFilePath = [aDefinitionsFilePath copy];
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:ORRunDefinitionsFileChangedNotification
+     object: self];
+    
+}
 #pragma mark ¥¥¥Run Stuff
 - (void) startRun
 {
+    uint32_t aNumber = [self getCurrentRunNumber];
+    [self setRunNumber:aNumber+1];
     for(ORRemoteRunItem* anOrca in remoteRunItems){
+        [anOrca setRunNumber:[self runNumber]-1]; //arggh-- pre-subtract 1 because it will be incremented by the remote system
         [anOrca startRun:!quickStart];
     }
     [self setStartTime:[NSDate date]];
@@ -334,6 +358,64 @@ NSString* ORDistributedRunLock                    = @"ORDistributedRunLock";
      userInfo: nil];
 }
 
+- (uint32_t)runNumber
+{
+    return runNumber;
+}
+
+- (void) setRunNumber:(uint32_t)aRunNumber
+{
+    runNumber = aRunNumber;
+    //sync the run number file
+    NSString* fullFileName = [[[self dirName]stringByExpandingTildeInPath] stringByAppendingPathComponent:@"RunNumber"];
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+    if([fileManager fileExistsAtPath:fullFileName] == NO){
+        if([fileManager createFileAtPath:fullFileName contents:nil attributes:nil]){
+            NSLog(@"created <%@>\n",fullFileName);
+        }
+        else NSLog(@"Could NOT create <%@>\n",fullFileName);
+    }
+    NSFileHandle* file = [NSFileHandle fileHandleForWritingAtPath:fullFileName];
+    NSString* s = [NSString stringWithFormat:@"%u",runNumber];
+    
+    [file writeData:[NSData dataWithBytes:[s cStringUsingEncoding:NSASCIIStringEncoding] length:[s length]+1]];
+    [file closeFile];
+        
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:ORDistributedRunNumberChanged
+     object: self];
+}
+
+- (uint32_t) getCurrentRunNumber
+{
+    NSString* fullFileName = [[[self dirName]stringByExpandingTildeInPath] stringByAppendingPathComponent:@"RunNumber"];
+    NSString* s = [NSString stringWithContentsOfFile:fullFileName encoding:NSASCIIStringEncoding error:nil];
+    uint32_t aNumber = (uint32_t)[s integerValue];
+    
+    return aNumber;
+}
+
+- (void) setDirName:(NSString*)aDirName
+{
+    [[[self undoManager] prepareWithInvocationTarget:self] setDirName:[self dirName]];
+    
+    if(!aDirName){
+        NSString* s = @"~";
+        aDirName = [s stringByExpandingTildeInPath];
+    }
+    [dirName autorelease];
+    dirName = [aDirName copy];
+    
+    [[NSNotificationCenter defaultCenter]
+     postNotificationName:ORDistributedRunNumberDirChanged
+     object: self];
+    
+}
+
+- (NSString*)dirName
+{
+    return dirName;
+}
 - (void) doTimedUpdate
 {
     for(ORRemoteRunItem* anOrca in remoteRunItems){
@@ -384,7 +466,9 @@ NSString* ORDistributedRunLock                    = @"ORDistributedRunLock";
     [self setTimedRun:      [decoder decodeBoolForKey:   @"timedRun"]];
     [self setRepeatRun:     [decoder decodeBoolForKey:   @"repeatRun"]];
     [self setQuickStart:    [decoder decodeBoolForKey:   @"quickStart"]];
-    
+    [self setDirName:       [decoder decodeObjectForKey:   @"dirName"]];
+    [self setDefinitionsFilePath:     [decoder decodeObjectForKey:   @"definitionsFilePath"]];
+
     [self setRemoteRunItems:[decoder decodeObjectForKey:@"remoteRunItems"]];
     [self ensureMinimumNumberOfRemoteItems];
     [remoteRunItems makeObjectsPerformSelector:@selector(setOwner:) withObject:self];
@@ -402,8 +486,9 @@ NSString* ORDistributedRunLock                    = @"ORDistributedRunLock";
     [encoder encodeBool:repeatRun        forKey:@"repeatRun"];
     [encoder encodeBool:quickStart       forKey:@"quickStart"];
     [encoder encodeObject:remoteRunItems forKey:@"remoteRunItems"];
+    [encoder encodeObject:dirName        forKey:@"dirName"];
+    [encoder encodeObject:definitionsFilePath        forKey:@"definitionsFilePath"];
 }
-
 
 -(NSString*) commandID
 {

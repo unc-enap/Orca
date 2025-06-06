@@ -42,11 +42,19 @@
     IBOutlet NSTextField* timeToGoField;
     IBOutlet StopLightView* lightBoardView;
 
-    //IBOutlet NSButton*      lockButton;
+    IBOutlet NSTextField* runNumberField; //in main dialog
+    IBOutlet NSTextField* runNumberText;  //in run number drawer
+    IBOutlet NSButton*    runNumberDirButton;
+    IBOutlet NSTextField* runNumberDirField;
+    IBOutlet NSDrawer*    runNumberDrawer;
+    IBOutlet NSButton*    runNumberLockButton;
+    IBOutlet NSButton*    runNumberButton;
+    IBOutlet NSButton*    runNumberApplyButton;
 
-    IBOutlet ZFlowLayout*     remoteRunItemContentView;
-    NSMutableArray*           remoteRunItemControllers;
-
+    IBOutlet NSButton*    lockButton;
+    
+    IBOutlet ZFlowLayout* remoteRunItemContentView;
+    NSMutableArray*       remoteRunItemControllers;
 }
 
 #pragma  mark ¥¥¥Initialization
@@ -55,21 +63,11 @@
 - (void) setModel:(id)aModel;
 - (NSView*) remoteRunItemContentView;
 
-#pragma  mark ¥¥¥Actions
-- (IBAction) lockAction:(id)sender;
-- (IBAction) startRunAction:(id)sender;
-- (IBAction) stopRunAction:(id)sender;
-- (IBAction) timeLimitTextAction:(id)sender;
-- (IBAction) timedRunCBAction:(id)sender;
-- (IBAction) repeatRunCBAction:(id)sender;
-- (IBAction) connectAllAction:(id)sender;
-- (IBAction) disConnectAllAction:(id)sender;
-
 #pragma mark ¥¥¥Interface Management
 - (NSView*) remoteRunItemContentView;
 - (void) updateButtons;
 - (void) isConnectedChanged:(NSNotification*)note;
-- (void) lockChanged:(NSNotification*)aNotification;
+- (void) runNumberLockChanged:(NSNotification*)aNotification;
 - (void) registerNotificationObservers;
 - (void) runStatusChanged:(NSNotification*)aNotification;
 - (void) timedRunChanged:(NSNotification*)aNotification;
@@ -77,13 +75,28 @@
 - (void) elapsedTimeChanged:(NSNotification*)aNotification;
 - (void) startTimeChanged:(NSNotification*)aNotification;
 - (void) timeToGoChanged:(NSNotification*)aNotification;
-//- (void) connectAtStartChanged:(NSNotification*)note;
+- (void) runNumberChanged:(NSNotification*)aNote;
+- (void) runNumberDirChanged:(NSNotification*)aNote;
 - (void) updateView:(NSNotification*)aNote;
+- (void) runNumberLockChanged:(NSNotification *)aNote;
+- (void) deferredRunNumberChange;
+- (void) deferredChooseDir;
 
 - (void) addRemoteRunItem:(ORRemoteRunItem*)anItem;
 - (void) removeRemoteRunItem:(ORRemoteRunItem*)anItem;
-//- (void) setButtonStates;
-//- (void) updateView:(NSNotification*)aNote;
 - (void) remoteRunItemAdded:(NSNotification*)aNote;
 - (void) remoteRunItemRemoved:(NSNotification*)aNote;
+
+#pragma  mark ¥¥¥Actions
+- (IBAction) startRunAction:(id)sender;
+- (IBAction) stopRunAction:(id)sender;
+- (IBAction) timeLimitTextAction:(id)sender;
+- (IBAction) timedRunCBAction:(id)sender;
+- (IBAction) repeatRunCBAction:(id)sender;
+- (IBAction) connectAllAction:(id)sender;
+- (IBAction) disConnectAllAction:(id)sender;
+- (IBAction) runNumberAction:(id)sender;
+- (IBAction) chooseDir:(id)sender;
+- (IBAction) runNumberLockAction:(id)sender;
+
 @end

@@ -4113,7 +4113,7 @@
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		0F16E30E1C493AD6003C9EC9 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		0F16E30F1C493AD6003C9EC9 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
+		0F16E30F1C493AD6003C9EC9 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .travis.yml; sourceTree = "<group>"; };
 		0F16E3111C493AD6003C9EC9 /* ae.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ae.h; sourceTree = "<group>"; };
 		0F16E3121C493AD6003C9EC9 /* glib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glib.h; sourceTree = "<group>"; };
 		0F16E3131C493AD6003C9EC9 /* ivykis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ivykis.h; sourceTree = "<group>"; };
@@ -4373,7 +4373,7 @@
 		369E733B1C7B5E6400A7F89E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		369E73441C7B5E8E00A7F89E /* NSLogTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSLogTest.m; sourceTree = "<group>"; };
 		369E734B1C7B64FF00A7F89E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		3AFC9E201D2AACFB00190989 /* NodeMap.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NodeMap.xib; path = "Source/Objects/Custom Hardware/SNO+/ELLIE/NodeMap.xib"; sourceTree = SOURCE_ROOT; };
+		3AFC9E201D2AACFB00190989 /* NodeMap.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NodeMap.xib; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/ELLIE/NodeMap.xib"; sourceTree = SOURCE_ROOT; };
 		3AFC9E221D2AAD4600190989 /* NodePanelMap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = NodePanelMap.png; sourceTree = "<group>"; };
 		43135801195C5D89007B1F15 /* ORGretinaTriggerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORGretinaTriggerModel.m; sourceTree = "<group>"; };
 		43135803195C5DA3007B1F15 /* ORGretinaTriggerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORGretinaTriggerModel.h; sourceTree = "<group>"; };
@@ -4581,12 +4581,12 @@
 		8402796E07397B8700972B07 /* ORBit3Model.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORBit3Model.h; sourceTree = "<group>"; };
 		8402796F07397B8700972B07 /* ORBit3Model.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORBit3Model.m; sourceTree = "<group>"; };
 		84028032073BF49D00972B07 /* ORLAMhosting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLAMhosting.h; sourceTree = "<group>"; };
-		8402B5AD14C708A1007999C1 /* MJDPreAmp.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = MJDPreAmp.gif; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/MJDPreAmp.gif"; sourceTree = SOURCE_ROOT; };
-		8402B5AE14C708A1007999C1 /* MJDPreAmp.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MJDPreAmp.nib; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/MJDPreAmp.nib"; sourceTree = SOURCE_ROOT; };
-		8402B5AF14C708A1007999C1 /* ORMJDPreAmpController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMJDPreAmpController.h; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpController.h"; sourceTree = SOURCE_ROOT; };
-		8402B5B014C708A1007999C1 /* ORMJDPreAmpController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDPreAmpController.m; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpController.m"; sourceTree = SOURCE_ROOT; };
-		8402B5B114C708A1007999C1 /* ORMJDPreAmpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMJDPreAmpModel.h; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpModel.h"; sourceTree = SOURCE_ROOT; };
-		8402B5B214C708A1007999C1 /* ORMJDPreAmpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDPreAmpModel.m; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpModel.m"; sourceTree = SOURCE_ROOT; };
+		8402B5AD14C708A1007999C1 /* MJDPreAmp.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = MJDPreAmp.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/MJDPreAmp.gif"; sourceTree = SOURCE_ROOT; };
+		8402B5AE14C708A1007999C1 /* MJDPreAmp.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = MJDPreAmp.nib; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/MJDPreAmp.nib"; sourceTree = SOURCE_ROOT; };
+		8402B5AF14C708A1007999C1 /* ORMJDPreAmpController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMJDPreAmpController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpController.h"; sourceTree = SOURCE_ROOT; };
+		8402B5B014C708A1007999C1 /* ORMJDPreAmpController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDPreAmpController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpController.m"; sourceTree = SOURCE_ROOT; };
+		8402B5B114C708A1007999C1 /* ORMJDPreAmpModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMJDPreAmpModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpModel.h"; sourceTree = SOURCE_ROOT; };
+		8402B5B214C708A1007999C1 /* ORMJDPreAmpModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDPreAmpModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpModel.m"; sourceTree = SOURCE_ROOT; };
 		840340260427CEEA005F64B1 /* ORDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORDataSet.h; sourceTree = "<group>"; };
 		840340270427CEEA005F64B1 /* ORDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORDataSet.m; sourceTree = "<group>"; };
 		8403F4A50508F1BE005F64B1 /* ORGenericView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORGenericView.h; path = Source/Misc/ORGenericView.h; sourceTree = SOURCE_ROOT; };
@@ -5090,12 +5090,12 @@
 		842AECC609538066009550DE /* ORCRGetterController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORCRGetterController.h; sourceTree = "<group>"; };
 		842B0619040C1D3F005F64B1 /* ORVmeIPCard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORVmeIPCard.h; path = "Source/Objects/Hardware/Vme/Vme Base Classes/ORVmeIPCard.h"; sourceTree = SOURCE_ROOT; };
 		842B061A040C1D3F005F64B1 /* ORVmeIPCard.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORVmeIPCard.m; path = "Source/Objects/Hardware/Vme/Vme Base Classes/ORVmeIPCard.m"; sourceTree = SOURCE_ROOT; };
-		842B061D040C2709005F64B1 /* NcdMuxBox.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = NcdMuxBox.gif; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBox.gif"; sourceTree = SOURCE_ROOT; };
-		842B061E040C2709005F64B1 /* NcdMuxBoxModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = NcdMuxBoxModel.m; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxModel.m"; sourceTree = SOURCE_ROOT; };
-		842B0621040C2709005F64B1 /* NcdMuxBoxModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = NcdMuxBoxModel.h; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxModel.h"; sourceTree = SOURCE_ROOT; };
-		842B0622040C2709005F64B1 /* NcdMuxBoxController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = NcdMuxBoxController.m; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxController.m"; sourceTree = SOURCE_ROOT; };
-		842B0623040C2709005F64B1 /* NcdMuxBoxController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = NcdMuxBoxController.h; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxController.h"; sourceTree = SOURCE_ROOT; };
-		842B0624040C2709005F64B1 /* NcdMuxBox.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = NcdMuxBox.nib; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBox.nib"; sourceTree = SOURCE_ROOT; };
+		842B061D040C2709005F64B1 /* NcdMuxBox.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = NcdMuxBox.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBox.gif"; sourceTree = SOURCE_ROOT; };
+		842B061E040C2709005F64B1 /* NcdMuxBoxModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = NcdMuxBoxModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxModel.m"; sourceTree = SOURCE_ROOT; };
+		842B0621040C2709005F64B1 /* NcdMuxBoxModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = NcdMuxBoxModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxModel.h"; sourceTree = SOURCE_ROOT; };
+		842B0622040C2709005F64B1 /* NcdMuxBoxController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = NcdMuxBoxController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxController.m"; sourceTree = SOURCE_ROOT; };
+		842B0623040C2709005F64B1 /* NcdMuxBoxController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = NcdMuxBoxController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBoxController.h"; sourceTree = SOURCE_ROOT; };
+		842B0624040C2709005F64B1 /* NcdMuxBox.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = NcdMuxBox.nib; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMuxBox/NcdMuxBox.nib"; sourceTree = SOURCE_ROOT; };
 		842B548404182630005F64B1 /* ORDataPacket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORDataPacket.h; sourceTree = "<group>"; };
 		842B548504182630005F64B1 /* ORDataPacket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORDataPacket.m; sourceTree = "<group>"; };
 		842BB6141639691600393470 /* DigitalReadSerial.ino */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = DigitalReadSerial.ino; path = Source/Objects/Hardware/Serial/Arduino/ArduioUNO/DigitalReadSerial.ino; sourceTree = SOURCE_ROOT; };
@@ -5252,11 +5252,11 @@
 		843CDEBD03BE2B2D00C39F5F /* ORPreferencesController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORPreferencesController.m; sourceTree = "<group>"; };
 		843CDEDC03BE307400C39F5F /* ORPreferences.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = ORPreferences.nib; sourceTree = "<group>"; };
 		843CDF57071C9CF4009D7D30 /* RandomPulser.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = RandomPulser.nib; sourceTree = "<group>"; };
-		843CDF60071C9DB3009D7D30 /* ORRandomPulserModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORRandomPulserModel.m; path = "Source/Objects/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserModel.m"; sourceTree = SOURCE_ROOT; };
-		843CDF61071C9DB3009D7D30 /* ORRandomPulserController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRandomPulserController.h; path = "Source/Objects/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserController.h"; sourceTree = SOURCE_ROOT; };
-		843CDF62071C9DB3009D7D30 /* ORRandomPulserController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORRandomPulserController.m; path = "Source/Objects/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserController.m"; sourceTree = SOURCE_ROOT; };
-		843CDF63071C9DB3009D7D30 /* ORRandomPulserModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRandomPulserModel.h; path = "Source/Objects/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserModel.h"; sourceTree = SOURCE_ROOT; };
-		843CE012071CAB20009D7D30 /* RandomPulser.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = RandomPulser.gif; path = "Source/Objects/Custom Hardware/Misc Hardware/RandomPulser/RandomPulser.gif"; sourceTree = SOURCE_ROOT; };
+		843CDF60071C9DB3009D7D30 /* ORRandomPulserModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORRandomPulserModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserModel.m"; sourceTree = SOURCE_ROOT; };
+		843CDF61071C9DB3009D7D30 /* ORRandomPulserController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRandomPulserController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserController.h"; sourceTree = SOURCE_ROOT; };
+		843CDF62071C9DB3009D7D30 /* ORRandomPulserController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORRandomPulserController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserController.m"; sourceTree = SOURCE_ROOT; };
+		843CDF63071C9DB3009D7D30 /* ORRandomPulserModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORRandomPulserModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/Misc Hardware/RandomPulser/ORRandomPulserModel.h"; sourceTree = SOURCE_ROOT; };
+		843CE012071CAB20009D7D30 /* RandomPulser.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = RandomPulser.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/Misc Hardware/RandomPulser/RandomPulser.gif"; sourceTree = SOURCE_ROOT; };
 		843D354D0DEF1C9300330F3F /* ORCaen1190Decoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORCaen1190Decoders.m; path = Source/Objects/Hardware/Vme/CAEN/CV1190/ORCaen1190Decoders.m; sourceTree = SOURCE_ROOT; };
 		843D354E0DEF1C9300330F3F /* ORCaen1190Decoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORCaen1190Decoders.h; path = Source/Objects/Hardware/Vme/CAEN/CV1190/ORCaen1190Decoders.h; sourceTree = SOURCE_ROOT; };
 		843DCF2E058E546A000C5219 /* DataGen.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = DataGen.gif; sourceTree = "<group>"; };
@@ -5374,11 +5374,11 @@
 		8449CC82123E85DA009C8AA2 /* VHSC040n.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = VHSC040n.tif; path = Source/Objects/Hardware/Vme/VHSC040n/VHSC040n.tif; sourceTree = SOURCE_ROOT; };
 		844AEE8C1ACD9AA300139C57 /* ORGretina4AReadout.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ORGretina4AReadout.cc; sourceTree = "<group>"; };
 		844AEE8D1ACD9AA300139C57 /* ORGretina4AReadout.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ORGretina4AReadout.hh; sourceTree = "<group>"; };
-		844B42B70DE5D5680061AE80 /* ORSNORackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNORackController.h; path = "Source/Objects/Custom Hardware/SNO+/SNORack/ORSNORackController.h"; sourceTree = SOURCE_ROOT; };
-		844B42B80DE5D5680061AE80 /* ORSNORackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNORackController.m; path = "Source/Objects/Custom Hardware/SNO+/SNORack/ORSNORackController.m"; sourceTree = SOURCE_ROOT; };
-		844B42B90DE5D5680061AE80 /* ORSNORackModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNORackModel.h; path = "Source/Objects/Custom Hardware/SNO+/SNORack/ORSNORackModel.h"; sourceTree = SOURCE_ROOT; };
-		844B42BA0DE5D5680061AE80 /* ORSNORackModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNORackModel.m; path = "Source/Objects/Custom Hardware/SNO+/SNORack/ORSNORackModel.m"; sourceTree = SOURCE_ROOT; };
-		844B42BD0DE5D5680061AE80 /* SNORack.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = SNORack.gif; path = "Source/Objects/Custom Hardware/SNO+/SNORack/SNORack.gif"; sourceTree = SOURCE_ROOT; };
+		844B42B70DE5D5680061AE80 /* ORSNORackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNORackController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNORack/ORSNORackController.h"; sourceTree = SOURCE_ROOT; };
+		844B42B80DE5D5680061AE80 /* ORSNORackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNORackController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNORack/ORSNORackController.m"; sourceTree = SOURCE_ROOT; };
+		844B42B90DE5D5680061AE80 /* ORSNORackModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNORackModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNORack/ORSNORackModel.h"; sourceTree = SOURCE_ROOT; };
+		844B42BA0DE5D5680061AE80 /* ORSNORackModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNORackModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNORack/ORSNORackModel.m"; sourceTree = SOURCE_ROOT; };
+		844B42BD0DE5D5680061AE80 /* SNORack.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = SNORack.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNORack/SNORack.gif"; sourceTree = SOURCE_ROOT; };
 		844B9BE5132E527700FEDA6B /* Caen1724.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Caen1724.nib; path = Source/Objects/Hardware/Vme/CAEN/CV1724/Caen1724.nib; sourceTree = SOURCE_ROOT; };
 		844B9BE6132E527700FEDA6B /* Caen1724Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = Caen1724Card.gif; path = Source/Objects/Hardware/Vme/CAEN/CV1724/Caen1724Card.gif; sourceTree = SOURCE_ROOT; };
 		844B9BE7132E527700FEDA6B /* ORCaen1724Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORCaen1724Controller.h; path = Source/Objects/Hardware/Vme/CAEN/CV1724/ORCaen1724Controller.h; sourceTree = SOURCE_ROOT; };
@@ -5850,12 +5850,12 @@
 		847D76FD10B7963D00893F3A /* makeScript */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = makeScript; path = Source/Objects/Hardware/SBC/SBC_Code/makeScript; sourceTree = SOURCE_ROOT; };
 		847E6C0E0CFF4BF400E963C6 /* ORObjectProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORObjectProxy.h; path = "Source/Objects/Misc Objects/ObjectProxy/ORObjectProxy.h"; sourceTree = SOURCE_ROOT; };
 		847E6C0F0CFF4BF400E963C6 /* ORObjectProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORObjectProxy.m; path = "Source/Objects/Misc Objects/ObjectProxy/ORObjectProxy.m"; sourceTree = SOURCE_ROOT; };
-		847E6C130CFF4C3200E963C6 /* eGun.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = eGun.nib; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/eGun.nib"; sourceTree = SOURCE_ROOT; };
-		847E6C140CFF4C3200E963C6 /* eGun.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = eGun.tif; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/eGun.tif"; sourceTree = SOURCE_ROOT; };
-		847E6C160CFF4C3200E963C6 /* OReGunController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OReGunController.h; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/OReGunController.h"; sourceTree = SOURCE_ROOT; };
-		847E6C170CFF4C3200E963C6 /* OReGunController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OReGunController.m; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/OReGunController.m"; sourceTree = SOURCE_ROOT; };
-		847E6C180CFF4C3200E963C6 /* OReGunModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OReGunModel.h; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/OReGunModel.h"; sourceTree = SOURCE_ROOT; };
-		847E6C190CFF4C3200E963C6 /* OReGunModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OReGunModel.m; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/OReGunModel.m"; sourceTree = SOURCE_ROOT; };
+		847E6C130CFF4C3200E963C6 /* eGun.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = eGun.nib; path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun/eGun.nib"; sourceTree = SOURCE_ROOT; };
+		847E6C140CFF4C3200E963C6 /* eGun.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = eGun.tif; path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun/eGun.tif"; sourceTree = SOURCE_ROOT; };
+		847E6C160CFF4C3200E963C6 /* OReGunController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OReGunController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun/OReGunController.h"; sourceTree = SOURCE_ROOT; };
+		847E6C170CFF4C3200E963C6 /* OReGunController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OReGunController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun/OReGunController.m"; sourceTree = SOURCE_ROOT; };
+		847E6C180CFF4C3200E963C6 /* OReGunModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OReGunModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun/OReGunModel.h"; sourceTree = SOURCE_ROOT; };
+		847E6C190CFF4C3200E963C6 /* OReGunModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OReGunModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun/OReGunModel.m"; sourceTree = SOURCE_ROOT; };
 		847F59EA0450CB61005F64B1 /* TriggerCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = TriggerCard.gif; path = Source/Objects/Hardware/Vme/Trigger/TriggerCard.gif; sourceTree = SOURCE_ROOT; };
 		847F8B33063DB29E00A8597A /* ORTimer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORTimer.h; sourceTree = "<group>"; };
 		847F8B34063DB29E00A8597A /* ORTimer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORTimer.m; sourceTree = "<group>"; };
@@ -6035,8 +6035,8 @@
 		8491302E15334EAA00597004 /* ORTwoBitProcessorModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORTwoBitProcessorModel.m; path = Source/Objects/ProcessLogic/ProcessElements/Outputs/TwoBitProcessor/ORTwoBitProcessorModel.m; sourceTree = SOURCE_ROOT; };
 		8491302F15334EAA00597004 /* TwoBitProcessor.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = TwoBitProcessor.nib; path = Source/Objects/ProcessLogic/ProcessElements/Outputs/TwoBitProcessor/TwoBitProcessor.nib; sourceTree = SOURCE_ROOT; };
 		8491303015334EAA00597004 /* TwoBitProcessor.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = TwoBitProcessor.tif; path = Source/Objects/ProcessLogic/ProcessElements/Outputs/TwoBitProcessor/TwoBitProcessor.tif; sourceTree = SOURCE_ROOT; };
-		84913AC315376BBF00597004 /* ORMJDPreAmpDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMJDPreAmpDecoders.h; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpDecoders.h"; sourceTree = SOURCE_ROOT; };
-		84913AC415376BBF00597004 /* ORMJDPreAmpDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDPreAmpDecoders.m; path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpDecoders.m"; sourceTree = SOURCE_ROOT; };
+		84913AC315376BBF00597004 /* ORMJDPreAmpDecoders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMJDPreAmpDecoders.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpDecoders.h"; sourceTree = SOURCE_ROOT; };
+		84913AC415376BBF00597004 /* ORMJDPreAmpDecoders.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDPreAmpDecoders.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp/ORMJDPreAmpDecoders.m"; sourceTree = SOURCE_ROOT; };
 		84913C9C1538698000597004 /* OROutputCallBackController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OROutputCallBackController.h; path = Source/Objects/ProcessLogic/ProcessElements/Outputs/OutputCallBack/OROutputCallBackController.h; sourceTree = SOURCE_ROOT; };
 		84913C9D1538698000597004 /* OROutputCallBackController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OROutputCallBackController.m; path = Source/Objects/ProcessLogic/ProcessElements/Outputs/OutputCallBack/OROutputCallBackController.m; sourceTree = SOURCE_ROOT; };
 		84913C9E1538698000597004 /* OROutputCallBackModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OROutputCallBackModel.h; path = Source/Objects/ProcessLogic/ProcessElements/Outputs/OutputCallBack/OROutputCallBackModel.h; sourceTree = SOURCE_ROOT; };
@@ -6175,17 +6175,17 @@
 		8497E611180C640D00CE974A /* V2718Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = V2718Card.gif; sourceTree = "<group>"; };
 		8498069B09A6584200086E71 /* ORSocketThreadedClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORSocketThreadedClient.h; sourceTree = "<group>"; };
 		8498069C09A6584200086E71 /* ORSocketThreadedClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORSocketThreadedClient.m; sourceTree = "<group>"; };
-		849901920DC91C5A00E82DB4 /* SNOCrate.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = SNOCrate.gif; path = "Source/Objects/Custom Hardware/SNO+/SNOCrate/SNOCrate.gif"; sourceTree = SOURCE_ROOT; };
+		849901920DC91C5A00E82DB4 /* SNOCrate.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = SNOCrate.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNOCrate/SNOCrate.gif"; sourceTree = SOURCE_ROOT; };
 		8499148604BB3E05005F64B1 /* Dispatcher.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = Dispatcher.nib; sourceTree = "<group>"; };
 		8499148704BB3E05005F64B1 /* ORDispatcherController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORDispatcherController.h; sourceTree = "<group>"; };
 		8499148804BB3E05005F64B1 /* ORDispatcherController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORDispatcherController.m; sourceTree = "<group>"; };
 		8499148B04BB3E05005F64B1 /* ORDispatcherModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORDispatcherModel.h; sourceTree = "<group>"; };
 		8499148C04BB3E05005F64B1 /* ORDispatcherModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORDispatcherModel.m; sourceTree = "<group>"; };
-		849928100DCB997C00E82DB4 /* MTCCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = MTCCard.gif; path = "Source/Objects/Custom Hardware/SNO+/MTC/MTCCard.gif"; sourceTree = SOURCE_ROOT; };
-		849928110DCB997C00E82DB4 /* ORMTCController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMTCController.h; path = "Source/Objects/Custom Hardware/SNO+/MTC/ORMTCController.h"; sourceTree = SOURCE_ROOT; };
-		849928120DCB997C00E82DB4 /* ORMTCController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMTCController.m; path = "Source/Objects/Custom Hardware/SNO+/MTC/ORMTCController.m"; sourceTree = SOURCE_ROOT; };
-		849928150DCB997C00E82DB4 /* ORMTCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMTCModel.h; path = "Source/Objects/Custom Hardware/SNO+/MTC/ORMTCModel.h"; sourceTree = SOURCE_ROOT; };
-		849928160DCB997C00E82DB4 /* ORMTCModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMTCModel.m; path = "Source/Objects/Custom Hardware/SNO+/MTC/ORMTCModel.m"; sourceTree = SOURCE_ROOT; };
+		849928100DCB997C00E82DB4 /* MTCCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = MTCCard.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/MTC/MTCCard.gif"; sourceTree = SOURCE_ROOT; };
+		849928110DCB997C00E82DB4 /* ORMTCController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMTCController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/MTC/ORMTCController.h"; sourceTree = SOURCE_ROOT; };
+		849928120DCB997C00E82DB4 /* ORMTCController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMTCController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/MTC/ORMTCController.m"; sourceTree = SOURCE_ROOT; };
+		849928150DCB997C00E82DB4 /* ORMTCModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMTCModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/MTC/ORMTCModel.h"; sourceTree = SOURCE_ROOT; };
+		849928160DCB997C00E82DB4 /* ORMTCModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMTCModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/MTC/ORMTCModel.m"; sourceTree = SOURCE_ROOT; };
 		849929AA0DCFCA5900E82DB4 /* ORMTC_Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORMTC_Constants.h; sourceTree = "<group>"; };
 		84992CAE0DD21F3800E82DB4 /* HP3458a.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = HP3458a.nib; path = Source/Objects/Hardware/GPIB/HP3458a/HP3458a.nib; sourceTree = SOURCE_ROOT; };
 		84992CAF0DD21F3800E82DB4 /* HP3458a.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = HP3458a.tif; path = Source/Objects/Hardware/GPIB/HP3458a/HP3458a.tif; sourceTree = SOURCE_ROOT; };
@@ -6243,19 +6243,19 @@
 		8499C96F15221F9800CD7AAC /* ORMJDVacuumController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDVacuumController.m; path = Source/Experiments/MJDVacuum/ORMJDVacuumController.m; sourceTree = SOURCE_ROOT; };
 		8499C97015221F9800CD7AAC /* ORMJDVacuumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORMJDVacuumModel.h; path = Source/Experiments/MJDVacuum/ORMJDVacuumModel.h; sourceTree = SOURCE_ROOT; };
 		8499C97115221F9800CD7AAC /* ORMJDVacuumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORMJDVacuumModel.m; path = Source/Experiments/MJDVacuum/ORMJDVacuumModel.m; sourceTree = SOURCE_ROOT; };
-		8499FE840DC8E9B700E82DB4 /* NoSNOCratePowerHelp.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = NoSNOCratePowerHelp.plist; path = "Source/Objects/Custom Hardware/SNO+/SNOCrate/NoSNOCratePowerHelp.plist"; sourceTree = SOURCE_ROOT; };
-		8499FE850DC8E9B700E82DB4 /* ORSNOCrateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNOCrateController.h; path = "Source/Objects/Custom Hardware/SNO+/SNOCrate/ORSNOCrateController.h"; sourceTree = SOURCE_ROOT; };
-		8499FE860DC8E9B700E82DB4 /* ORSNOCrateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNOCrateController.m; path = "Source/Objects/Custom Hardware/SNO+/SNOCrate/ORSNOCrateController.m"; sourceTree = SOURCE_ROOT; };
-		8499FE870DC8E9B700E82DB4 /* ORSNOCrateModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNOCrateModel.h; path = "Source/Objects/Custom Hardware/SNO+/SNOCrate/ORSNOCrateModel.h"; sourceTree = SOURCE_ROOT; };
-		8499FE880DC8E9B700E82DB4 /* ORSNOCrateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNOCrateModel.m; path = "Source/Objects/Custom Hardware/SNO+/SNOCrate/ORSNOCrateModel.m"; sourceTree = SOURCE_ROOT; };
-		8499FF8F0DC9090400E82DB4 /* ORSNOCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNOCard.h; path = "Source/Objects/Custom Hardware/SNO+/SNO Base Classes/ORSNOCard.h"; sourceTree = SOURCE_ROOT; };
-		8499FF900DC9090400E82DB4 /* ORSNOCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNOCard.m; path = "Source/Objects/Custom Hardware/SNO+/SNO Base Classes/ORSNOCard.m"; sourceTree = SOURCE_ROOT; };
-		8499FFDA0DC90F5800E82DB4 /* ORXL1Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORXL1Model.h; path = "Source/Objects/Custom Hardware/SNO+/XL1/ORXL1Model.h"; sourceTree = SOURCE_ROOT; };
-		8499FFDB0DC90F5800E82DB4 /* ORXL1Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORXL1Model.m; path = "Source/Objects/Custom Hardware/SNO+/XL1/ORXL1Model.m"; sourceTree = SOURCE_ROOT; };
-		8499FFDC0DC90F5800E82DB4 /* XL1Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = XL1Card.gif; path = "Source/Objects/Custom Hardware/SNO+/XL1/XL1Card.gif"; sourceTree = SOURCE_ROOT; };
-		8499FFE10DC9102700E82DB4 /* ORXL2Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORXL2Model.h; path = "Source/Objects/Custom Hardware/SNO+/XL2/ORXL2Model.h"; sourceTree = SOURCE_ROOT; };
-		8499FFE20DC9102700E82DB4 /* ORXL2Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORXL2Model.m; path = "Source/Objects/Custom Hardware/SNO+/XL2/ORXL2Model.m"; sourceTree = SOURCE_ROOT; };
-		8499FFE30DC9102700E82DB4 /* XL2Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = XL2Card.gif; path = "Source/Objects/Custom Hardware/SNO+/XL2/XL2Card.gif"; sourceTree = SOURCE_ROOT; };
+		8499FE840DC8E9B700E82DB4 /* NoSNOCratePowerHelp.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = NoSNOCratePowerHelp.plist; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNOCrate/NoSNOCratePowerHelp.plist"; sourceTree = SOURCE_ROOT; };
+		8499FE850DC8E9B700E82DB4 /* ORSNOCrateController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNOCrateController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNOCrate/ORSNOCrateController.h"; sourceTree = SOURCE_ROOT; };
+		8499FE860DC8E9B700E82DB4 /* ORSNOCrateController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNOCrateController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNOCrate/ORSNOCrateController.m"; sourceTree = SOURCE_ROOT; };
+		8499FE870DC8E9B700E82DB4 /* ORSNOCrateModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNOCrateModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNOCrate/ORSNOCrateModel.h"; sourceTree = SOURCE_ROOT; };
+		8499FE880DC8E9B700E82DB4 /* ORSNOCrateModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNOCrateModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNOCrate/ORSNOCrateModel.m"; sourceTree = SOURCE_ROOT; };
+		8499FF8F0DC9090400E82DB4 /* ORSNOCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORSNOCard.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNO Base Classes/ORSNOCard.h"; sourceTree = SOURCE_ROOT; };
+		8499FF900DC9090400E82DB4 /* ORSNOCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORSNOCard.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNO Base Classes/ORSNOCard.m"; sourceTree = SOURCE_ROOT; };
+		8499FFDA0DC90F5800E82DB4 /* ORXL1Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORXL1Model.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/XL1/ORXL1Model.h"; sourceTree = SOURCE_ROOT; };
+		8499FFDB0DC90F5800E82DB4 /* ORXL1Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORXL1Model.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/XL1/ORXL1Model.m"; sourceTree = SOURCE_ROOT; };
+		8499FFDC0DC90F5800E82DB4 /* XL1Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = XL1Card.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/XL1/XL1Card.gif"; sourceTree = SOURCE_ROOT; };
+		8499FFE10DC9102700E82DB4 /* ORXL2Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORXL2Model.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/XL2/ORXL2Model.h"; sourceTree = SOURCE_ROOT; };
+		8499FFE20DC9102700E82DB4 /* ORXL2Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORXL2Model.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/XL2/ORXL2Model.m"; sourceTree = SOURCE_ROOT; };
+		8499FFE30DC9102700E82DB4 /* XL2Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = XL2Card.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/XL2/XL2Card.gif"; sourceTree = SOURCE_ROOT; };
 		849B25E40B2F34F90007484F /* Prespectrometer.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Prespectrometer.nib; path = Source/Experiments/Prespectrometer/Prespectrometer.nib; sourceTree = SOURCE_ROOT; };
 		849B25E50B2F34F90007484F /* prespectrometer.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = prespectrometer.tif; path = Source/Experiments/Prespectrometer/prespectrometer.tif; sourceTree = SOURCE_ROOT; };
 		849B25E60B2F34F90007484F /* PrespectrometerController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = PrespectrometerController.h; path = Source/Experiments/Prespectrometer/PrespectrometerController.h; sourceTree = SOURCE_ROOT; };
@@ -6453,7 +6453,7 @@
 		84AD4C2D0BA21B7A003C7ABE /* ORWindowListController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORWindowListController.h; path = "Source/Main Dialogs/WindowList/ORWindowListController.h"; sourceTree = SOURCE_ROOT; };
 		84AD4C2E0BA21B7A003C7ABE /* ORWindowListController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORWindowListController.m; path = "Source/Main Dialogs/WindowList/ORWindowListController.m"; sourceTree = SOURCE_ROOT; };
 		84AD4C2F0BA21B7A003C7ABE /* WindowList.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = WindowList.nib; path = "Source/Main Dialogs/WindowList/WindowList.nib"; sourceTree = SOURCE_ROOT; };
-		84ADA288040ADF2D005F64B1 /* NcdMux.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = NcdMux.nib; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMux/NcdMux.nib"; sourceTree = SOURCE_ROOT; };
+		84ADA288040ADF2D005F64B1 /* NcdMux.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = NcdMux.nib; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMux/NcdMux.nib"; sourceTree = SOURCE_ROOT; };
 		84AFC23E1029F35E009F4139 /* downRamp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = downRamp.png; path = Source/Objects/Hardware/Vme/VHQ224L/downRamp.png; sourceTree = SOURCE_ROOT; };
 		84AFC23F1029F35E009F4139 /* highVoltage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = highVoltage.png; path = Source/Objects/Hardware/Vme/VHQ224L/highVoltage.png; sourceTree = SOURCE_ROOT; };
 		84AFC2401029F35E009F4139 /* lowVoltage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = lowVoltage.png; path = Source/Objects/Hardware/Vme/VHQ224L/lowVoltage.png; sourceTree = SOURCE_ROOT; };
@@ -6653,7 +6653,7 @@
 		84B63CE109783832005B20A5 /* PushButton.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = PushButton.nib; path = Source/Objects/ProcessLogic/ProcessElements/Inputs/PushButton/PushButton.nib; sourceTree = SOURCE_ROOT; };
 		84B63CE209783832005B20A5 /* PushButtonOff.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = PushButtonOff.tif; path = Source/Objects/ProcessLogic/ProcessElements/Inputs/PushButton/PushButtonOff.tif; sourceTree = SOURCE_ROOT; };
 		84B63CE309783832005B20A5 /* PushButtonOn.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = PushButtonOn.tif; path = Source/Objects/ProcessLogic/ProcessElements/Inputs/PushButton/PushButtonOn.tif; sourceTree = SOURCE_ROOT; };
-		84B649B50406ECBA005F64B1 /* NcdMux.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = NcdMux.gif; path = "Source/Objects/Custom Hardware/Ncd Hardware/NcdMux/NcdMux.gif"; sourceTree = SOURCE_ROOT; };
+		84B649B50406ECBA005F64B1 /* NcdMux.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = NcdMux.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/NcdMux/NcdMux.gif"; sourceTree = SOURCE_ROOT; };
 		84B649B70407013B005F64B1 /* NcdMuxHWModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NcdMuxHWModel.h; sourceTree = "<group>"; };
 		84B649B80407013B005F64B1 /* NcdMuxHWModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NcdMuxHWModel.m; sourceTree = "<group>"; };
 		84B6CD3D14B37E9700386BE1 /* ORRGA300Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORRGA300Controller.h; path = Source/Objects/Hardware/Serial/RGA300/ORRGA300Controller.h; sourceTree = SOURCE_ROOT; };
@@ -6897,17 +6897,17 @@
 		84CDDA4F047171B1005F64B1 /* ORHPPulserController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ORHPPulserController.m; sourceTree = "<group>"; };
 		84CDDA5404717389005F64B1 /* ORTek754DData.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ORTek754DData.h; path = "Source/Objects/Hardware/GPIB/Oscilloscope T754D/ORTek754DData.h"; sourceTree = SOURCE_ROOT; };
 		84CDDA5504717389005F64B1 /* ORTek754DData.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = ORTek754DData.m; path = "Source/Objects/Hardware/GPIB/Oscilloscope T754D/ORTek754DData.m"; sourceTree = SOURCE_ROOT; };
-		84CEA3630EA4EB2E0060076A /* Fec32.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = Fec32.gif; path = "Source/Objects/Custom Hardware/SNO+/Fec32/Fec32.gif"; sourceTree = SOURCE_ROOT; };
-		84CEA3650EA4EB2E0060076A /* Fec32Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = Fec32Card.gif; path = "Source/Objects/Custom Hardware/SNO+/Fec32/Fec32Card.gif"; sourceTree = SOURCE_ROOT; };
-		84CEA3660EA4EB2E0060076A /* ORFec32Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFec32Controller.h; path = "Source/Objects/Custom Hardware/SNO+/Fec32/ORFec32Controller.h"; sourceTree = SOURCE_ROOT; };
-		84CEA3670EA4EB2E0060076A /* ORFec32Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFec32Controller.m; path = "Source/Objects/Custom Hardware/SNO+/Fec32/ORFec32Controller.m"; sourceTree = SOURCE_ROOT; };
-		84CEA3680EA4EB2E0060076A /* ORFec32Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFec32Model.h; path = "Source/Objects/Custom Hardware/SNO+/Fec32/ORFec32Model.h"; sourceTree = SOURCE_ROOT; };
-		84CEA3690EA4EB2E0060076A /* ORFec32Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFec32Model.m; path = "Source/Objects/Custom Hardware/SNO+/Fec32/ORFec32Model.m"; sourceTree = SOURCE_ROOT; };
-		84CEA6E10EA623A50060076A /* FecDaughterCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = FecDaughterCard.gif; path = "Source/Objects/Custom Hardware/SNO+/FecDaughterCard/FecDaughterCard.gif"; sourceTree = SOURCE_ROOT; };
-		84CEA6E30EA623A50060076A /* ORFecDaughterCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFecDaughterCardController.h; path = "Source/Objects/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardController.h"; sourceTree = SOURCE_ROOT; };
-		84CEA6E40EA623A50060076A /* ORFecDaughterCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFecDaughterCardController.m; path = "Source/Objects/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardController.m"; sourceTree = SOURCE_ROOT; };
-		84CEA6E50EA623A50060076A /* ORFecDaughterCardModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFecDaughterCardModel.h; path = "Source/Objects/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardModel.h"; sourceTree = SOURCE_ROOT; };
-		84CEA6E60EA623A50060076A /* ORFecDaughterCardModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFecDaughterCardModel.m; path = "Source/Objects/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardModel.m"; sourceTree = SOURCE_ROOT; };
+		84CEA3630EA4EB2E0060076A /* Fec32.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = Fec32.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/Fec32/Fec32.gif"; sourceTree = SOURCE_ROOT; };
+		84CEA3650EA4EB2E0060076A /* Fec32Card.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = Fec32Card.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/Fec32/Fec32Card.gif"; sourceTree = SOURCE_ROOT; };
+		84CEA3660EA4EB2E0060076A /* ORFec32Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFec32Controller.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/Fec32/ORFec32Controller.h"; sourceTree = SOURCE_ROOT; };
+		84CEA3670EA4EB2E0060076A /* ORFec32Controller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFec32Controller.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/Fec32/ORFec32Controller.m"; sourceTree = SOURCE_ROOT; };
+		84CEA3680EA4EB2E0060076A /* ORFec32Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFec32Model.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/Fec32/ORFec32Model.h"; sourceTree = SOURCE_ROOT; };
+		84CEA3690EA4EB2E0060076A /* ORFec32Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFec32Model.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/Fec32/ORFec32Model.m"; sourceTree = SOURCE_ROOT; };
+		84CEA6E10EA623A50060076A /* FecDaughterCard.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; name = FecDaughterCard.gif; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/FecDaughterCard/FecDaughterCard.gif"; sourceTree = SOURCE_ROOT; };
+		84CEA6E30EA623A50060076A /* ORFecDaughterCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFecDaughterCardController.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardController.h"; sourceTree = SOURCE_ROOT; };
+		84CEA6E40EA623A50060076A /* ORFecDaughterCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFecDaughterCardController.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardController.m"; sourceTree = SOURCE_ROOT; };
+		84CEA6E50EA623A50060076A /* ORFecDaughterCardModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORFecDaughterCardModel.h; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardModel.h"; sourceTree = SOURCE_ROOT; };
+		84CEA6E60EA623A50060076A /* ORFecDaughterCardModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ORFecDaughterCardModel.m; path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/FecDaughterCard/ORFecDaughterCardModel.m"; sourceTree = SOURCE_ROOT; };
 		84CED38D1732FB9E000A84C2 /* LakeShore336.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; path = LakeShore336.nib; sourceTree = "<group>"; };
 		84CED38E1732FB9E000A84C2 /* LakeShore336.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; path = LakeShore336.tif; sourceTree = "<group>"; };
 		84CED38F1732FB9E000A84C2 /* ORLakeShore336Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ORLakeShore336Controller.h; sourceTree = "<group>"; };
@@ -7439,7 +7439,7 @@
 		84FFCAA30636D5B10069432F /* ORCaen792Controller.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORCaen792Controller.m; sourceTree = "<group>"; };
 		84FFCAA40636D5B10069432F /* ORCaen792Model.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ORCaen792Model.h; sourceTree = "<group>"; };
 		84FFCAA50636D5B10069432F /* ORCaen792Model.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ORCaen792Model.m; sourceTree = "<group>"; };
-		9C086CE80D10AB6200524F47 /* mainFocalPlaneDetector.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = mainFocalPlaneDetector.tif; path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun/mainFocalPlaneDetector.tif"; sourceTree = SOURCE_ROOT; };
+		9C086CE80D10AB6200524F47 /* mainFocalPlaneDetector.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = mainFocalPlaneDetector.tif; path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun/mainFocalPlaneDetector.tif"; sourceTree = SOURCE_ROOT; };
 		9C1363BF0D0A7921006C550D /* Caen265.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = Caen265.nib; path = Source/Objects/Hardware/Vme/CAEN/CV265/Caen265.nib; sourceTree = SOURCE_ROOT; };
 		9C1363C00D0A7921006C550D /* Caen265Card.tif */ = {isa = PBXFileReference; lastKnownFileType = image.tiff; name = Caen265Card.tif; path = Source/Objects/Hardware/Vme/CAEN/CV265/Caen265Card.tif; sourceTree = SOURCE_ROOT; };
 		9C1363C10D0A7921006C550D /* ORCaen265Controller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ORCaen265Controller.h; path = Source/Objects/Hardware/Vme/CAEN/CV265/ORCaen265Controller.h; sourceTree = SOURCE_ROOT; };
@@ -8700,7 +8700,7 @@
 				8499516B1D5CE50700A6FA40 /* MJDBiasWatcher */,
 			);
 			name = "Majorana Hardware";
-			path = "Source/Objects/Custom Hardware/Majorana Hardware";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware";
 			sourceTree = SOURCE_ROOT;
 		};
 		8402B5AB14C70522007999C1 /* MJDPreAmp */ = {
@@ -8716,7 +8716,7 @@
 				84913AC415376BBF00597004 /* ORMJDPreAmpDecoders.m */,
 			);
 			name = MJDPreAmp;
-			path = "Source/Objects/Custom Hardware/Majorana Hardware/MJDPreAmp";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/Majorana Hardware/MJDPreAmp";
 			sourceTree = SOURCE_ROOT;
 		};
 		840463B8183515AC00F69B23 /* GretinaTrigger */ = {
@@ -9614,7 +9614,7 @@
 				8418DC540531EF7A005F64B1 /* PulserDistrib.nib */,
 			);
 			name = PulserDistrib;
-			path = "Source/Objects/Custom Hardware/Ncd Hardware/PulserDistrib";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/Ncd Hardware/PulserDistrib";
 			sourceTree = SOURCE_ROOT;
 		};
 		841C4DEE141FA72800F95B50 /* Met237 */ = {
@@ -10324,7 +10324,7 @@
 				843CDF57071C9CF4009D7D30 /* RandomPulser.nib */,
 			);
 			name = RandomPulser;
-			path = "Source/Objects/Custom Hardware/Misc Hardware/RandomPulser";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/Misc Hardware/RandomPulser";
 			sourceTree = SOURCE_ROOT;
 		};
 		843DCF2D058E546A000C5219 /* DataGenerator */ = {
@@ -10623,7 +10623,7 @@
 				844B42BD0DE5D5680061AE80 /* SNORack.gif */,
 			);
 			name = SNORack;
-			path = "Source/Objects/Custom Hardware/SNO+/SNORack";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNORack";
 			sourceTree = SOURCE_ROOT;
 		};
 		844B9BE4132E527700FEDA6B /* CV1724 */ = {
@@ -10673,6 +10673,7 @@
 		844CD9DF2C5BACA800694275 /* I2C */ = {
 			isa = PBXGroup;
 			children = (
+				84C4948A0405A0C0005F64B1 /* Custom Hardware */,
 				844CD9DE2C5BACA800694275 /* SHT35 */,
 				844CD9E92C5BD55F00694275 /* I2CProtocol.h */,
 			);
@@ -11606,7 +11607,7 @@
 				847E6C190CFF4C3200E963C6 /* OReGunModel.m */,
 			);
 			name = eGun;
-			path = "Source/Objects/Custom Hardware/KATRIN Hardware/eGun";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/KATRIN Hardware/eGun";
 			sourceTree = SOURCE_ROOT;
 		};
 		847F947213D4AA31006B06B4 /* Rad7 */ = {
@@ -12375,7 +12376,7 @@
 				849929AA0DCFCA5900E82DB4 /* ORMTC_Constants.h */,
 			);
 			name = MTC;
-			path = "Source/Objects/Custom Hardware/SNO+/MTC";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/MTC";
 			sourceTree = SOURCE_ROOT;
 		};
 		84992CAD0DD21F3800E82DB4 /* HP3458a */ = {
@@ -12517,7 +12518,7 @@
 				84CEA6E00EA623A50060076A /* FecDaughterCard */,
 			);
 			name = "SNO+";
-			path = "Source/Objects/Custom Hardware/SNO+";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+";
 			sourceTree = SOURCE_ROOT;
 		};
 		8499FE820DC8E9B700E82DB4 /* SNOCrate */ = {
@@ -12534,7 +12535,7 @@
 				8499FE880DC8E9B700E82DB4 /* ORSNOCrateModel.m */,
 			);
 			name = SNOCrate;
-			path = "Source/Objects/Custom Hardware/SNO+/SNOCrate";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNOCrate";
 			sourceTree = SOURCE_ROOT;
 		};
 		8499FF8E0DC9090400E82DB4 /* SNO Base Classes */ = {
@@ -12549,7 +12550,7 @@
 				84C37E240EF8408F00E77E09 /* ORPSUPTubePosition.h */,
 			);
 			name = "SNO Base Classes";
-			path = "Source/Objects/Custom Hardware/SNO+/SNO Base Classes";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/SNO Base Classes";
 			sourceTree = SOURCE_ROOT;
 		};
 		8499FFD90DC90F5800E82DB4 /* XL1 */ = {
@@ -12563,7 +12564,7 @@
 				8499FFDC0DC90F5800E82DB4 /* XL1Card.gif */,
 			);
 			name = XL1;
-			path = "Source/Objects/Custom Hardware/SNO+/XL1";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/XL1";
 			sourceTree = SOURCE_ROOT;
 		};
 		8499FFE00DC9102700E82DB4 /* XL2 */ = {
@@ -13971,7 +13972,7 @@
 				8499FE810DC8E86800E82DB4 /* SNO+ */,
 			);
 			name = "Custom Hardware";
-			path = "Source/Objects/Custom Hardware";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware";
 			sourceTree = SOURCE_ROOT;
 		};
 		84C4948C0405A0C0005F64B1 /* Ncd Hardware */ = {
@@ -14134,7 +14135,7 @@
 				84CEA6E60EA623A50060076A /* ORFecDaughterCardModel.m */,
 			);
 			name = FecDaughterCard;
-			path = "Source/Objects/Custom Hardware/SNO+/FecDaughterCard";
+			path = "Source/Objects/Hardware/I2C/Custom Hardware/SNO+/FecDaughterCard";
 			sourceTree = SOURCE_ROOT;
 		};
 		84CED38C1732FB9D000A84C2 /* LakeShore336 */ = {
@@ -15912,7 +15913,6 @@
 				84AD1EE003C2476F005F64B1 /* Data Processing */,
 				840EFFA30944B28F00049827 /* ProcessLogic */,
 				842F19A603B8EAF3005F64B1 /* Control */,
-				84C4948A0405A0C0005F64B1 /* Custom Hardware */,
 				F51E698503AE4775015F64B1 /* Hardware */,
 			);
 			name = Objects;
