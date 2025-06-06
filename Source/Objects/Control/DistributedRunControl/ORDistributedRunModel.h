@@ -37,6 +37,9 @@
         NSMutableArray* remoteRunItems;
         NSInteger       numberConnected;
         NSInteger       numberRunning;
+        uint32_t        runNumber;
+        NSString*       dirName;
+        NSString*       definitionsFilePath;
 }
 
 #pragma mark ¥¥¥Accessors
@@ -87,6 +90,12 @@
 - (NSInteger) numberRunning;
 - (void)      setNumberRunning:(NSInteger)aValue;;
 - (NSInteger) numberRemoteSystems;
+- (uint32_t)   runNumber;
+- (void)       setRunNumber:(uint32_t)aRunNumber;
+- (void) setDirName:(NSString*)aDirName;
+- (NSString*)dirName;
+- (NSString *)definitionsFilePath;
+- (void) setDefinitionsFilePath:(NSString *)aDefinitionsFilePath;
 
 #pragma mark ¥¥¥Archival
 - (void) encodeWithCoder:(NSCoder*)encoder;
@@ -106,4 +115,6 @@ extern NSString* ORDistributedRunElapsedTimeChanged;
 extern NSString* ORDistributedRunSystemListChanged;
 extern NSString* ORRemoteRunItemAdded;
 extern NSString* ORRemoteRunItemRemoved;
-extern NSString* ORDistributedRunLock;
+extern NSString* ORDistributedRunNumberLock;
+extern NSString* ORDistributedRunNumberChanged;
+extern NSString* ORDistributedRunNumberDirChanged;
