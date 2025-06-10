@@ -84,6 +84,7 @@
     [self populateClassNamePopup:pmtAdcClassNamePopup];
     [self populateClassNamePopup:auxChanAdcClassNamePopup];
     [self populateClassNamePopup:cc4AdcClassNamePopup];
+    [self populateDataTypePopup];
     
     [(ORPlot*) [ratePlot plotWithTag:kL200DetType] setLineColor:[NSColor systemBlueColor]];
     ORTimeLinePlot* sipmPlot = [[ORTimeLinePlot alloc] initWithTag:kL200SiPMType andDataSource:self];
