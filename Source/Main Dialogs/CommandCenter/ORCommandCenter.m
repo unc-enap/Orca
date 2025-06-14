@@ -45,6 +45,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
     self = [super init];
     
     [[self undoManager] disableUndoRegistration];
+    clientLock = [[NSLock alloc] init];
     NSInteger port = [[NSUserDefaults standardUserDefaults] integerForKey: @"orca.CommandCenter.ListeningPort"];
     if(port==0)port = kORCommandPort;
 	
@@ -54,21 +55,12 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 	
 	NSString* theComments = [[NSUserDefaults standardUserDefaults] objectForKey: @"orca.CommandCenter.scriptComments"];
     [self setScriptComments:theComments];
-	
-	//NSMutableArray* theArgs = [[[[NSUserDefaults standardUserDefaults] objectForKey: @"orca.CommandCenter.args"] mutableCopy] autorelease];
-	//if(!theArgs){
-	//	theArgs = [NSMutableArray arrayWithObjects:[NSDecimalNumber zero],[NSDecimalNumber zero],[NSDecimalNumber zero],
-	//	[NSDecimalNumber zero],[NSDecimalNumber zero],nil];
-	//}
-
     
     [self setSocketPort:(int)port];
     [self setClients:[NSMutableArray array]];
     [[self undoManager] enableUndoRegistration];
     NSArray* objectsToRegister = [[(ORAppDelegate*)[NSApp delegate] document] collectObjectsRespondingTo:@selector(commandID)];
-    NSEnumerator* e = [objectsToRegister objectEnumerator];
-    id obj;
-    while(obj = [e nextObject]){
+    for(id obj in objectsToRegister){
         [self addDestination:obj];
     }
     [self registerNotificationObservers];
@@ -93,6 +85,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
     [serverSocket release];
     [destinationObjects release];
 	[history release];
+    [clientLock release];
     [super dealloc];
 }
 
@@ -193,24 +186,51 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 
 - (void) setClients:(NSMutableArray*)someClients
 {
-    [someClients retain];
-    [clients release];
-    clients = someClients;
+    @try {
+        [clientLock lock];
+        [someClients retain];
+        [clients release];
+        clients = someClients;
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
+    }
 }
 
 - (BOOL) clientWithNameExists:(NSString*)aName
 {
-    NSEnumerator* e = [clients objectEnumerator];
-    ORCommandClient* theClient;
-    while(theClient = [e nextObject]){
-        if([[theClient name] isEqualToString:aName])return YES;
+    bool clientExists = NO;
+    @try {
+        [clientLock lock];
+        for(ORCommandClient* aClient in clients){
+            if([[aClient name] isEqualToString:aName]){
+                clientExists =  YES;
+                break;
+            }
+        }
+        [clientLock unlock];
     }
-	return NO;
+    @catch(NSException* e)
+    {
+        [clientLock unlock];
+    }
+    return clientExists;
 }
 
 - (NSUInteger) clientCount
 {
-    return [clients count];
+    NSUInteger count = 0;
+    @try {
+        [clientLock lock];
+        count = [clients count];
+        [clientLock unlock];
+    }
+    @catch(NSException* e)
+    {
+        [clientLock unlock];
+    }
+    return count;
 }
 
 
@@ -238,9 +258,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 
 - (void)netsocket:(NetSocket*)inNetSocket connectionAccepted:(NetSocket*)inNewNetSocket
 {
-    
-    //NSLog( @"ORCommand: New connection established\n" );
-    
+
     ORCommandClient* client = [[[ORCommandClient alloc] initWithNetSocket:inNewNetSocket] autorelease];
     [client setDelegate:self];
     [client setTimeConnected:[NSDate date]];
@@ -251,15 +269,29 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
         heartBeatTimer = [[NSTimer scheduledTimerWithTimeInterval:15.0 target:self selector:@selector(timeToBeat:) userInfo:nil repeats:YES]retain];
         [self sendHeartBeat:client];
     }
-    [clients addObject:client];
-    [self clientChanged:client];
+    @try {
+        [clientLock lock];
+        [clients addObject:client];
+        [clientLock unlock];
+
+        [self clientChanged:client];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
+    }
 }
 
 - (void) clientDisconnected:(id)aClient
 {
-    [clients removeObject:aClient];
-    [self clientChanged:aClient];
-    
+    @try {
+        [clientLock lock];
+        [clients removeObject:aClient];
+        [self clientChanged:aClient];
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
+    }
     if([clients count] == 0) {
         [heartBeatTimer invalidate];
         [heartBeatTimer release];
@@ -317,19 +349,22 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 
 - (void) taskListChanged:(NSNotification*)aNotification
 {
-    NSEnumerator* e = [clients objectEnumerator];
-    ORCommandClient* theClient;
-    while(theClient = [e nextObject]){
-        [theClient sendCmd:@"orcaTaskList" withString:[aNotification object]];
+    @try {
+        [clientLock lock];
+        for(ORCommandClient* aClient in clients){
+            [aClient sendCmd:@"orcaTaskList" withString:[aNotification object]];
+        }
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
     }
 }
 
 - (void) objectsAdded:(NSNotification*)aNotification
 {
     NSArray* theObjects = [[aNotification userInfo] objectForKey: ORGroupObjectList];
-    NSEnumerator* e = [theObjects objectEnumerator];
-    id obj;
-    while(obj = [e nextObject]){
+    for(id obj in theObjects){
         [self addDestination:obj];
     }
 }
@@ -337,56 +372,79 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 - (void) objectsRemoved:(NSNotification*)aNotification
 {
     NSArray* theObjects = [[aNotification userInfo] objectForKey: ORGroupObjectList];
-    NSEnumerator* e = [theObjects objectEnumerator];
-    id obj;
-    while(obj = [e nextObject]){
+    for(id obj in theObjects){
         [self removeDestination:obj];
     }
 }
 
 - (void) alarmWasPosted:(NSNotification*)aNotification
 {
-    NSEnumerator* e = [clients objectEnumerator];
-    ORCommandClient* theClient;
-    while(theClient = [e nextObject]){
-        [theClient sendCmd:@"postAlarm" withString:[[aNotification object] name]];
+    @try {
+        [clientLock lock];
+        for(ORCommandClient* aClient in clients){
+            [aClient sendCmd:@"postAlarm" withString:[[aNotification object] name]];
+        }
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
     }
 }
 
 - (void) alarmWasCleared:(NSNotification*)aNotification
 {
-    NSEnumerator* e = [clients objectEnumerator];
-    ORCommandClient* theClient;
-    while(theClient = [e nextObject]){
-        [theClient sendCmd:@"clearAlarm" withString:[[aNotification object] name]];
+    @try {
+        [clientLock lock];
+        for(ORCommandClient*aClient in clients){
+            [aClient sendCmd:@"clearAlarm" withString:[[aNotification object] name]];
+        }
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
     }
 }
 
 
 - (void) runStatusChanged:(NSNotification*)aNotification
 {
-    NSEnumerator* e = [clients objectEnumerator];
-    ORCommandClient* theClient;
-    while(theClient = [e nextObject]){
-        [theClient sendCmd:@"runStatus" withString:[[[aNotification userInfo] objectForKey:ORRunStatusValue] stringValue]];
+    @try {
+        [clientLock lock];
+        for(ORCommandClient* aClient in clients){
+            [aClient sendCmd:@"runStatus" withString:[[[aNotification userInfo] objectForKey:ORRunStatusValue] stringValue]];
+        }
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
     }
 }
 
 - (void) timeToBeat:(NSTimer*)aTimer
 {
-    NSEnumerator* e = [clients objectEnumerator];
-    ORCommandClient* theClient;
-    while(theClient = [e nextObject]){
-        [self sendHeartBeat:theClient];
+    @try {
+        [clientLock lock];
+        for(ORCommandClient* aClient in clients){
+            [self sendHeartBeat:aClient];
+        }
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
     }
 }
 
 - (void) sendCmd:(NSString*)aCmd withString:(NSString*)aString
 {
-    NSEnumerator* e = [clients objectEnumerator];
-    ORCommandClient* theClient;
-    while(theClient = [e nextObject]){
-        [theClient sendCmd:aCmd withString:aString];
+    @try {
+        [clientLock lock];
+        for(ORCommandClient* aClient in clients){
+            [aClient sendCmd:aCmd withString:aString];
+        }
+        [clientLock unlock];
+    }
+    @catch(NSException* e) {
+        [clientLock unlock];
     }
 }
 
@@ -559,8 +617,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
                 else [allObjs addObject:theObj];
             }
             
-            NSEnumerator* e = [allObjs objectEnumerator];
-            while(theObj = [e nextObject]){
+            for(theObj in allObjs){
                 if([theObj respondsToSelector:theSelector]){
                     NSMethodSignature* theSignature = [theObj methodSignatureForSelector:theSelector];
                     NSInvocation* theInvocation = [NSInvocation invocationWithMethodSignature:theSignature];
@@ -695,6 +752,7 @@ SYNTHESIZE_SINGLETON_FOR_ORCLASS(CommandCenter);
 #pragma mark •••Update Methods
 - (void) sendCurrentAlarms:(ORCommandClient*)client
 {
+    
     NSEnumerator* e = [[ORAlarmCollection sharedAlarmCollection] alarmEnumerator];
     id anAlarm;
     while (anAlarm = [e nextObject]){
