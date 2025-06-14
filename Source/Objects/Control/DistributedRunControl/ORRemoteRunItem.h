@@ -57,6 +57,7 @@
 - (void)      setIgnore:(bool)aState;
 - (NSInteger) remotePort;
 - (void)      setRemotePort:(NSInteger)aRemotePort;
+- (void)      setPostAlarm:(NSString*)anAlarm;
 
 #pragma mark •••Command Handling
 - (void) parseString:(NSString*)inString;

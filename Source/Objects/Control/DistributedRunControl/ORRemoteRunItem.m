@@ -267,6 +267,11 @@ NSString* ORRemoteRunItemRunNumberChanged   = @"ORRemoteRunItemRunNumberChanged"
    //just for KVC
 }
 
+- (void) setPostAlarm:(NSString*)anAlarm
+{
+    NSLogColor([NSColor redColor],@"%@ posted Alarm: %@\n",systemName,anAlarm);
+}
+
 - (void) sendSetup
 {
     if(isConnected){
