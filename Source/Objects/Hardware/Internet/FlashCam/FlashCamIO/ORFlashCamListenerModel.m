@@ -1331,6 +1331,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
     FSPSetLogTime(processor, [[self configParam:@"fspLogTime"] doubleValue]);
     FSPSetLogLevel(processor, [[self configParam:@"fspLogLevel"] intValue]);
+    if ([[self configParam:@"daqMode"] intValue] == 12) {
+        FSPEnableEventFlags(processor, (EventFlags){ .consecutive = 0, .extended = 0});
+        NSLog(@"%@: setupSoftwareTrigger: Singles mode selected (daqmode/-dm 12). Disabling trigger on extended or consecutive events.\n", [self identifier]);
+    }
     
     /* always set the Aux Parameters to get sane defaults, we picked some at the beginning of this function.*/
     if (!FSP_L200_SetAuxParameters(processor, FCIO_TRACE_MAP_FORMAT,
