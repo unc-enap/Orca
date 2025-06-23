@@ -1236,10 +1236,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
 
 - (bool) setupStreamProcessor
 {
-    if ([[self configParam:@"daqMode"] intValue] == 12) {
-        NSLogColor([NSColor redColor],@"%s: Usage of the Software Trigger in singles mode is not implemented.\n", [self identifier]);
-        return NO;
-    }
+
     // overwrite parameter, use for debugging purposes. even though fsp would not
     // write, we want them in the output datastream
     writeNonTriggered = [[self configParam:@"fspWriteNonTriggered"] boolValue];
@@ -1356,6 +1353,9 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
 
     if ([self configParam:@"fspPSEnabled"] && nfspPSChannels) {
+        if ([[self configParam:@"daqMode"] intValue] == 12 && ([[self configParam:@"fspPSPreWindow"] intValue] > 0 || [[self configParam:@"fspPSPostWindow"] intValue] > 0)) {
+            NSLogColor([NSColor redColor],@"%s: Warning: usage of the software trigger in singles mode with peak sum (PS) pre or post coincidence windows > 0 ns may lead to unexpected sideffects if hardware triggered events arrive not time ordered.\n", [self identifier]);
+        }
         if (!FSP_L200_SetSiPMParameters(processor, nfspPSChannels, fspPSChannelMap, FCIO_TRACE_MAP_FORMAT,
                                   fspPSChannelGains, fspPSChannelThresholds,
                                   fspPSChannelShapings, fspPSChannelLowPass,
