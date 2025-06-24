@@ -1773,6 +1773,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         return NO;
     }
 
+    DEBUG_PRINT( "%s: %s: shipFCIO: tag %d recordSize %zu dataId %u\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String],
+                writeTag, recordSize, dataId
+                );
+
     dataRecord[0] = dataId; // use extended format, write recordLength to the second entry
     dataRecord[1] = recordLength;
     /* FlashCamIO Header */
