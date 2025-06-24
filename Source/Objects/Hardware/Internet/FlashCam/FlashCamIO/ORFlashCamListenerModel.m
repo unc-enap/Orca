@@ -958,7 +958,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             else if([p isEqualToString:@"nonsparseEnd"])
                 [configParams setObject:[NSNumber numberWithInt:MAX([[self configParam:@"nonsparseStart"] intValue], [v intValue])] forKey:p];
             else if([p isEqualToString:@"sparseOverwrite"])
-                [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1, [v intValue]), 1)] forKey:p];
+                [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1, [v intValue]), 2304)] forKey:p];
         }
     }
 
