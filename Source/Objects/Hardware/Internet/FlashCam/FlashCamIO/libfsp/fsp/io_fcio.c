@@ -271,7 +271,7 @@ int FCIOPutFSPEvent(FCIOStream output, StreamProcessor* processor)
   FCIOWriteInts(output, fsp_state->obs.sub_event_list.size, fsp_state->obs.sub_event_list.stop);
   FCIOWriteFloats(output, fsp_state->obs.sub_event_list.size, fsp_state->obs.sub_event_list.wps_max);
 
-  FCIOWriteInts(output, fsp_state->obs.ps.n_hwm_prescaled, fsp_state->obs.ps.hwm_prescaled_trace_idx);
+  FCIOWriteUShorts(output, fsp_state->obs.ps.n_hwm_prescaled, fsp_state->obs.ps.hwm_prescaled_trace_idx);
 
   return FCIOFlush(output);
 }
@@ -300,8 +300,8 @@ int FCIOGetFSPEvent(FCIOData* input, StreamProcessor* processor)
   FCIOReadInts(in, FCIOMaxSamples, fsp_state->obs.sub_event_list.stop);
   FCIOReadFloats(in, FCIOMaxSamples, fsp_state->obs.sub_event_list.wps_max);
 
-  readbytes = FCIOReadInts(in, FCIOMaxChannels, fsp_state->obs.ps.hwm_prescaled_trace_idx);
-  fsp_state->obs.ps.n_hwm_prescaled = (readbytes >= 0) ? readbytes/sizeof(int) : 0;
+  readbytes = FCIOReadUShorts(in, FCIOMaxChannels, fsp_state->obs.ps.hwm_prescaled_trace_idx);
+  fsp_state->obs.ps.n_hwm_prescaled = (readbytes >= 0) ? readbytes/sizeof(unsigned short) : 0;
 
   return 0;
 }
