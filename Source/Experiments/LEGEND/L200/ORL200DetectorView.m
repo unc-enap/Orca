@@ -23,6 +23,9 @@
 #import "ORDetectorSegment.h"
 #import "ORColorScale.h"
 #import "ORAxis.h"
+#import "ORLNGSSlowControlsModel.h"
+#import "ORAppDelegate.h"
+#import "NSNotifications+Extensions.h"
 
 #define kL200CrateWidth         (31 * [self bounds].size.width  / (2*32+1))
 #define kL200CrateXSpacing           ([self bounds].size.width  / (2*32+1))
@@ -32,7 +35,7 @@
 #define kL200CrateInsideY       (0.081 * kL200CrateHeight)
 #define kL200CrateInsideWidth   (kL200CrateWidth  - 2*kL200CrateInsideX)
 #define kL200CrateInsideHeight  (kL200CrateHeight - 2*kL200CrateInsideY)
-#define kL200DetViewWidth       (0.95 * [self bounds].size.width)
+#define kL200DetViewWidth       (0.80 * [self bounds].size.width)
 #define kL200AuxViewWidth       ([self bounds].size.width - kL200DetViewWidth)
 #define kL200DetViewHeight      (0.7 * [self bounds].size.height)
 #define kL200SiPMViewHeight     (0.4 * ([self bounds].size.height - kL200DetViewHeight) / 2)
@@ -57,10 +60,13 @@
 - (void) makeDummySet;
 - (void) drawLabels;
 - (void) drawGeDetectorLabels;
-- (void) drawSiPMabels;
+- (void) drawSiPMLabels;
 - (void) drawPMTLabels;
+- (void) drawSourceLabel;
 - (void) drawCC4Background;
 - (void) drawAuxChanLabels;
+- (void) makeSource;
+- (void) makeSourcesTube;
 @end
 
 @implementation ORL200DetectorView
@@ -73,9 +79,12 @@
     for(int i=0; i<kL200PMTRings; i++)        pmtLabel[i] = nil;
     for(int i=0; i<kL200AuxLabels; i++)       auxLabel[i] = nil;
     for(int i=0; i<kL200NumCC4s; i++)       cc4Label[i] = nil;
+    for(int i=0; i<kL200MaxSISChans; i++)       sisLabel[i] = nil;
     strLabelAttr  = nil;
+    sourceLabelAttr = nil;
     sipmLabelAttr = nil;
     pmtLabelAttr  = nil;
+    sourceLabelAttr = nil;
     auxLabelAttr  = nil;
     self = [super initWithFrame:frameRect];
     return self;
@@ -84,17 +93,29 @@
 - (void) dealloc
 {
     [detOutlines release];
+    [slowControls release];
     for(int i=0; i<kL200DetectorStrings; i++) [strLabel[i]  release];
     for(int i=0; i<kL200SiPMRings; i++)       [sipmLabel[i] release];
     for(int i=0; i<kL200PMTRings; i++)        [pmtLabel[i]  release];
     for(int i=0; i<kL200AuxLabels; i++)       [auxLabel[i]  release];
     for(int i=0; i<kL200NumCC4s; i++)       [cc4Label[i]  release];
+    for(int i=0; i<kL200MaxSISChans; i++)       [sisLabel[i] release];
     [strLabelAttr  release];
+    [sourceLabelAttr release];
     [sipmLabelAttr release];
     [pmtLabelAttr  release];
+    [sourceLabelAttr release];
     [auxLabelAttr  release];
     [cc4LabelAttr  release];
     [super dealloc];
+}
+- (void) registerNotificationObservers
+{
+    NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
+    [notifyCenter addObserver : self
+                     selector : @selector(makeSource)
+                         name : ORL200SlowControlsSourceHeightChanged
+                       object : nil];
 }
 
 - (void) awakeFromNib
@@ -302,6 +323,8 @@
         [self makePMTs];
         [self makeAuxChans];
         [self makeDummySet]; //place holder for CC4s
+        [self makeSourcesTube];
+        [self makeSource];
     }
     else if(viewType == kL200CC4View){
         [self makeDummySet];//place holder for Dets
@@ -309,13 +332,8 @@
         [self makePMTs];
         [self makeDummySet];//place holder for AuxChans
         [self makeCC4s];
-        //[self makeCC4sSiPMS];
-        //[self makeCC4sOutSiPMS];
-        //[self makeDummySet];//place holder for AuxChans
-       
-        //[self makeCC4sInSiPMS];
-        //[self makeCC4sOutSiPMS];
-        
+        [self makeSourcesTube];
+        [self makeSource];
     }
     [self setNeedsDisplay:YES];
 }
@@ -325,14 +343,17 @@
     switch (viewType){
         case kL200DetectorView:
             [self drawGeDetectorLabels];
-            [self drawSiPMabels];
+            [self drawSiPMLabels];
             [self drawPMTLabels];
+            [self drawSourceLabel];
             [self drawAuxChanLabels];
             break;
         case kL200CC4View:
             [self drawCC4Background];
-            [self drawSiPMabels];
+            //[self drawSiPMLabels];
             [self drawPMTLabels];
+            //[self drawSourceLabel];
+            //[self drawAuxChanLabels];
             break;
         default:
             break;
@@ -359,7 +380,7 @@
     }
 }
 
-- (void) drawSiPMabels
+- (void) drawSiPMLabels
 {
     // draw the SiPM labels, top and bottom for inner and outer barrels in the right margin
     if(!sipmLabelAttr){
@@ -409,7 +430,7 @@
         if(!auxLabel[i]) auxLabel[0] = [@"" copy];
         if([auxLabel[i] length] == 0) continue;
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:auxLabel[i] attributes:auxLabelAttr];
-        [s drawAtPoint:NSMakePoint(kL200DetViewWidth+kL200AuxViewWidth/2-[s size].width/2, auxLabelY+auxOffset)];
+        [s drawAtPoint:NSMakePoint(kL200DetViewWidth*0.92+kL200AuxViewWidth/2-[s size].width/2, auxLabelY+auxOffset)];
         auxOffset += [s size].height;
         [s release];
     }
@@ -928,7 +949,8 @@
     const float xoff = kL200AuxViewWidth*0.25 / 2;
     const float yoff = kL200PMTViewHeight + kL200SiPMViewHeight + kL200DetViewHeight*0.05;
     const float ytot = kL200DetViewHeight * 0.3;
-    const float cx   = kL200AuxViewWidth - 2*xoff;
+    //const float cx   = kL200AuxViewWidth - 2*xoff;
+    const float cx   = 20;
     const float cy   = 4*ytot / (kL200MaxAuxChans*5+1);
     const float dy   =   ytot / (kL200MaxAuxChans*5+1);
     const float inset = MIN(0.05*cx, 0.05*cy);
@@ -951,6 +973,76 @@
     [errorPathSet addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];
     [self setNeedsDisplay:YES];
+}
+-(void) makeSourcesTube
+{
+    NSMutableArray* segmentPaths = [NSMutableArray array];
+    NSMutableArray* errorPaths   = [NSMutableArray array];
+    //[delegate makeSegmentGroupsSis];
+    ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
+    for (int i=0; i<4; i++){
+        if (i==0) [group setSegment:0 object:@"Source 1" forKey:@"kSourceName"];
+        if (i==1) [group setSegment:3 object:@"Source 2" forKey:@"kSourceName"];
+        if (i==2) [group setSegment:6 object:@"Source 3" forKey:@"kSourceName"];
+        if (i==2) [group setSegment:9 object:@"Source 4" forKey:@"kSourceName"];
+        
+        NSRect tubeFrame = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+5, 10, 430-5);
+        // Draw bottom ellipse
+        NSRect bottomEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50, 10, 10);
+        // Draw top ellipse
+        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+430-5, 10, 10);
+            
+        [segmentPaths addObject:[NSBezierPath bezierPathWithRect:tubeFrame]];
+        [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:bottomEllipse]];
+        [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:topEllipse]];
+    }
+    [segmentPathSet addObject:segmentPaths];
+    //[errorPathSet addObject:errorPaths];
+    [detOutlines addObjectsFromArray:errorPaths];
+    [self setNeedsDisplay:YES];
+}
+-(void) makeSource
+{
+    NSMutableArray* segmentPaths = [NSMutableArray array];
+    NSMutableArray* errorPaths   = [NSMutableArray array];
+    ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
+    //NSLog(@"The segments in the group is : %i", [group numSegments]);
+    
+    slowControls = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORLNGSSlowControlsModel,1"]retain];
+    for (int i=0; i<4; i++){
+        //rectangle body
+        //NSString *sourceName = [NSString stringWithFormat:@"Source Number %i", i];
+        //[group setSegment:i object:@"sourceName  oh ho ho" forKey:@"kSourceName"];
+        float aPos = [[slowControls cmd:@"Source" dataAtRow:i column:2] floatValue];
+        //aPos=7000+i*200; //to debug providing direct value
+        NSString *sourcePos = [NSString stringWithFormat:@"Source Position %d", (int)aPos];
+        //[group setSegment:i object:sourcePos forKey:@"kSourcePos"];
+        if (i==0) [group setSegment:0 object:sourcePos forKey:@"kSourcePos"];
+        if (i==1) [group setSegment:3 object:sourcePos forKey:@"kSourcePos"];
+        if (i==2) [group setSegment:6 object:sourcePos forKey:@"kSourcePos"];
+        if (i==3) [group setSegment:9 object:sourcePos forKey:@"kSourcePos"];
+        
+        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+430-5-(aPos/21), 10, 10);
+        [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:topEllipse]];
+        [errorPaths addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(topEllipse, -1, -1)]];
+    }
+    [segmentPathSet addObject:segmentPaths];
+    [errorPathSet addObject:errorPaths];
+    [detOutlines addObjectsFromArray:errorPaths];
+    [slowControls release];
+    [self setNeedsDisplay:YES];
+
+}
+-(void)drawSourceLabel{
+    NSFont* font = [NSFont fontWithName:@"Geneva" size:7];
+    sourceLabelAttr = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
+                     [NSColor systemRedColor], NSForegroundColorAttributeName, nil] retain];
+    for(int i=0; i<4; i++){
+        NSString *sisLabel = [NSString stringWithFormat:@"SIS%i",i+1];
+        NSAttributedString* s = [[NSAttributedString alloc] initWithString:sisLabel attributes:sourceLabelAttr];
+        [s drawAtPoint:NSMakePoint(kL200DetViewWidth*1.095+i*20, 487)];
+        [s release];
+    }
 }
 - (void) makeDummySet
 {

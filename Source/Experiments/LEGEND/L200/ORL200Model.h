@@ -33,6 +33,7 @@
 #define kL200MaxAuxChans       6
 #define kL200MaxCC4s          24*7
 #define kL200MaxADCCards      14*4
+#define kL200MaxSISChans 4
 
 @interface ORL200Model : ORExperimentModel
 {
@@ -73,6 +74,7 @@
 - (void) findInFluxDB;
 - (void) findSlowControls;
 - (void) findRunControl;
+- (void) makeSegmentGroupsSis;
 - (void) findObjects:(NSNotification*)aNote;
 - (void) runTypeChanged:(NSNotification*) aNote;
 - (void) dataFileWritten:(NSNotification*) aNote;
