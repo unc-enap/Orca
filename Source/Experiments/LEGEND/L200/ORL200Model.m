@@ -641,13 +641,18 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
         [self setCardIndex:5    forGroup:groupIndex];
         [self setChannelIndex:6 forGroup:groupIndex];
         keys = [NSArray arrayWithObjects:@"cc4_name",  @"cc4_position", @"cc4_slot", @"cc4_chan",
-                @"daq_crate", @"daq_board_slot",     @"daq_board_ch", nil];
+                @"daq_crate", @"daq_board_slot",     @"daq_board_ch", @"serial", @"str_number", @"str_position", nil];
+        
     }
     else if(groupIndex == kL200ADCType){
         [self setCrateIndex:0   forGroup:groupIndex];
         [self setCardIndex:2    forGroup:groupIndex];
         keys = [NSArray arrayWithObjects:@"daq_crate", @"daq_board_id", @"daq_board_slot",
                 @"adc_serial_0", @"adc_serial_1", nil];
+    }
+    else if(groupIndex == kL200SISType){
+        keys = [NSArray arrayWithObjects:@"sis",
+                @"sis_name", @"sis_pos", nil];
     }
     NSMutableArray* mapEntries = [NSMutableArray array];
     if(keys) for(id key in keys) [mapEntries addObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -699,8 +704,23 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     [adc setType:kL200ADCType];
     [self addGroup:adc];
     [adc release];
+    
+    ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
+                                                           numSegments:kL200MaxSISChans
+                                                            mapEntries:[self setupMapEntries:kL200SISType]];
+    [sis setType:kL200SISType];
+    [self addGroup:sis];
+    [sis release];
 }
-
+- (void) makeSegmentGroupsSis
+{
+    ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
+                                                           numSegments:kL200MaxSISChans
+                                                            mapEntries:[self setupMapEntries:kL200SISType]];
+    [sis setType:kL200SISType];
+    [self addGroup:sis];
+    [sis release];
+}
 - (void) linkCC4sToDetectors
 {
     if(!linked){
@@ -737,9 +757,23 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
                 NSString* crate = [detSeg objectForKey:@"daq_crate"];
                 NSString* slot  = [detSeg objectForKey:@"daq_board_slot"];
                 NSString* chan  = [detSeg objectForKey:@"daq_board_ch"];
+                NSString* serial  = [detSeg objectForKey:@"serial"];
+                NSString* str  = [detSeg objectForKey:@"str_number"];
+                NSString* pos  = [detSeg objectForKey:@"str_position"];
                 [[cc4Group segment:cc4Index] setObject:crate forKey:@"daq_crate"];
                 [[cc4Group segment:cc4Index] setObject:slot  forKey:@"daq_board_slot"];
                 [[cc4Group segment:cc4Index] setObject:chan  forKey:@"daq_board_ch"];
+                [[cc4Group segment:cc4Index] setObject:serial  forKey:@"serial"];
+                [[cc4Group segment:cc4Index] setObject:str  forKey:@"str_number"];
+                [[cc4Group segment:cc4Index] setObject:pos  forKey:@"str_position"];
+                //posible keys we can take
+               // keys = [NSArray arrayWithObjects:@"serial",     @"det_type",
+                //        @"str_number",     @"str_position",
+                //        @"daq_crate",      @"daq_board_id",     @"daq_board_slot",   @"daq_board_ch", @"adc_serial",
+                 //       @"hv_crate",       @"hv_board_slot",    @"hv_board_chan",    @"hv_cable",
+                 //       @"hv_flange_id",   @"hv_flange_pos",
+                 //       @"fe_cc4_ch",      @"fe_head_card_ana", @"fe_head_card_dig", @"fe_fanout_card",
+                //        @"fe_raspberrypi", @"fe_lmfe_id", nil];
             }
         }
         linked = YES;
@@ -759,6 +793,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     else if(aGroup == kL200AuxType) return kL200MaxAuxChans;
     else if(aGroup == kL200CC4Type) return kL200MaxCC4s;
     else if(aGroup == kL200ADCType) return kL200MaxADCCards;
+    else if(aGroup == kL200SISType) return kL200MaxSISChans;
     else return 0;
 }
 
@@ -920,9 +955,17 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     if(aSet == kL200DetType)       [s appendString:@"Detector\n"];
     else if(aSet == kL200SiPMType) [s appendString:@"SiPM\n"];
     else if(aSet == kL200PMTType)  [s appendString:@"PMT\n"];
-    else if(aSet == kL200AuxType)  [s appendString:@"Aux Chan\n"];
+    else if(aSet == kL200AuxType)  {
+        [s appendString:@"----------------\n"];
+        [s appendString:@"Aux Chan\n"];
+        [s appendString:@"----------------\n"];
+    }
     else if(aSet == kL200CC4Type)  [s appendString:@"CC4\n"];
-    
+    else if(aSet == kL200SISType)  {
+        [s appendString:@"---------------------------\n"];
+        [s appendString:@"Source Information---------\n"];
+        [s appendString:@"---------------------------\n"];
+    }
     if(aSet == kL200DetType){
         [s appendString:@"   String\n"];
         [s appendFormat:@"           Num: %@\n", [self valueForLabel:@"tr_number"      fromParts:parts]];
@@ -931,7 +974,13 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     else if(aSet == kL200SiPMType || aSet == kL200PMTType){
         [s appendFormat:@"           Pos: %@\n", [self valueForLabel:@"RingName"        fromParts:parts]];
     }
-    if(aSet != kL200CC4Type){
+    else if(aSet == kL200SISType){
+        [s appendFormat:@"           \n"];
+        [s appendFormat:@"Source :\n %@\n", [self valueForLabel:@"SourceName"        fromParts:parts]];
+        [s appendFormat:@"           \n"];
+        [s appendFormat:@"Pos:\n %@\n", [self valueForLabel:@"SourcePos"             fromParts:parts]];
+    }
+    if(aSet != kL200CC4Type && aSet != kL200SISType){
         [s appendFormat:@"            ID: %@\n",     [self valueForLabel:@"Segment"        fromParts:parts]];
         [s appendFormat:@"        Serial: %@\n",     [self valueForLabel:@"erial"          fromParts:parts]];
         [s appendString:@"   DAQ\n"];
@@ -981,6 +1030,9 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
                 [s appendFormat:@"         Crate: %@\n",     [self valueForLabel:@"aq_crate"    fromParts:parts]];
                 [s appendFormat:@"          Slot: %@\n",     [self valueForLabel:@"aq_board_slot"     fromParts:parts]];
                 [s appendFormat:@"          Chan: %@\n",     [self valueForLabel:@"aq_board_ch"     fromParts:parts]];
+                [s appendFormat:@"          Det: %@\n",     [self valueForLabel:@"erial"     fromParts:parts]];
+                [s appendFormat:@"          Det Str: %@\n",     [self valueForLabel:@"tr_number"     fromParts:parts]];
+                [s appendFormat:@"          Det Pos: %@\n",     [self valueForLabel:@"tr_position"     fromParts:parts]];
             }
             else {
                 [s appendFormat:@"         Crate: -\n"];
@@ -1016,6 +1068,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     [[self segmentGroup:kL200AuxType]  addParametersToDictionary:dict useName:@"AuxChanMap"  addInGroupName:NO];
     [[self segmentGroup:kL200CC4Type]  addParametersToDictionary:dict useName:@"CC4Map"      addInGroupName:NO];
     [[self segmentGroup:kL200ADCType]  addParametersToDictionary:dict useName:@"ADCMap"      addInGroupName:NO];
+    //[[self segmentGroup:kL200SISType]  addParametersToDictionary:dict useName:@"SISMap"      addInGroupName:NO];
     [dictionary setObject:dict forKey:[self className]];
     return dictionary;
 }
