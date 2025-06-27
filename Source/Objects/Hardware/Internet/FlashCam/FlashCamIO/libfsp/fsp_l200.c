@@ -60,6 +60,7 @@ int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* cha
                        int prescale_ratio) {
 
   DSPHardwareMultiplicity* hwm = &processor->dsp_hwm;
+  FSPPrescaler* prescaler = &processor->prescaler;
 
   if (!is_known_channelmap_format(format)) {
     if (processor->loglevel)
@@ -82,11 +83,12 @@ int FSP_L200_SetGeParameters(StreamProcessor* processor, int nchannels, int* cha
     fprintf(stderr, "CRITICAL majority_threshold needs to be >= 0 is %d\n", majority_threshold);
     return 0;
   }
-  if (prescale_ratio >= 0) {
+  if (prescale_ratio > 0) {
+    prescaler->hwm_enabled = 1;
     for (int i = 0; i < nchannels && i < FCIOMaxChannels; i++)
       processor->triggerconfig.hwm_prescale_ratio[i] = prescale_ratio; // set the same preratio for all channels.
   }
-  else {
+  else if (prescale_ratio < 0) {
     fprintf(stderr, "CRITICAL Ge prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
   }
@@ -116,6 +118,7 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
                          float sum_threshold_pe, float coincidence_wps_threshold, int prescale_ratio, int enable_muon_coincidence) {
 
   DSPWindowedPeakSum* wps = &processor->dsp_wps;
+  FSPPrescaler* prescaler = &processor->prescaler;
 
   if (!is_known_channelmap_format(format)) {
     if (processor->loglevel)
@@ -145,9 +148,11 @@ int FSP_L200_SetSiPMParameters(StreamProcessor* processor, int nchannels, int* c
   processor->triggerconfig.pre_trigger_window.nanoseconds = coincidence_pre_window_ns % 1000000000L;
   processor->triggerconfig.post_trigger_window.seconds = coincidence_post_window_ns / 1000000000L;
   processor->triggerconfig.post_trigger_window.nanoseconds = coincidence_post_window_ns % 1000000000L;
-  if (prescale_ratio >= 0)
+  if (prescale_ratio > 0) {
+    prescaler->wps_enabled = 1;
     processor->triggerconfig.wps_prescale_ratio = prescale_ratio;
-  else {
+  }
+  else if (prescale_ratio < 0){
     fprintf(stderr, "CRITICAL SiPM prescale_ratio needs to be >= 0 is %d\n", prescale_ratio);
     return 0;
   }

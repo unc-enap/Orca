@@ -87,7 +87,7 @@ StreamProcessor* FSPCreate(unsigned int buffer_depth)
 
     processor->dsp_wps.tracemap.map[i] = -1;
     processor->dsp_wps.tracemap.enabled[i] = -1;
-    
+
     processor->prescaler.hwm_prescale_timestamp[i].seconds = -1; // will init when it's needed
   }
 
@@ -166,6 +166,15 @@ static inline void fsp_derive_triggerflags(StreamProcessor* processor, FSPState*
     fsp_state->write_flags.trigger.wps_prescaled = 1;
 }
 
+static inline void fsp_derive_eventflags(StreamProcessor* processor, FSPState* fsp_state)
+{
+  if (processor->triggerconfig.enabled_flags.event.consecutive && fsp_state->proc_flags.evt.consecutive)
+    fsp_state->write_flags.event.consecutive = 1;
+
+  if (processor->triggerconfig.enabled_flags.event.extended && fsp_state->proc_flags.evt.extended)
+    fsp_state->write_flags.event.extended = 1;
+}
+
 static inline uint32_t fsp_write_decision(FSPState* fsp_state) {
   if ((fsp_state->state->last_tag != FCIOEvent) && (fsp_state->state->last_tag != FCIOSparseEvent))
     return 1;
@@ -187,6 +196,7 @@ FSPState* FSPOutput(StreamProcessor* processor)
   }
 
   fsp_derive_triggerflags(processor, fsp_state);
+  fsp_derive_eventflags(processor, fsp_state);
 
   fsp_state->write_flags.write = fsp_write_decision(fsp_state);
 

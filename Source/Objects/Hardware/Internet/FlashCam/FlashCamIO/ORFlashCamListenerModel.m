@@ -958,7 +958,7 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
             else if([p isEqualToString:@"nonsparseEnd"])
                 [configParams setObject:[NSNumber numberWithInt:MAX([[self configParam:@"nonsparseStart"] intValue], [v intValue])] forKey:p];
             else if([p isEqualToString:@"sparseOverwrite"])
-                [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1, [v intValue]), 1)] forKey:p];
+                [configParams setObject:[NSNumber numberWithInt:MIN(MAX(-1, [v intValue]), 2304)] forKey:p];
         }
     }
 
@@ -1334,6 +1334,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     }
     FSPSetLogTime(processor, [[self configParam:@"fspLogTime"] doubleValue]);
     FSPSetLogLevel(processor, [[self configParam:@"fspLogLevel"] intValue]);
+    if ([[self configParam:@"daqMode"] intValue] == 12) {
+        FSPEnableEventFlags(processor, (EventFlags){ .consecutive = 0, .extended = 0});
+        NSLog(@"%@: setupSoftwareTrigger: Singles mode selected (daqmode/-dm 12). Disabling trigger on extended or consecutive events.\n", [self identifier]);
+    }
     
     /* always set the Aux Parameters to get sane defaults, we picked some at the beginning of this function.*/
     if (!FSP_L200_SetAuxParameters(processor, FCIO_TRACE_MAP_FORMAT,
@@ -1768,6 +1772,10 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
         DEBUG_PRINT( "%s %s: shipFCIO no valid dataId\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String]);
         return NO;
     }
+
+    DEBUG_PRINT( "%s: %s: shipFCIO: tag %d recordSize %zu dataId %u\n", [[self identifier] UTF8String], [[[NSThread currentThread] description] UTF8String],
+                writeTag, recordSize, dataId
+                );
 
     dataRecord[0] = dataId; // use extended format, write recordLength to the second entry
     dataRecord[1] = recordLength;
