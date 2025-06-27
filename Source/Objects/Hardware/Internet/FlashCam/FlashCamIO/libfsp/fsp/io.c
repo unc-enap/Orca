@@ -144,10 +144,12 @@ void FSPFlags2BitField(FSPState* fsp_state, uint32_t* trigger_field, uint32_t* e
   tfield |= ((fsp_state->write_flags.trigger.wps_coincident_sum & 0x1)   << bit++);
   tfield |= ((fsp_state->write_flags.trigger.wps_prescaled & 0x1)        << bit++);
   tfield |= ((fsp_state->write_flags.trigger.ct_multiplicity & 0x1)      << bit++);
+  tfield |= ((fsp_state->write_flags.event.extended & 0x1)               << bit++);
+  tfield |= ((fsp_state->write_flags.event.consecutive & 0x1)            << bit++);
 
   bit = 0;
-  efield |= ((fsp_state->write_flags.event.extended & 0x1)               << bit++);
-  efield |= ((fsp_state->write_flags.event.consecutive & 0x1)            << bit++);
+  efield |= ((fsp_state->proc_flags.evt.extended & 0x1)               << bit++);
+  efield |= ((fsp_state->proc_flags.evt.consecutive & 0x1)            << bit++);
   efield |= ((fsp_state->proc_flags.wps.sum_threshold & 0x1)             << bit++);
   efield |= ((fsp_state->proc_flags.wps.coincidence_sum_threshold & 0x1) << bit++);
   efield |= ((fsp_state->proc_flags.wps.coincidence_ref & 0x1)           << bit++);
@@ -170,10 +172,12 @@ void FSPBitField2Flags(FSPState* fsp_state, uint32_t trigger_field, uint32_t eve
   fsp_state->write_flags.trigger.wps_coincident_sum = trigger_field & (0x1 << bit++);
   fsp_state->write_flags.trigger.wps_prescaled =      trigger_field & (0x1 << bit++);
   fsp_state->write_flags.trigger.ct_multiplicity =    trigger_field & (0x1 << bit++);
+  fsp_state->write_flags.event.extended =             trigger_field & (0x1 << bit++);
+  fsp_state->write_flags.event.consecutive =          trigger_field & (0x1 << bit++);
 
   bit = 0;
-  fsp_state->write_flags.event.extended =               event_field & (0x1 << bit++);
-  fsp_state->write_flags.event.consecutive =            event_field & (0x1 << bit++);
+  fsp_state->proc_flags.evt.extended =                  event_field & (0x1 << bit++);
+  fsp_state->proc_flags.evt.consecutive =               event_field & (0x1 << bit++);
   fsp_state->proc_flags.wps.sum_threshold =             event_field & (0x1 << bit++);
   fsp_state->proc_flags.wps.coincidence_sum_threshold = event_field & (0x1 << bit++);
   fsp_state->proc_flags.wps.coincidence_ref =           event_field & (0x1 << bit++);
@@ -199,12 +203,14 @@ void FSPFlags2BitString(FSPState* fsp_state, size_t strlen, char* trigger_string
   *trgstring-- = (fsp_state->write_flags.trigger.wps_coincident_sum & 0x1) ? '1' : '0';
   *trgstring-- = (fsp_state->write_flags.trigger.wps_prescaled & 0x1) ? '1' : '0';
   *trgstring-- = (fsp_state->write_flags.trigger.ct_multiplicity & 0x1) ? '1' : '0';
+  *trgstring-- = (fsp_state->write_flags.event.extended & 0x1) ? '1' : '0';
+  *trgstring-- = (fsp_state->write_flags.event.consecutive & 0x1) ? '1' : '0';
   *trgstring-- = 'b';
   *trgstring = '0';
 
   *evtstring-- = 0;
-  *evtstring-- = (fsp_state->write_flags.event.extended & 0x1) ? '1' : '0';
-  *evtstring-- = (fsp_state->write_flags.event.consecutive & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->proc_flags.evt.extended & 0x1) ? '1' : '0';
+  *evtstring-- = (fsp_state->proc_flags.evt.consecutive & 0x1) ? '1' : '0';
   *evtstring-- = (fsp_state->proc_flags.wps.sum_threshold & 0x1) ? '1' : '0';
   *evtstring-- = (fsp_state->proc_flags.wps.coincidence_sum_threshold & 0x1) ? '1' : '0';
   *evtstring-- = (fsp_state->proc_flags.wps.coincidence_ref & 0x1) ? '1' : '0';

@@ -193,8 +193,7 @@ static inline int prescale_by_rate(Timestamp event_timestamp, Timestamp* prescal
 static inline int prescale_by_ratio(int counter, int ratio)
 {
   if (ratio)
-    if (counter % ratio == 0)
-      return 1;
+    return (counter % ratio == 0) * counter;
 
   return 0;
 }
@@ -203,20 +202,28 @@ static inline HWMFlags fsp_swt_hardware_majority(StreamProcessor* processor, FCI
   fcio_event* event = state->event;
 
   HWMFlags hwmflags = {0};
+  processor->prescaler.n_hwm_prescaled = 0;
 
   fsp_dsp_hardware_majority(&processor->dsp_hwm, event->num_traces, event->trace_list, event->theader);
 
   // one or more channels had an fpga_energy > 0 (was hardware triggered)
   hwmflags.hw_multiplicity = (processor->dsp_hwm.n_hw_trg > 0);
 
+  // if there is no prescaler enabled we ignore the thresholds and check the multiplicity against hardware triggers
+  if (!processor->prescaler.hwm_enabled) {
+    hwmflags.sw_multiplicity = (processor->dsp_hwm.n_hw_trg >= processor->triggerconfig.hwm_min_multiplicity);
+    return hwmflags;
+  }
   // enough channels had an fpga_energy >= software threshold and were more than the required multiplicity
   hwmflags.sw_multiplicity = (processor->dsp_hwm.n_sw_trg >= processor->triggerconfig.hwm_min_multiplicity);
 
-  if (processor->dsp_hwm.n_sw_trg > processor->dsp_hwm.n_hw_trg) {
+  // if not all hw triggers produced a software trigger, a possible prescale event was found
+  if (processor->dsp_hwm.n_sw_trg < processor->dsp_hwm.n_hw_trg) {
     for (int i = 0 ; i < processor->dsp_hwm.tracemap.n_mapped; i++) {
       if (prescale_by_ratio(processor->dsp_hwm.below_threshold_counter[i], processor->triggerconfig.hwm_prescale_ratio[i])) {
         hwmflags.prescaled = 1;
         processor->prescaler.hwm_prescaled_trace_idx[processor->prescaler.n_hwm_prescaled++] = processor->dsp_hwm.tracemap.map[i];
+        processor->dsp_hwm.below_threshold_counter[i] = 0;
       }
       if (prescale_by_rate(event_timestamp, &processor->prescaler.hwm_prescale_timestamp[i], processor->triggerconfig.hwm_prescale_rate[i], processor->loglevel)) {
         hwmflags.prescaled = 1;
@@ -266,7 +273,7 @@ static inline WPSFlags fsp_swt_windowed_peak_sum(StreamProcessor* processor, FCI
 
   if (!wpsflags.sum_threshold && !wpsflags.coincidence_sum_threshold) {
     processor->prescaler.wps_prescale_ready_counter++;
-    if (processor->triggerconfig.wps_prescale_ratio > 0) {
+    if (processor->prescaler.wps_enabled && processor->triggerconfig.wps_prescale_ratio > 0) {
       if ((processor->prescaler.wps_prescale_ready_counter % processor->triggerconfig.wps_prescale_ratio) == 0) {
         wpsflags.prescaled = 1;
       }
@@ -330,7 +337,7 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
                     state->event->timestamp[3]);
         }
       }
-      write_flags.event = fsp_evt_flags(processor, state);
+      proc_flags.evt = fsp_evt_flags(processor, state);
       fsp_state->obs.evt.nconsecutive = 0; // it's the default, process_timings will increase the number if consecutive events are following
 
       if (hwm_cfg->enabled) {
@@ -382,7 +389,7 @@ int fsp_process_fcio_state(StreamProcessor* processor, FSPState* fsp_state, FCIO
         }
       }
 
-      if (prescaler->enabled) {
+      if (prescaler->hwm_enabled) {
         fsp_state->obs.ps.n_hwm_prescaled = prescaler->n_hwm_prescaled;
         for (int i = 0; i < prescaler->n_hwm_prescaled; i++) {
           fsp_state->obs.ps.hwm_prescaled_trace_idx[i] = prescaler->hwm_prescaled_trace_idx[i];
@@ -553,15 +560,15 @@ static inline void fsp_process_state_timings(StreamProcessor* processor, FSPStat
     }
   }
 
-  if (fsp_state->write_flags.event.consecutive) {
+  if (fsp_state->proc_flags.evt.consecutive) {
     FSPState* update_fsp_state = NULL;
     int previous_counter = 0;
     int nconsectutive = 1;
     while ( (update_fsp_state = FSPBufferGetState(processor->buffer, previous_counter--)) ) {
       if (!update_fsp_state->has_timestamp)
         continue;
-      if (!update_fsp_state->write_flags.event.consecutive) {
-        update_fsp_state->write_flags.event.extended = 1;
+      if (!update_fsp_state->proc_flags.evt.consecutive) {
+        update_fsp_state->proc_flags.evt.extended = 1;
         update_fsp_state->obs.evt.nconsecutive = nconsectutive;
         break;
       } else {

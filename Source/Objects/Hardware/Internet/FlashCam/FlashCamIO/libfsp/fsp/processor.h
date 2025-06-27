@@ -42,7 +42,8 @@ typedef struct {
 
 typedef struct {
 
-  int enabled;
+  int hwm_enabled;
+  int wps_enabled;
 
   int wps_prescale_ready_counter;
   Timestamp wps_prescale_timestamp;

@@ -1116,7 +1116,7 @@
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
             else if(col == 3) [l setConfigParam:@"nonsparseEnd"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
-            else if(col == 4) [l setConfigParam:@"sparseOverride"
+            else if(col == 4) [l setConfigParam:@"sparseOverwrite"
                                       withValue:[NSNumber numberWithInt:[object intValue]]];
         }
         else if(view == listenerWFView){

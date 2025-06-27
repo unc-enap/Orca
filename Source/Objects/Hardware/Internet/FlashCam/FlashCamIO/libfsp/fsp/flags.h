@@ -67,5 +67,6 @@ typedef struct FSPProcessorFlags {
   HWMFlags hwm;
   WPSFlags wps;
   CTFlags ct;
+  EventFlags evt;
 
 } FSPProcessorFlags;

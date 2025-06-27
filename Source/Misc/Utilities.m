@@ -431,7 +431,9 @@ NSString* ipAddressAndListInterfaces(NSString* interface, BOOL listAvailable)
                                         [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in*)temp_addr->ifa_addr)->sin_addr)]);
                 if(!interface) continue;
                 if([[NSString stringWithUTF8String:temp_addr->ifa_name] isEqualToString:interface]){
-                    address = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in*)temp_addr->ifa_addr)->sin_addr)];
+                    char buf[16] = {0};
+                    const char* buf_ptr = inet_ntop(AF_INET, &(((struct sockaddr_in*)temp_addr->ifa_addr)->sin_addr), buf, 16);
+                    address = [NSString stringWithUTF8String:buf_ptr];
                     break;
                 }
             }
