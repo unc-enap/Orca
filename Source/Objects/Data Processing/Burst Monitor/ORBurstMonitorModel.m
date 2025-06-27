@@ -1420,7 +1420,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         burstcommand = [burstcommand stringByAppendingFormat:@"/home/halo/snews/coinccode/ctestgcli %i %i 0 %i %i 9", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
        // burstcommand = [burstcommand stringByAppendingFormat:@"/home/halo/snews/testserver/ctestgcli %i %i 5 %i %i 9", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
         NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
-        snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/data/remington/submit_alert.py %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"alert\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
+        snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/data/remington/submit_snews2_alert.sh %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"alert\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
         NSLog(@"snews2burstcommand with a space on each side: | %@ |\n", snews2burstcommand);
 //        NSTask* Cping;
 //        Cping =[[NSTask alloc] init];
@@ -1493,7 +1493,7 @@ static NSString* ORBurstMonitorMinimumEnergyAllowed  = @"ORBurstMonitor Minimum 
         burstcommand = [burstcommand stringByAppendingFormat:@"/home/halo/snews/testserver/ctestgcli %i %i 0 %i %i 9; ", (int32_t)dateint, (int)timeint, (int)level, (int)signif];  //maybe add nanoseconds? 9 is halo
          // rhill: Here we will define the snews2burstcommand. Just use the timeint as the message id.
 	 // Should be little to no concern about two messages sharing an id. 
-	snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/data/remington/submit_alert.py %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"alert test - coincidence or spallation observed\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
+	snews2burstcommand = [snews2burstcommand stringByAppendingFormat:@"/data/remington/submit_snews2_alert.sh %i halo \"%@\" \"%@\" \"%@\" \"Sudbury,ON\" %f ON \"alert test - coincidence or spallation observed\"; ", (int)timeint, nowDateString, burstDateString, nowDateString, (double)chanpvalue];
         NSLog(@"burstcommand witha a space on each side: | %@ |\n", burstcommand);
         // rhill: Add my stuff to the log if it does any good. 
         NSLog(@"snews2burstcommand with a space on each side: | %@ |\n", snews2burstcommand);
