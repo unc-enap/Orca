@@ -983,8 +983,8 @@
 {
     NSMutableArray* segmentPaths = [NSMutableArray array];
     NSMutableArray* errorPaths   = [NSMutableArray array];
-    [delegate makeSegmentGroupsSis];
-    ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
+    
+    //ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
     for (int i=0; i<4; i++){
         //if (i==0) [group setSegment:0 object:@"Source 1" forKey:@"kSourceName"];
         //if (i==1) [group setSegment:3 object:@"Source 2" forKey:@"kSourceName"];
@@ -1012,7 +1012,7 @@
     NSMutableArray* errorPaths   = [NSMutableArray array];
     ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
     //NSLog(@"The segments in the group is : %i", [group numSegments]);
-    
+    [delegate makeSegmentGroupsSis];
     slowControls = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORLNGSSlowControlsModel,1"]retain];
     for (int i=0; i<4; i++){
         //rectangle body
@@ -1021,7 +1021,7 @@
         float aPos = [[slowControls cmd:@"Source" dataAtRow:i column:2] floatValue];
         int name = [[slowControls cmd:@"Source" dataAtRow:i column:0] intValue];
         //NSLog(@"The source number : %i", name);
-        aPos=7000+name*200; //to debug providing direct value
+        //aPos=7000+name*200; //to debug providing direct value
         NSString *sourcePos = [NSString stringWithFormat:@"Source Position %d", (int)aPos];
         NSString *sourceName = [NSString stringWithFormat:@"Source %i", name+1];
         int index=name*3;
