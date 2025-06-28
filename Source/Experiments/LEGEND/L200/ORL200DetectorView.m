@@ -84,7 +84,6 @@
     sourceLabelAttr = nil;
     sipmLabelAttr = nil;
     pmtLabelAttr  = nil;
-    sourceLabelAttr = nil;
     auxLabelAttr  = nil;
     self = [super initWithFrame:frameRect];
     return self;
@@ -98,13 +97,12 @@
     for(int i=0; i<kL200SiPMRings; i++)       [sipmLabel[i] release];
     for(int i=0; i<kL200PMTRings; i++)        [pmtLabel[i]  release];
     for(int i=0; i<kL200AuxLabels; i++)       [auxLabel[i]  release];
-    for(int i=0; i<kL200NumCC4s; i++)       [cc4Label[i]  release];
-    for(int i=0; i<kL200MaxSISChans; i++)       [sisLabel[i] release];
+    for(int i=0; i<kL200NumCC4s; i++)         [cc4Label[i]  release];
+    for(int i=0; i<kL200MaxSISChans; i++)     [sisLabel[i] release];
     [strLabelAttr  release];
     [sourceLabelAttr release];
     [sipmLabelAttr release];
     [pmtLabelAttr  release];
-    [sourceLabelAttr release];
     [auxLabelAttr  release];
     [cc4LabelAttr  release];
     [super dealloc];
@@ -679,6 +677,7 @@
             [errorPaths   addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(r, -inset, -inset)]];
         }
     }
+    //NSLog(@"Segment path before make det : %i", [ segmentPathSet count]);
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];
@@ -766,6 +765,7 @@
             }
         }
     }
+    //NSLog(@"Segment path before make sipm : %i", [ segmentPathSet count]);
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
     [detOutlines    addObjectsFromArray:errorPaths];
@@ -813,6 +813,7 @@
             }
         }
     }
+    //NSLog(@"Segment path before make pmt : %i", [ segmentPathSet count]);
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];
@@ -894,6 +895,7 @@
     [errorPathSet   addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];
     [self setNeedsDisplay:YES];
+    //NSLog(@"Segment path before make cc4 sipm : %i", [ segmentPathSet count]);
 }
 
 - (void) makeCC4s
@@ -930,8 +932,10 @@
             cc4++;
         }
     }
+    //NSLog(@"Segment path before make cc4 : %i", [ segmentPathSet count]);
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet   addObject:errorPaths];
+    //NSLog(@"Segment path before make cc4");
     [self setNeedsDisplay:YES];
 }
 
@@ -969,6 +973,7 @@
             }
         }
     }
+    //NSLog(@"Segment path before make aux ch : %i", [ segmentPathSet count]);
     [segmentPathSet addObject:segmentPaths];
     [errorPathSet addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];
@@ -978,19 +983,19 @@
 {
     NSMutableArray* segmentPaths = [NSMutableArray array];
     NSMutableArray* errorPaths   = [NSMutableArray array];
-    //[delegate makeSegmentGroupsSis];
+    [delegate makeSegmentGroupsSis];
     ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
     for (int i=0; i<4; i++){
-        if (i==0) [group setSegment:0 object:@"Source 1" forKey:@"kSourceName"];
-        if (i==1) [group setSegment:3 object:@"Source 2" forKey:@"kSourceName"];
-        if (i==2) [group setSegment:6 object:@"Source 3" forKey:@"kSourceName"];
-        if (i==2) [group setSegment:9 object:@"Source 4" forKey:@"kSourceName"];
+        //if (i==0) [group setSegment:0 object:@"Source 1" forKey:@"kSourceName"];
+        //if (i==1) [group setSegment:3 object:@"Source 2" forKey:@"kSourceName"];
+        //if (i==2) [group setSegment:6 object:@"Source 3" forKey:@"kSourceName"];
+        //if (i==3) [group setSegment:9 object:@"Source 4" forKey:@"kSourceName"];
         
-        NSRect tubeFrame = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+5, 10, 430-5);
+        NSRect tubeFrame = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+5, 10, 355-5);
         // Draw bottom ellipse
         NSRect bottomEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50, 10, 10);
         // Draw top ellipse
-        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+430-5, 10, 10);
+        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+355-5, 10, 10);
             
         [segmentPaths addObject:[NSBezierPath bezierPathWithRect:tubeFrame]];
         [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:bottomEllipse]];
@@ -1014,15 +1019,21 @@
         //NSString *sourceName = [NSString stringWithFormat:@"Source Number %i", i];
         //[group setSegment:i object:@"sourceName  oh ho ho" forKey:@"kSourceName"];
         float aPos = [[slowControls cmd:@"Source" dataAtRow:i column:2] floatValue];
-        //aPos=7000+i*200; //to debug providing direct value
+        int name = [[slowControls cmd:@"Source" dataAtRow:i column:0] intValue];
+        //NSLog(@"The source number : %i", name);
+        aPos=7000+name*200; //to debug providing direct value
         NSString *sourcePos = [NSString stringWithFormat:@"Source Position %d", (int)aPos];
-        //[group setSegment:i object:sourcePos forKey:@"kSourcePos"];
-        if (i==0) [group setSegment:0 object:sourcePos forKey:@"kSourcePos"];
-        if (i==1) [group setSegment:3 object:sourcePos forKey:@"kSourcePos"];
-        if (i==2) [group setSegment:6 object:sourcePos forKey:@"kSourcePos"];
-        if (i==3) [group setSegment:9 object:sourcePos forKey:@"kSourcePos"];
+        NSString *sourceName = [NSString stringWithFormat:@"Source %i", name+1];
+        int index=name*3;
         
-        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+430-5-(aPos/21), 10, 10);
+        //[group setSegment:i object:sourcePos forKey:@"kSourcePos"];
+        [group setSegment:index object:sourcePos forKey:@"kSourcePos"];
+        [group setSegment:index object:sourceName forKey:@"kSourceName"];
+        //else if (i==name) [group setSegment:index object:sourcePos forKey:@"kSourcePos"];
+        //else if (i==name) [group setSegment:index object:sourcePos forKey:@"kSourcePos"];
+        //else if (i==name) [group setSegment:index object:sourcePos forKey:@"kSourcePos"];
+        
+        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+(name-1)*20, 50+355-5-(aPos/25.8), 10, 10);
         [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:topEllipse]];
         [errorPaths addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(topEllipse, -1, -1)]];
     }
@@ -1040,7 +1051,7 @@
     for(int i=0; i<4; i++){
         NSString *sisLabel = [NSString stringWithFormat:@"SIS%i",i+1];
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:sisLabel attributes:sourceLabelAttr];
-        [s drawAtPoint:NSMakePoint(kL200DetViewWidth*1.095+i*20, 487)];
+        [s drawAtPoint:NSMakePoint(kL200DetViewWidth*1.095+i*20, 417)];
         [s release];
     }
 }

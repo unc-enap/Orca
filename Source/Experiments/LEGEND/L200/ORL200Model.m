@@ -651,8 +651,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
                 @"adc_serial_0", @"adc_serial_1", nil];
     }
     else if(groupIndex == kL200SISType){
-        keys = [NSArray arrayWithObjects:@"sis",
-                @"sis_name", @"sis_pos", nil];
+        keys = [NSArray arrayWithObjects:@"sis_1", @"sis1_name", @"sis1_pos", @"sis_2", @"sis2_name", @"sis2_pos", @"sis_3", @"sis3_name", @"sis3_pos", @"sis_4", @"sis4_name", @"sis4_pos", nil];
     }
     NSMutableArray* mapEntries = [NSMutableArray array];
     if(keys) for(id key in keys) [mapEntries addObject:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -705,17 +704,17 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     [self addGroup:adc];
     [adc release];
     
-    ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
-                                                           numSegments:kL200MaxSISChans
-                                                            mapEntries:[self setupMapEntries:kL200SISType]];
-    [sis setType:kL200SISType];
-    [self addGroup:sis];
-    [sis release];
+    //ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
+     //                                                      numSegments:kL200MaxSISChans
+      //                                                      mapEntries:[self setupMapEntries:kL200SISType]];
+    //[sis setType:kL200SISType];
+    //[self addGroup:sis];
+    //[sis release];
 }
 - (void) makeSegmentGroupsSis
 {
     ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
-                                                           numSegments:kL200MaxSISChans
+                                                           numSegments:kL200MaxSISChans*4
                                                             mapEntries:[self setupMapEntries:kL200SISType]];
     [sis setType:kL200SISType];
     [self addGroup:sis];
@@ -793,7 +792,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     else if(aGroup == kL200AuxType) return kL200MaxAuxChans;
     else if(aGroup == kL200CC4Type) return kL200MaxCC4s;
     else if(aGroup == kL200ADCType) return kL200MaxADCCards;
-    else if(aGroup == kL200SISType) return kL200MaxSISChans;
+    else if(aGroup == kL200SISType) return kL200MaxSISChans*4;
     else return 0;
 }
 
