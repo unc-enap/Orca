@@ -40,6 +40,8 @@
     IBOutlet ORColorScale* auxChanColorScale;
     int viewType;
     NSMutableArray* detOutlines;
+    NSMutableArray* detOutlines1;
+    NSMutableArray* lastSourcePos;
     NSString* strLabel[kL200DetectorStrings];
     NSString* sipmLabel[kL200SiPMRings];
     NSString* pmtLabel[kL200PMTRings];

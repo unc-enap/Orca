@@ -47,6 +47,7 @@
 #define kL200CC4InnerR          (kL200CC4Offset*2-5)
 #define kL200CC4OuterR          (kL200CC4Offset*2 + 2*kL200CC4Size*7+10)
 #define kL200CC4DeltaAngle      (360/kNumCC4Positions)
+static NSInteger NumberofTimesCall = 0;
 
 @interface ORL200DetectorView (private)
 - (void) makeAllSegments;
@@ -54,8 +55,6 @@
 - (void) makeSIPMs;
 - (void) makePMTs;
 - (void) makeCC4s;
-//- (void) makeCC4sInSiPMS;
-//- (void) makeCC4sOutSiPMS;
 - (void) makeAuxChans;
 - (void) makeDummySet;
 - (void) drawLabels;
@@ -74,6 +73,7 @@
 - (id) initWithFrame:(NSRect)frameRect
 {
     detOutlines = nil;
+    detOutlines1 = nil;
     for(int i=0; i<kL200DetectorStrings; i++) strLabel[i] = nil;
     for(int i=0; i<kL200SiPMRings; i++)      sipmLabel[i] = nil;
     for(int i=0; i<kL200PMTRings; i++)        pmtLabel[i] = nil;
@@ -92,6 +92,7 @@
 - (void) dealloc
 {
     [detOutlines release];
+    [detOutlines1 release];
     [slowControls release];
     for(int i=0; i<kL200DetectorStrings; i++) [strLabel[i]  release];
     for(int i=0; i<kL200SiPMRings; i++)       [sipmLabel[i] release];
@@ -107,15 +108,6 @@
     [cc4LabelAttr  release];
     [super dealloc];
 }
-- (void) registerNotificationObservers
-{
-    NSNotificationCenter* notifyCenter = [NSNotificationCenter defaultCenter];
-    [notifyCenter addObserver : self
-                     selector : @selector(makeSource)
-                         name : ORL200SlowControlsSourceHeightChanged
-                       object : nil];
-}
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -206,17 +198,25 @@
         [[NSColor darkGrayColor] set];
         for(id det in detOutlines) [det fill];
         [self drawLabels];
+        [[NSColor blueColor] set];
+        for(id det_s in detOutlines1) [det_s fill];
     }
     
     else if(viewType == kL200CC4View){
         [self drawLabels];
+        [[NSColor blueColor] set];
+        for(id det_s in detOutlines1) [det_s fill];
     }
-    
     [super drawRect:rect];
 }
 
 - (NSColor*) getColorForSet:(int)setIndex value:(float)aValue
 {
+    if (NumberofTimesCall==1000){ //only calling to make source once in 1000 times
+        [self makeSource];
+        NumberofTimesCall=0;
+    }
+    NumberofTimesCall++;
     if(setIndex == kL200DetType)       return [detColorScale     getColorForValue:aValue];
     else if(setIndex == kL200SiPMType) return [sipmColorScale    getColorForValue:aValue];
     else if(setIndex == kL200PMTType)  return [pmtColorScale     getColorForValue:aValue];
@@ -283,6 +283,8 @@
     
     if(detOutlines) [detOutlines removeAllObjects];
     else detOutlines = [[NSMutableArray array] retain];
+    if(detOutlines1) [detOutlines1 removeAllObjects];
+    else detOutlines1 = [[NSMutableArray array] retain];
     if(viewType == kL200CrateView){
         [self makeCrateImage];
         float dx = kL200CrateInsideWidth / 14;
@@ -976,7 +978,7 @@
 {
     NSMutableArray* segmentPaths = [NSMutableArray array];
     NSMutableArray* errorPaths   = [NSMutableArray array];
-    
+    [delegate makeSegmentGroupsSis];
     for (int i=0; i<4; i++){
         NSRect tubeFrame = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+5, 10, 355-5);
         // Draw bottom ellipse
@@ -995,31 +997,30 @@
 }
 -(void) makeSource
 {
-    NSMutableArray* segmentPaths = [NSMutableArray array];
-    NSMutableArray* errorPaths   = [NSMutableArray array];
-    ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
-    [delegate makeSegmentGroupsSis];
-    slowControls = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORLNGSSlowControlsModel,1"]retain];
-    for (int i=0; i<4; i++){
-        float aPos = [[slowControls cmd:@"Source" dataAtRow:i column:2] floatValue];
-        int name = [[slowControls cmd:@"Source" dataAtRow:i column:0] intValue];
-        if (name<=0) continue; //when slow control is not loaded, we get 0 otherwise source name is 1,2,3,4
-        NSString *sourcePos = [NSString stringWithFormat:@"Source Position %d", (int)aPos];
-        NSString *sourceName = [NSString stringWithFormat:@"Source %i", name];
-        int index=(name-1)*3; //one unit thave 3 segment
-        [group setSegment:index object:sourcePos forKey:@"kSourcePos"];
-        [group setSegment:index object:sourceName forKey:@"kSourceName"];
+        NSMutableArray* errorPaths1   = [NSMutableArray array];
+        [detOutlines1 release];
+        detOutlines1 = [[NSMutableArray alloc] init];
+        ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
         
-        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+(name-1)*20, 50+355-5-(aPos/25.8), 10, 10);
-        [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:topEllipse]];
-        [errorPaths addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(topEllipse, -1, -1)]];
-    }
-    [segmentPathSet addObject:segmentPaths];
-    [errorPathSet addObject:errorPaths];
-    [detOutlines addObjectsFromArray:errorPaths];
-    [slowControls release];
-    [self setNeedsDisplay:YES];
-
+        slowControls = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORLNGSSlowControlsModel,1"]retain];
+        
+        for (int i=0; i<4; i++){
+            float aPos = [[slowControls cmd:@"Source" dataAtRow:i column:2] floatValue];
+            int name = [[slowControls cmd:@"Source" dataAtRow:i column:0] intValue];
+            if (name<=0) continue; //when slow control is not loaded, we get 0 otherwise source name is 1,2,3,4
+            NSString *sourcePos = [NSString stringWithFormat:@"Source Position %d", (int)aPos];
+            NSString *sourceName = [NSString stringWithFormat:@"Source %i", name];
+            int index=(name-1)*3; //one unit have 3 segment
+            [group setSegment:index object:sourcePos forKey:@"kSourcePos"];
+            [group setSegment:index object:sourceName forKey:@"kSourceName"];
+            
+            NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+(name-1)*20, 50+355-5-(aPos/25.8), 10, 10);
+            [errorPaths1 addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(topEllipse, -1, -1)]];
+        }
+        [errorPathSet addObject:errorPaths1];
+        [detOutlines1 addObjectsFromArray:errorPaths1];
+        [slowControls release];
+        [self setNeedsDisplay:YES];
 }
 -(void)drawSourceLabel{
     NSFont* font = [NSFont fontWithName:@"Geneva" size:7];
