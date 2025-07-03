@@ -23,6 +23,9 @@
 #import "ORDetectorSegment.h"
 #import "ORColorScale.h"
 #import "ORAxis.h"
+#import "ORLNGSSlowControlsModel.h"
+#import "ORAppDelegate.h"
+#import "NSNotifications+Extensions.h"
 
 #define kL200CrateWidth         (31 * [self bounds].size.width  / (2*32+1))
 #define kL200CrateXSpacing           ([self bounds].size.width  / (2*32+1))
@@ -32,7 +35,7 @@
 #define kL200CrateInsideY       (0.081 * kL200CrateHeight)
 #define kL200CrateInsideWidth   (kL200CrateWidth  - 2*kL200CrateInsideX)
 #define kL200CrateInsideHeight  (kL200CrateHeight - 2*kL200CrateInsideY)
-#define kL200DetViewWidth       (0.95 * [self bounds].size.width)
+#define kL200DetViewWidth       (0.80 * [self bounds].size.width)
 #define kL200AuxViewWidth       ([self bounds].size.width - kL200DetViewWidth)
 #define kL200DetViewHeight      (0.7 * [self bounds].size.height)
 #define kL200SiPMViewHeight     (0.4 * ([self bounds].size.height - kL200DetViewHeight) / 2)
@@ -44,6 +47,7 @@
 #define kL200CC4InnerR          (kL200CC4Offset*2-5)
 #define kL200CC4OuterR          (kL200CC4Offset*2 + 2*kL200CC4Size*7+10)
 #define kL200CC4DeltaAngle      (360/kNumCC4Positions)
+static NSInteger NumberofTimesCall = 0;
 
 @interface ORL200DetectorView (private)
 - (void) makeAllSegments;
@@ -51,16 +55,17 @@
 - (void) makeSIPMs;
 - (void) makePMTs;
 - (void) makeCC4s;
-//- (void) makeCC4sInSiPMS;
-//- (void) makeCC4sOutSiPMS;
 - (void) makeAuxChans;
 - (void) makeDummySet;
 - (void) drawLabels;
 - (void) drawGeDetectorLabels;
-- (void) drawSiPMabels;
+- (void) drawSiPMLabels;
 - (void) drawPMTLabels;
+- (void) drawSourceLabel;
 - (void) drawCC4Background;
 - (void) drawAuxChanLabels;
+- (void) makeSource;
+- (void) makeSourcesTube;
 @end
 
 @implementation ORL200DetectorView
@@ -68,12 +73,15 @@
 - (id) initWithFrame:(NSRect)frameRect
 {
     detOutlines = nil;
+    detOutlines1 = nil;
     for(int i=0; i<kL200DetectorStrings; i++) strLabel[i] = nil;
     for(int i=0; i<kL200SiPMRings; i++)      sipmLabel[i] = nil;
     for(int i=0; i<kL200PMTRings; i++)        pmtLabel[i] = nil;
     for(int i=0; i<kL200AuxLabels; i++)       auxLabel[i] = nil;
     for(int i=0; i<kL200NumCC4s; i++)       cc4Label[i] = nil;
+    for(int i=0; i<kL200MaxSISChans; i++)       sisLabel[i] = nil;
     strLabelAttr  = nil;
+    sourceLabelAttr = nil;
     sipmLabelAttr = nil;
     pmtLabelAttr  = nil;
     auxLabelAttr  = nil;
@@ -84,19 +92,22 @@
 - (void) dealloc
 {
     [detOutlines release];
+    [detOutlines1 release];
+    [slowControls release];
     for(int i=0; i<kL200DetectorStrings; i++) [strLabel[i]  release];
     for(int i=0; i<kL200SiPMRings; i++)       [sipmLabel[i] release];
     for(int i=0; i<kL200PMTRings; i++)        [pmtLabel[i]  release];
     for(int i=0; i<kL200AuxLabels; i++)       [auxLabel[i]  release];
-    for(int i=0; i<kL200NumCC4s; i++)       [cc4Label[i]  release];
+    for(int i=0; i<kL200NumCC4s; i++)         [cc4Label[i]  release];
+    for(int i=0; i<kL200MaxSISChans; i++)     [sisLabel[i] release];
     [strLabelAttr  release];
+    [sourceLabelAttr release];
     [sipmLabelAttr release];
     [pmtLabelAttr  release];
     [auxLabelAttr  release];
     [cc4LabelAttr  release];
     [super dealloc];
 }
-
 - (void) awakeFromNib
 {
     [super awakeFromNib];
@@ -187,17 +198,25 @@
         [[NSColor darkGrayColor] set];
         for(id det in detOutlines) [det fill];
         [self drawLabels];
+        [[NSColor blueColor] set];
+        for(id det_s in detOutlines1) [det_s fill];
     }
     
     else if(viewType == kL200CC4View){
         [self drawLabels];
+        [[NSColor blueColor] set];
+        for(id det_s in detOutlines1) [det_s fill];
     }
-    
     [super drawRect:rect];
 }
 
 - (NSColor*) getColorForSet:(int)setIndex value:(float)aValue
 {
+    if (NumberofTimesCall==1000){ //only calling to make source once in 1000 times
+        [self makeSource];
+        NumberofTimesCall=0;
+    }
+    NumberofTimesCall++;
     if(setIndex == kL200DetType)       return [detColorScale     getColorForValue:aValue];
     else if(setIndex == kL200SiPMType) return [sipmColorScale    getColorForValue:aValue];
     else if(setIndex == kL200PMTType)  return [pmtColorScale     getColorForValue:aValue];
@@ -264,6 +283,8 @@
     
     if(detOutlines) [detOutlines removeAllObjects];
     else detOutlines = [[NSMutableArray array] retain];
+    if(detOutlines1) [detOutlines1 removeAllObjects];
+    else detOutlines1 = [[NSMutableArray array] retain];
     if(viewType == kL200CrateView){
         [self makeCrateImage];
         float dx = kL200CrateInsideWidth / 14;
@@ -302,6 +323,8 @@
         [self makePMTs];
         [self makeAuxChans];
         [self makeDummySet]; //place holder for CC4s
+        [self makeSourcesTube];
+        [self makeSource];
     }
     else if(viewType == kL200CC4View){
         [self makeDummySet];//place holder for Dets
@@ -309,13 +332,8 @@
         [self makePMTs];
         [self makeDummySet];//place holder for AuxChans
         [self makeCC4s];
-        //[self makeCC4sSiPMS];
-        //[self makeCC4sOutSiPMS];
-        //[self makeDummySet];//place holder for AuxChans
-       
-        //[self makeCC4sInSiPMS];
-        //[self makeCC4sOutSiPMS];
-        
+        [self makeSourcesTube];
+        [self makeSource];
     }
     [self setNeedsDisplay:YES];
 }
@@ -325,14 +343,17 @@
     switch (viewType){
         case kL200DetectorView:
             [self drawGeDetectorLabels];
-            [self drawSiPMabels];
+            [self drawSiPMLabels];
             [self drawPMTLabels];
+            [self drawSourceLabel];
             [self drawAuxChanLabels];
             break;
         case kL200CC4View:
             [self drawCC4Background];
-            [self drawSiPMabels];
+            //[self drawSiPMLabels];
             [self drawPMTLabels];
+            //[self drawSourceLabel];
+            //[self drawAuxChanLabels];
             break;
         default:
             break;
@@ -359,7 +380,7 @@
     }
 }
 
-- (void) drawSiPMabels
+- (void) drawSiPMLabels
 {
     // draw the SiPM labels, top and bottom for inner and outer barrels in the right margin
     if(!sipmLabelAttr){
@@ -409,7 +430,7 @@
         if(!auxLabel[i]) auxLabel[0] = [@"" copy];
         if([auxLabel[i] length] == 0) continue;
         NSAttributedString* s = [[NSAttributedString alloc] initWithString:auxLabel[i] attributes:auxLabelAttr];
-        [s drawAtPoint:NSMakePoint(kL200DetViewWidth+kL200AuxViewWidth/2-[s size].width/2, auxLabelY+auxOffset)];
+        [s drawAtPoint:NSMakePoint(kL200DetViewWidth*0.92+kL200AuxViewWidth/2-[s size].width/2, auxLabelY+auxOffset)];
         auxOffset += [s size].height;
         [s release];
     }
@@ -928,7 +949,8 @@
     const float xoff = kL200AuxViewWidth*0.25 / 2;
     const float yoff = kL200PMTViewHeight + kL200SiPMViewHeight + kL200DetViewHeight*0.05;
     const float ytot = kL200DetViewHeight * 0.3;
-    const float cx   = kL200AuxViewWidth - 2*xoff;
+    //const float cx   = kL200AuxViewWidth - 2*xoff;
+    const float cx   = 20;
     const float cy   = 4*ytot / (kL200MaxAuxChans*5+1);
     const float dy   =   ytot / (kL200MaxAuxChans*5+1);
     const float inset = MIN(0.05*cx, 0.05*cy);
@@ -951,6 +973,65 @@
     [errorPathSet addObject:errorPaths];
     [detOutlines addObjectsFromArray:errorPaths];
     [self setNeedsDisplay:YES];
+}
+-(void) makeSourcesTube
+{
+    NSMutableArray* segmentPaths = [NSMutableArray array];
+    NSMutableArray* errorPaths   = [NSMutableArray array];
+    [delegate makeSegmentGroupsSis];
+    for (int i=0; i<4; i++){
+        NSRect tubeFrame = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+5, 10, 355-5);
+        // Draw bottom ellipse
+        NSRect bottomEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50, 10, 10);
+        // Draw top ellipse
+        NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+355-5, 10, 10);
+            
+        [segmentPaths addObject:[NSBezierPath bezierPathWithRect:tubeFrame]];
+        [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:bottomEllipse]];
+        [segmentPaths addObject:[NSBezierPath bezierPathWithOvalInRect:topEllipse]];
+    }
+    [segmentPathSet addObject:segmentPaths];
+    //[errorPathSet addObject:errorPaths];
+    [detOutlines addObjectsFromArray:errorPaths];
+    [self setNeedsDisplay:YES];
+}
+-(void) makeSource
+{
+        NSMutableArray* errorPaths1   = [NSMutableArray array];
+        [detOutlines1 release];
+        detOutlines1 = [[NSMutableArray alloc] init];
+        ORSegmentGroup* group = [delegate segmentGroup:kL200SISType];
+        
+        slowControls = [[[(ORAppDelegate*)[NSApp delegate] document] findObjectWithFullID:@"ORLNGSSlowControlsModel,1"]retain];
+        
+        for (int i=0; i<4; i++){
+            float aPos = [[slowControls cmd:@"Source" dataAtRow:i column:2] floatValue];
+            int name = [[slowControls cmd:@"Source" dataAtRow:i column:0] intValue];
+            if (name<=0) continue; //when slow control is not loaded, we get 0 otherwise source name is 1,2,3,4
+            NSString *sourcePos = [NSString stringWithFormat:@"Source Position %d", (int)aPos];
+            NSString *sourceName = [NSString stringWithFormat:@"Source %i", name];
+            int index=(name-1)*3; //one unit have 3 segment
+            [group setSegment:index object:sourcePos forKey:@"kSourcePos"];
+            [group setSegment:index object:sourceName forKey:@"kSourceName"];
+            
+            NSRect topEllipse = NSMakeRect(kL200DetViewWidth*1.1+(name-1)*20, 50+355-5-(aPos/25.8), 10, 10);
+            [errorPaths1 addObject:[NSBezierPath bezierPathWithRect:NSInsetRect(topEllipse, -1, -1)]];
+        }
+        [errorPathSet addObject:errorPaths1];
+        [detOutlines1 addObjectsFromArray:errorPaths1];
+        [slowControls release];
+        [self setNeedsDisplay:YES];
+}
+-(void)drawSourceLabel{
+    NSFont* font = [NSFont fontWithName:@"Geneva" size:7];
+    sourceLabelAttr = [[NSDictionary dictionaryWithObjectsAndKeys:font, NSFontAttributeName,
+                     [NSColor systemRedColor], NSForegroundColorAttributeName, nil] retain];
+    for(int i=0; i<4; i++){
+        NSString *sisLabel = [NSString stringWithFormat:@"SIS%i",i+1];
+        NSAttributedString* s = [[NSAttributedString alloc] initWithString:sisLabel attributes:sourceLabelAttr];
+        [s drawAtPoint:NSMakePoint(kL200DetViewWidth*1.095+i*20, 417)];
+        [s release];
+    }
 }
 - (void) makeDummySet
 {

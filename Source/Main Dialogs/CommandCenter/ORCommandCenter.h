@@ -33,7 +33,6 @@
 @interface ORCommandCenter : NSObject
 {
     NSMutableDictionary*    destinationObjects;
-    NSLock*                 clientLock;
     int                     socketPort;
     NetSocket*              serverSocket;
     NSMutableArray*         clients;

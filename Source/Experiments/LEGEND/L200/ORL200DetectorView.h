@@ -21,6 +21,7 @@
 #import "ORL200Model.h"
 
 @class ORColorScale;
+@class ORLNGSSlowControlsModel;
 
 #define kL200CrateView    0
 #define kL200DetectorView 1
@@ -39,11 +40,14 @@
     IBOutlet ORColorScale* auxChanColorScale;
     int viewType;
     NSMutableArray* detOutlines;
+    NSMutableArray* detOutlines1;
+    NSMutableArray* lastSourcePos;
     NSString* strLabel[kL200DetectorStrings];
     NSString* sipmLabel[kL200SiPMRings];
     NSString* pmtLabel[kL200PMTRings];
     NSString* auxLabel[kL200AuxLabels];
     NSString* cc4Label[kL200NumCC4s];
+    NSString* sisLabel[kL200MaxSISChans];
     float strLabelX[kL200DetectorStrings];
     float sipmLabelY[kL200SiPMRings];
     float pmtLabelY[kL200PMTRings];
@@ -51,9 +55,11 @@
     NSDictionary* strLabelAttr;
     NSDictionary* sipmLabelAttr;
     NSDictionary* pmtLabelAttr;
+    NSDictionary* sourceLabelAttr;
     NSDictionary* auxLabelAttr;
     NSDictionary* cc4LabelAttr;
     NSDictionary* cc4LabelAttr1;
+    ORLNGSSlowControlsModel* slowControls;
 }
 - (void) setViewType:(int)type;
 @end
