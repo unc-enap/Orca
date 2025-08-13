@@ -464,7 +464,16 @@ NSString* ORL200SlowControlsSourceHeightChanged = @"ORL200SlowControlsSourceHeig
 
 - (void) sendToInFlux:(NSString*)aDataCmd
 {
-    if(![self inFluxDBAvailable])return;
+    //if(![self inFluxDBAvailable])return;
+    if (![self inFluxDBAvailable]) {
+        //NSLog(@"InfluxDB not available. Attempting to locate...");
+        [self findInfluxDB];
+        
+        if (![self inFluxDBAvailable]) {
+            //NSLog(@"InfluxDB still unavailable after search. Aborting operation.");
+            return;
+        }
+    }
     
     NSArray* data = [[cmdStatus objectForKey:aDataCmd] objectForKey:kCmdData];
     if(!data)return;
