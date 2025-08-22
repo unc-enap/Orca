@@ -1579,6 +1579,11 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
                     unsigned short fpga_energy = state->event->theader[trace_idx][1];
 
                     [[card baselineHistory:channel] addDataToTimeAverage:(float)fpga_baseline];
+                    if (fspstate && !fspstate->write_flags.write && !writeNonTriggered) {
+                        // if fsp is enabled, but we don't intend to write it, skip updating
+                        // the wf and trig statistics.
+                        break;
+                    }
                     [card increaseWfCountForChannel:channel];
                     if (fpga_energy > 0) {
                         [card increaseTrigCountForChannel:channel];
@@ -2063,7 +2068,8 @@ NSString* ORFlashCamListenerModelSWTConfigChanged    = @"ORFlashCamListenerModel
     //-------MAH 02/1/22--------------------------------
     NSString* extraFlags = [self configParamString:@"extraFlags"];
     if([extraFlags length]>0){
-        extraFlags = [extraFlags removeExtraSpaces];
+        // ssailer 08/22/25 removed because the function removes commas, which it shouldn't.
+        //        extraFlags = [extraFlags removeExtraSpaces];
         extraFlags = [extraFlags removeNLandCRs];
         NSArray *extraFlagsArray = [extraFlags componentsSeparatedByString:@" "];
         [readoutArgs addObjectsFromArray:extraFlagsArray];
