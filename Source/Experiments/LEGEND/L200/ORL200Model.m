@@ -704,22 +704,23 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     [self addGroup:adc];
     [adc release];
     
-    //ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
-     //                                                      numSegments:kL200MaxSISChans
-      //                                                      mapEntries:[self setupMapEntries:kL200SISType]];
-    //[sis setType:kL200SISType];
-    //[self addGroup:sis];
-    //[sis release];
-}
-- (void) makeSegmentGroupsSis
-{
     ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
-                                                           numSegments:kL200MaxSISChans*4
+                                                           numSegments:kL200MaxSISChans
                                                             mapEntries:[self setupMapEntries:kL200SISType]];
     [sis setType:kL200SISType];
     [self addGroup:sis];
     [sis release];
 }
+//- (void) makeSegmentGroupsSis
+//{
+//    ORL200SegmentGroup* sis = [[ORL200SegmentGroup alloc] initWithName:@"SISChans"
+//                                                           numSegments:kL200MaxSISChans
+//                                                            mapEntries:[self setupMapEntries:kL200SISType]];
+//    [sis setType:kL200SISType];
+//    [self addGroup:sis];
+//    [sis release];
+//}
+
 - (void) linkCC4sToDetectors
 {
     if(!linked){
@@ -792,7 +793,7 @@ NSString* ORL200ModelMetaErrorChanged    = @"ORL200ModelMetaErrorChanged";
     else if(aGroup == kL200AuxType) return kL200MaxAuxChans;
     else if(aGroup == kL200CC4Type) return kL200MaxCC4s;
     else if(aGroup == kL200ADCType) return kL200MaxADCCards;
-    else if(aGroup == kL200SISType) return kL200MaxSISChans*4;
+    else if(aGroup == kL200SISType) return kL200MaxSISChans;
     else return 0;
 }
 

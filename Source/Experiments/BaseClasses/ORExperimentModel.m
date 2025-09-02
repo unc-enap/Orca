@@ -586,6 +586,33 @@ NSString* ExperimentModelCustomColor2Changed             = @"ExperimentModelCust
     else [self setCustomColor2:[NSColor whiteColor]];
     
 	segmentGroups = [[decoder decodeObjectForKey:       @"ExperimentSegmentGroups"] retain];
+
+    /*
+     2025/08/26: ssailer: The following code section was added temporarily, because some configs had
+     some copies of SISChans ORGroupSegments added, which were not intended to be encoded. This lead
+     to large startup times. To remove these, the commented code below was added to filter these out,
+     such that existing configs could be used.
+     This code remains _only_ that in the rare case, an old config must be loaded, it can be reactivated
+     again.
+     */
+//    NSMutableArray* tmp;
+//    tmp = [[decoder decodeObjectForKey:       @"ExperimentSegmentGroups"] retain];
+//    bool found = false;
+//    int counter = 0;
+//    for(NSUInteger i=0; i<[tmp count]; i++) {
+//        if (found) {
+//            counter++;
+//            continue;
+//        }l3g3nd_DAQ
+    
+//        if ([[[tmp objectAtIndex:i] groupName] isEqualToString:@"SISChans"]) {
+//            found = true;
+//        }
+//        [self addGroup:[tmp objectAtIndex:i]];
+//        fprintf(stderr, "Loading %s\n", [[[tmp objectAtIndex:i] groupName] UTF8String]);
+//    }
+//    fprintf(stderr, "Skipped %d\n", counter);
+
     for(NSUInteger i=0; i<[segmentGroups count]; i++)
         [[segmentGroups objectAtIndex:i] setMapEntries:[self setupMapEntries:(int)i]];
     [self setupSegmentIds];

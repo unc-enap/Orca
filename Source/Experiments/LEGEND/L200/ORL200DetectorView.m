@@ -978,7 +978,7 @@ static NSInteger NumberofTimesCall = 0;
 {
     NSMutableArray* segmentPaths = [NSMutableArray array];
     NSMutableArray* errorPaths   = [NSMutableArray array];
-    [delegate makeSegmentGroupsSis];
+//    [delegate makeSegmentGroupsSis];
     for (int i=0; i<4; i++){
         NSRect tubeFrame = NSMakeRect(kL200DetViewWidth*1.1+i*20, 50+5, 10, 355-5);
         // Draw bottom ellipse
