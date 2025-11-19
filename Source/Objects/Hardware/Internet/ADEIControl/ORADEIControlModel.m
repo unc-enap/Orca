@@ -141,9 +141,10 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 
 - (void) setMeasuredValue: (int)aIndex withValue: (double)value
 {
-    [[measuredValues objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%lf",value] forKey:@"value"];
-    //[[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object:self];
-    
+    @synchronized (self) {
+        [[measuredValues objectAtIndex:aIndex] setObject:[NSString stringWithFormat:@"%lf",value] forKey:@"value"];
+        //[[NSNotificationCenter defaultCenter] postNotificationName:ORADEIControlModelMeasuredValuesChanged object:self];
+    }
 }
 
 - (void) createSetPointArray
@@ -1510,7 +1511,11 @@ NSString* ORADEIControlLock						         = @"ORADEIControlLock";
 //!convertedValue: and valueForChan: are the same.
 - (double) convertedValue:(int)channel
 {
-    return [[self measuredValueAtIndex:channel] doubleValue];
+    double aValue = 0;
+    @synchronized (self) {
+        aValue = [[self measuredValueAtIndex:channel] doubleValue];
+    }
+    return aValue;
 }
 
 - (double) maxValueForChan:(int)channel
